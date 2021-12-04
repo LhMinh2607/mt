@@ -1,5 +1,5 @@
 import axios from 'axios'
-import {DRINK_LIST_REQUEST, DRINK_LIST_SUCCESSFUL, DRINK_LIST_FAILED, DRINK_DETAIL_REQUEST, DRINK_DETAIL_SUCCESSFUL, DRINK_DETAIL_FAILED, SHOW_RELATED_DRINK_REQUEST, SHOW_RELATED_DRINK_SUCCESSFUL, SHOW_RELATED_DRINK_FAILED} from '../constants/drinkConst'
+import {DRINK_LIST_REQUEST, DRINK_LIST_SUCCESSFUL, DRINK_LIST_FAILED, DRINK_DETAIL_REQUEST, DRINK_DETAIL_SUCCESSFUL, DRINK_DETAIL_FAILED, SHOW_RELATED_DRINK_REQUEST, SHOW_RELATED_DRINK_SUCCESSFUL, SHOW_RELATED_DRINK_FAILED, DRINK_SEARCH_REQUEST, DRINK_SEARCH_SUCCESSFUL, DRINK_SEARCH_FAILED, DRINK_FILTER_BY_STAR_REQUEST, DRINK_FILTER_BY_STAR_SUCCESSFUL, DRINK_FILTER_BY_STAR_FAILED, DRINK_FILTER_BY_PRICE_REQUEST, DRINK_FILTER_BY_PRICE_SUCCESSFUL, DRINK_FILTER_BY_PRICE_FAILED} from '../constants/drinkConst'
 
 export const listOfDrinks = () => async (dispatch) =>{
     dispatch({
@@ -45,6 +45,59 @@ export const showRelatedDrinkList = (drinkId) => async(dispatch)=>{
         dispatch({type: SHOW_RELATED_DRINK_SUCCESSFUL, payload: data});
     } catch (error) {
             dispatch({type: SHOW_RELATED_DRINK_FAILED,
+            payload: error.response 
+            && error.response.data.message 
+            ? error.response.data.message
+            : error.message,
+        });
+    }
+}
+
+export const searchDrink = (keyword) => async(dispatch)=>{
+    dispatch({
+        type: DRINK_SEARCH_REQUEST, payload: keyword
+    });
+    try {
+        //alert(tag);
+        //alert(keyword);
+        const {data} = await axios.get(`/api/drink/search/${keyword}`);
+        dispatch({type: DRINK_SEARCH_SUCCESSFUL, payload: data});
+    } catch (error) {
+            dispatch({type: DRINK_SEARCH_FAILED,
+            payload: error.response 
+            && error.response.data.message 
+            ? error.response.data.message
+            : error.message,
+        });
+    }
+}
+
+export const filterDrinkByStar = (star) => async(dispatch)=>{
+    dispatch({
+        type: DRINK_FILTER_BY_STAR_REQUEST, payload: star
+    });
+    try {
+        const {data} = await axios.get(`/api/drink/filter/star/${star}`);
+        dispatch({type: DRINK_FILTER_BY_STAR_SUCCESSFUL, payload: data});
+    } catch (error) {
+            dispatch({type: DRINK_FILTER_BY_STAR_FAILED,
+            payload: error.response 
+            && error.response.data.message 
+            ? error.response.data.message
+            : error.message,
+        });
+    }
+}
+
+export const filterDrinkByPrice = (price) => async(dispatch)=>{
+    dispatch({
+        type: DRINK_FILTER_BY_PRICE_REQUEST, payload: price
+    });
+    try {
+        const {data} = await axios.get(`/api/drink/filter/price/${price}`);
+        dispatch({type: DRINK_FILTER_BY_PRICE_SUCCESSFUL, payload: data});
+    } catch (error) {
+            dispatch({type: DRINK_FILTER_BY_PRICE_FAILED,
             payload: error.response 
             && error.response.data.message 
             ? error.response.data.message

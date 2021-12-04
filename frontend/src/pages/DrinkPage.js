@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react'
-import { listOfDrinks } from '../actions/drinkAction';
+import React, { useEffect, useState } from 'react'
+import { filterDrinkByPrice, filterDrinkByStar, listOfDrinks, searchDrink } from '../actions/drinkAction';
 import DrinkPanel from '../components/DrinkPanel';
 import LoadingBox from '../components/LoadingBox';
 import MessageBox from '../components/MessageBox';
@@ -15,6 +15,46 @@ export default function DrinkPage() {
     const drinkList = useSelector((state) => state.drinkList);
     const {loading, error, drinks} = drinkList;
 
+    const drinkSearch = useSelector(state=>state.drinkSearch);
+    const {loading: loadingResult, error: errorResult, result} = drinkSearch;
+
+    const drinkFilterByPrice = useSelector(state=>state.drinkFilterByPrice);
+    const {loading: loadingPriceResult, error: errorPriceResult, result: priceResult} = drinkFilterByPrice;
+
+    const drinkFilterByRating = useSelector(state=>state.drinkFilterByRating);
+    const {loading: loadingStarResult, error: errorStarResult, result: starResult} = drinkFilterByRating;
+
+    const [keyword, setKeyword] = useState("");
+    const [filteredStar, setFilteredStar] = useState("");
+    const [priceRange, setPriceRange] = useState("");
+
+
+    const filterStarBy = (e) => {
+        setFilteredStar(e.target.value); //still need this to show value on the UI component
+        setKeyword("");
+        setPriceRange("");
+        dispatch(filterDrinkByStar(e.target.value)); //shove the data into the action function
+      }
+
+    const setTheKeyword = (e) =>{
+        setFilteredStar("");
+        setPriceRange("");
+        setKeyword(e.target.value);
+        dispatch(searchDrink(e.target.value));
+    }
+
+    const setThePrice =(e) =>{
+        setFilteredStar("");
+        setKeyword("");
+        if(parseInt(e.target.value)<0)
+        {
+            alert("GIÁ KHÔNG ÂM ĐƯỢC NHA");
+        }else{
+            setPriceRange(e.target.value);
+            dispatch(filterDrinkByPrice(e.target.value));
+        }
+    }
+
     useEffect(()=>{
         window.scrollTo({
         top: 0, 
@@ -27,10 +67,31 @@ export default function DrinkPage() {
 
     return (
         <div>
-            <div>
-                DRINKS
+            <div className="row center">
+                <div className="search-background row center">
+                {/* <label htmlFor="searchField" className="fa fa-search"></label>
+                <button type="button" className="searchBtn"></button> */}
+                <div>
+                    <select onChange={filterStarBy} value={filteredStar}> 
+                    <option value="" hidden>Filter rating</option>
+                    <option value="5">Less than or equals 5 stars ⭐⭐⭐⭐⭐</option>
+                    <option value="4">Less than or equals 4 stars ⭐⭐⭐⭐</option>
+                    <option value="3">Less than or equals 3 stars ⭐⭐⭐</option>
+                    <option value="2">Less than or equals 2 stars ⭐⭐</option>
+                    <option value="1">Less than or equals 1 star ⭐</option>
+                    <option value="0">0 star</option>
+                    </select>
+                    </div>
+                    <div>
+                    <input type="text" id="searchField" className="searchInput" value={keyword} onChange={setTheKeyword} placeholder="🔍Seach anything"></input>
+                    </div>
+                    <div>
+                    <input pattern="[0-9]+" step="1" min="0" max="9999999999" type="number" id="priceField" className="" value={priceRange} onChange={setThePrice} placeholder="Lọc giá <="></input>
+                    
+                    </div>
+                </div>
             </div>
-            {
+            {filteredStar==="" && keyword==="" && priceRange==="" &&(
             loading ? (
                 <LoadingBox></LoadingBox>
             ) :
@@ -45,7 +106,71 @@ export default function DrinkPage() {
                     </DrinkPanel>
                     
                     ))}
-                </div>)}
+                </div>))}
+            
+                {keyword!=="" && result && (result.length>0 ?(
+          loadingResult ? (
+            <LoadingBox></LoadingBox>
+          ) :
+          errorResult ? (
+            <MessageBox variant="error">{errorResult}</MessageBox>
+          ) : (
+            <div className="row center">
+              {
+                result.map((d) => (
+                  <DrinkPanel key={d._id} d = {d}>
+                      
+                  </DrinkPanel>
+                  
+                ))}
+            </div>
+            )) : (
+              <MessageBox variant="error">{errorResult}</MessageBox>
+            ))
+          }
+          { filteredStar &&(
+            starResult ?(
+          loadingStarResult ? (
+            <LoadingBox></LoadingBox>
+          ) :
+          errorStarResult ? (
+            <MessageBox variant="error">{errorStarResult}</MessageBox>
+          ) : (
+            <div className="row center">
+              {
+                starResult.map((d) => (
+                  <DrinkPanel key={d._id} d = {d}>
+                      
+                  </DrinkPanel>
+                  
+                ))}
+            </div>
+            )) : (
+              <MessageBox variant="error">{errorStarResult}</MessageBox>
+            ))
+          }
+          {
+          priceRange &&(
+            priceResult ?( priceResult.length>0 &&(
+          loadingPriceResult ? (
+            <LoadingBox></LoadingBox>
+          ) :
+          errorPriceResult ? (
+            <MessageBox variant="error">{errorPriceResult}</MessageBox>
+          ) : (
+            <div className="row center">
+              {
+                priceResult.map((d) => (
+                  <DrinkPanel key={d._id} d = {d}>
+                      
+                  </DrinkPanel>
+                  
+                ))}
+            </div>
+            ))) : (
+              <MessageBox variant="error">{errorPriceResult}</MessageBox>
+            ))
+          }
         </div>
     )
 }
