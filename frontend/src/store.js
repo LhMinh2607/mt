@@ -3,6 +3,8 @@ import thunk from 'redux-thunk';
 import {drinkFilterByPriceReducer, drinkFilterByStarReducer, drinkListReducer, drinksDetailReducer, drinkSearchReducer, relatedDrinkListReducer} from './reducers/drinkReducer';
 import { userDetailReducer, userListReducer, userSigninReducer, userSignupReducer, userUpdateProfileReducer } from './reducers/userReducer';
 import {cartReducer} from './reducers/cartReducer';
+import { createOrderReducer, OrderDetailReducer } from './reducers/orderReducer';
+import { detailsOfOrder } from './actions/orderAction';
 
 const initialState = {
     userSignin: {
@@ -12,8 +14,10 @@ const initialState = {
     },
     cart:{
         cartItems: localStorage.getItem('cartItems')? JSON.parse(localStorage.getItem('cartItems')) : [],    
-        paymentMethod: 'Cash',
-        shippingAddress: localStorage.getItem('shippingAddress'),
+        paymentMethod: 'Cash', //temporarily fixed
+        shippingInfo: localStorage.getItem('shippingInfo')
+        ? JSON.parse(localStorage.getItem('shippingInfo'))
+        : {},
     }
 };
 
@@ -30,6 +34,8 @@ const reducer = combineReducers({
     drinkSearch: drinkSearchReducer,
     drinkFilterByRating: drinkFilterByStarReducer,
     drinkFilterByPrice: drinkFilterByPriceReducer,
+    orderCreate: createOrderReducer,
+    orderDetail: OrderDetailReducer,
 
 })
 

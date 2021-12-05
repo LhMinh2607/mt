@@ -12,6 +12,8 @@ import { signout } from './actions/userAction';
 import CartPage from './pages/CartPage';
 import DrinkDetailPage from './pages/DrinkDetailPage';
 import ProfilePage from './pages/ProfilePage';
+import OrderPage from './pages/OrderPage';
+import OrderDetailPage from './pages/OrderDetailPage';
 
 
 function App() {
@@ -82,6 +84,10 @@ function App() {
                 </Routes>
                 <Routes>
                   <Route path="/user/:id" element={<ProfilePage></ProfilePage>}></Route>
+                </Routes>
+                <Routes>
+                  <Route exact path="/order" element={<OrderPage></OrderPage>}></Route>
+                  <Route exact path={`/order/:orderId`} element={<OrderDetailPage></OrderDetailPage>}></Route>
                 </Routes>
               </main>
               {/* <footer className="row-bottom">

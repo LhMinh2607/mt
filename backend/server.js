@@ -3,6 +3,7 @@ import mongoose from "mongoose"
 import drinkRouter from './routers/drinkRouter.js'
 import dotenv from 'dotenv';
 import userRouter from './routers/userRouter.js';
+import orderRouter from './routers/orderRouter.js';
 
 dotenv.config();
 const app = express();
@@ -22,16 +23,12 @@ err => {
 
 app.use('/api/drink', drinkRouter);
 app.use('/api/user', userRouter);
+app.use('/api/order', orderRouter);
 
 app.get('/', (req, res) => {
     res.send('Server is ready!');
     
 });
-
-// app.get('/api/drinks', (req, res) => {
-//     console.log("fuck you");
-//     res.send({message: "fuck you"});
-// })
 
 
 app.use((err, req, res, next)=>{

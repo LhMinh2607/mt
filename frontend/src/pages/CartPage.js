@@ -127,6 +127,12 @@ export default function CartPage(props){
                                 Đặt hàng
                             </button>
                         </li>
+                        <li>
+                            <select>
+                                <option value='cash'>Tiền mặt</option>
+                                <option value='momo'>Ví điện tử Momo</option>
+                            </select>
+                        </li>
                     </ul>
                 </div>
             </div>
