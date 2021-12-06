@@ -34,7 +34,7 @@ export default function OrderPage() {
     //     props.history.push('/payment');
     // }
     cart.shippingPrice = 50000; //temporarily fixed, I'll figure out later with GOOGLE MAP API hopefully
-    cart.itemsPrice = cart.cartItems.reduce((a, c)=> a + c.price, 0)
+    cart.itemsPrice = cart.cartItems.reduce((a, c)=> a + c.price * c.quantity, 0)
     cart.totalPrice = cart.itemsPrice + cart.shippingPrice;
     const username = userInfo.name;
 
@@ -60,7 +60,7 @@ export default function OrderPage() {
             navigate(`/order/${order._id}`);
             dispatch({type: ORDER_CREATE_RESET});
         }
-    }, [dispatch, order, success]);
+    }, [dispatch, order, navigate, success]);
 
     return (
         <div>

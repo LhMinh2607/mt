@@ -13,10 +13,10 @@ export default function DrinkPanel(props) {
     const navigate = useNavigate();
     
     const addToCartHandler = () =>{
-        navigate(`/shopping_cart/${d._id}/${qty}`);
+        navigate(`/shopping_cart/${d._id}/${quantity}`);
     }
 
-    const [qty, setQty] = useState(1);
+    const [quantity, setquantity] = useState(1);
 
     return (
         <div>
@@ -39,8 +39,8 @@ export default function DrinkPanel(props) {
                           <div>Số lượng</div>
                           <div>
                             <select
-                              value={qty}
-                              onChange={(e) => setQty(e.target.value)}
+                              value={quantity}
+                              onChange={(e) => setquantity(e.target.value)}
                             >
                               {[...Array(5).keys()].map(
                                 (x) => (

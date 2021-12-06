@@ -14,6 +14,7 @@ import DrinkDetailPage from './pages/DrinkDetailPage';
 import ProfilePage from './pages/ProfilePage';
 import OrderPage from './pages/OrderPage';
 import OrderDetailPage from './pages/OrderDetailPage';
+import OrderHistoryPage from './pages/OrderHistoryPage';
 
 
 function App() {
@@ -44,7 +45,7 @@ function App() {
                       <i className="fa fa-shopping-cart"></i>
                     {
                     cartItems.length>0
-                    && (<span className="cart-items-count">{cartItems.reduce((a, c) => a + Number(c.qty), 0)}</span>)
+                    && (<span className="cart-items-count">{cartItems.reduce((a, c) => a + Number(c.quantity), 0)}</span>)
                     }</Link>
                       {userInfo && userInfo.role==='user' ? (
                         <div className="dropDown">
@@ -52,10 +53,10 @@ function App() {
                         
                           <ul className="dropDown-content">
                             <li>
-                              <Link to={`/user/${userInfo._id}`}>Tài khoản<i className="fa fa-user"></i></Link>
+                              <Link to={`/user/${userInfo._id}/profile`}>Tài khoản<i className="fa fa-user"></i></Link>
                             </li>
                             <li>
-                              <Link  to={`/user/${userInfo._id}/order_history`}>Lịch sử mua hàng<i className="fa fa-history"></i></Link>
+                              <Link  to={`/order/history`}>Lịch sử mua hàng<i className="fa fa-history"></i></Link>
                             </li>
                             <li>
                               <Link to="/" onClick={signOutHandler}>
@@ -80,15 +81,17 @@ function App() {
                 <Routes>
                   <Route path="/shopping_cart" element={<CartPage></CartPage>}></Route>
                   <Route path="/shopping_cart/:drinkId" element={<CartPage></CartPage>}></Route>
-                  <Route path="/shopping_cart/:drinkId/:qty" element={<CartPage></CartPage>}></Route>
+                  <Route path="/shopping_cart/:drinkId/:quantity" element={<CartPage></CartPage>}></Route>
                 </Routes>
                 <Routes>
-                  <Route path="/user/:id" element={<ProfilePage></ProfilePage>}></Route>
+                  <Route path="/user/:id/profile" element={<ProfilePage></ProfilePage>}></Route>
                 </Routes>
                 <Routes>
                   <Route exact path="/order" element={<OrderPage></OrderPage>}></Route>
                   <Route exact path={`/order/:orderId`} element={<OrderDetailPage></OrderDetailPage>}></Route>
+                  <Route exact path={"/order/history"} element={<OrderHistoryPage></OrderHistoryPage>}></Route>
                 </Routes>
+
               </main>
               {/* <footer className="row-bottom">
                   <div className="nav-menu-item">

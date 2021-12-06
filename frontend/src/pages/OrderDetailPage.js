@@ -57,13 +57,23 @@ export default function OrderDetailPage() {
                                                 <Link to={`/drink/${item.drink}`}>{item.name}</Link>
                                             </div>
                                             <div>
-                                                {item.price} đồng
+                                                <div>
+                                                    Đơn giá: {item.price} đồng
+                                                </div>
+                                                <div>
+                                                    Số lượng: {item.quantity}
+                                                </div>
+                                                <div>
+                                                    <strong>Tổng: {item.quantity*item.price} đồng </strong>
+                                                </div>
                                             </div>
-                                            
                                         </li>
                                         
                                     ))
                                     }
+                                    <li>
+                                        Phí giao hàng: {order && order.shippingPrice} đồng
+                                    </li>
                                 </ul>
                                 {order && order.isPaid ? <div>
                                     Đã thanh toán lúc {order.PaidAt}
@@ -83,8 +93,9 @@ export default function OrderDetailPage() {
                     <ul>
                         <li>
                             <h2>
-                            Tổng cộng {order && order.orderItems.length} món: {order && order.totalPrice} đồng
+                            Tổng cộng {order && order.orderItems.reduce((a, c)=> a + c.quantity, 0)} món: {order && order.totalPrice} đồng
                             </h2>
+                            
                         </li>
                     </ul>
                 </div>

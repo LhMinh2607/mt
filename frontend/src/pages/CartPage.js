@@ -8,7 +8,7 @@ export default function CartPage(props){
 
     const params = useParams();
     const id = params.drinkId;
-    const qty = Number(params.qty);
+    const quantity = Number(params.quantity);
     
     const userSignin = useSelector((state)=> state.userSignin);
     const {userInfo, loading, error} = userSignin;
@@ -37,8 +37,8 @@ export default function CartPage(props){
         //
         if(id){
             //alert(id);
-            //alert(qty);
-            dispatch(addToCart(id, qty));
+            //alert(quantity);
+            dispatch(addToCart(id, quantity));
         }
     }, [dispatch, id]);
 
@@ -83,7 +83,7 @@ export default function CartPage(props){
                             </div>
                             <div>
                                 <select
-                                    value={item.qty}
+                                    value={item.quantity}
                                     onChange={(e) =>
                                         dispatch(
                                         addToCart(item.drink, Number(e.target.value))
@@ -114,7 +114,7 @@ export default function CartPage(props){
                     <ul>
                         <li>
                             <h2>
-                                Tổng thành tiền của ({cartItems.reduce((a, c) => a + Number(c.qty), 0)} sản phẩm) : {cartItems.reduce((a, c)=> a + c.price * Number(c.qty), 0)} đồng 
+                                Tổng thành tiền của ({cartItems.reduce((a, c) => a + Number(c.quantity), 0)} sản phẩm) : {cartItems.reduce((a, c)=> a + c.price * Number(c.quantity), 0)} đồng 
                             </h2>
                         </li>
                         <li>

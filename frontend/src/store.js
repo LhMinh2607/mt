@@ -3,7 +3,7 @@ import thunk from 'redux-thunk';
 import {drinkFilterByPriceReducer, drinkFilterByStarReducer, drinkListReducer, drinksDetailReducer, drinkSearchReducer, relatedDrinkListReducer} from './reducers/drinkReducer';
 import { userDetailReducer, userListReducer, userSigninReducer, userSignupReducer, userUpdateProfileReducer } from './reducers/userReducer';
 import {cartReducer} from './reducers/cartReducer';
-import { createOrderReducer, OrderDetailReducer } from './reducers/orderReducer';
+import { createOrderReducer, orderAggregateReducer, OrderDetailReducer, orderListReducer } from './reducers/orderReducer';
 import { detailsOfOrder } from './actions/orderAction';
 
 const initialState = {
@@ -22,20 +22,22 @@ const initialState = {
 };
 
 const reducer = combineReducers({
-    drinkList: drinkListReducer,
-    userSignup: userSignupReducer,
+    drinkList: drinkListReducer, //streak #1 + set up the project with frontend, backend and database
+    userSignup: userSignupReducer, //streak #2
     userSignin: userSigninReducer,
     userList: userListReducer,
     cart: cartReducer,
-    drinkDetail: drinksDetailReducer,
+    drinkDetail: drinksDetailReducer,//streak #3
     userDetail: userDetailReducer,
     userUpdateProfile: userUpdateProfileReducer,
-    relatedDrinkList: relatedDrinkListReducer,
+    relatedDrinkList: relatedDrinkListReducer, //streak #4
     drinkSearch: drinkSearchReducer,
     drinkFilterByRating: drinkFilterByStarReducer,
     drinkFilterByPrice: drinkFilterByPriceReducer,
-    orderCreate: createOrderReducer,
+    orderCreate: createOrderReducer, //streak #5
     orderDetail: OrderDetailReducer,
+    orderList: orderListReducer,
+    orderAggregate: orderAggregateReducer,
 
 })
 

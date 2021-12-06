@@ -6,7 +6,34 @@ import Order from '../models/Order.js';
 
 const orderRouter = express.Router();
 
+orderRouter.get('/list', isAuth, expressAsyncHandler(async(req, res)=>{
+    console.log(req.user._id);
+    const orders = await Order.find({user: req.user._id});
+    res.send(orders);
+}));
 
+orderRouter.get('/total/:userId', expressAsyncHandler(async(req, res)=>{
+    //const totalPrice = await Order.findById({user: req.params.id}, {totalPrice: 1});
+    //console.log(req.params.userId);
+    const userSpendings = await Order.aggregate(
+        [   
+            {$match: {isPaid: true, user: req.params.userId}},
+            {
+                $group: {
+                    _id: req.params.userId,
+                    totalMoneySpent: {$sum: "$totalPrice"}
+                }
+            }
+        ]
+    )
+
+    console.log(userSpendings);
+ 
+    if(userSpendings == []){res.send(userSpendings);}
+    else{
+        res.send([{_id: req.params.userId, totalMoneySpent: 0}]);
+    }
+}));
 
 orderRouter.post('/', isAuth, expressAsyncHandler(async(req, res)=>{
     console.log(req.body.orderItems.length);
@@ -23,7 +50,6 @@ orderRouter.post('/', isAuth, expressAsyncHandler(async(req, res)=>{
             shippingPrice: req.body.shippingPrice,
         });
         const createdOrder = await order.save();
-        res.send(createdOrder);
         res.status(201).send({message: 'Tạo thành công 1 đơn hàng', order: createdOrder});
     }
 }));
@@ -38,9 +64,6 @@ orderRouter.get('/:id', isAuth, expressAsyncHandler(async(req, res)=>{
     }
 }));
 
-orderRouter.get('/list', isAuth, expressAsyncHandler(async(req, res)=>{
-    const orders = await Order.find({user: req.user._id});
-    res.send(orders);
-}));
+
 
 export default orderRouter;
