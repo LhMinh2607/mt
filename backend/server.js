@@ -1,9 +1,10 @@
-import express from 'express'
+import express, { application } from 'express'
 import mongoose from "mongoose"
 import drinkRouter from './routers/drinkRouter.js'
 import dotenv from 'dotenv';
 import userRouter from './routers/userRouter.js';
 import orderRouter from './routers/orderRouter.js';
+import commentRouter from './routers/commentRouter.js';
 
 dotenv.config();
 const app = express();
@@ -24,6 +25,7 @@ err => {
 app.use('/api/drink', drinkRouter);
 app.use('/api/user', userRouter);
 app.use('/api/order', orderRouter);
+app.use('/api/comment', commentRouter);
 
 app.get('/', (req, res) => {
     res.send('Server is ready!');

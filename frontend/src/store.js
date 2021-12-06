@@ -5,6 +5,7 @@ import { userDetailReducer, userListReducer, userSigninReducer, userSignupReduce
 import {cartReducer} from './reducers/cartReducer';
 import { createOrderReducer, orderAggregateReducer, OrderDetailReducer, orderListReducer } from './reducers/orderReducer';
 import { detailsOfOrder } from './actions/orderAction';
+import { userCommentListReducer, userCommentReducer, userDeleteCommentReducer, userEditCommentReducer, userFilterCommentByStarReducer, userSortCommentReducer } from './reducers/commentReducer';
 
 const initialState = {
     userSignin: {
@@ -38,6 +39,12 @@ const reducer = combineReducers({
     orderDetail: OrderDetailReducer,
     orderList: orderListReducer,
     orderAggregate: orderAggregateReducer,
+    userComment: userCommentReducer, //streak #6
+    userEditComment: userEditCommentReducer,
+    userDeleteComment: userDeleteCommentReducer,
+    userCommentList: userCommentListReducer,
+    userFilterCommentByStar: userFilterCommentByStarReducer,
+    userSortComment: userSortCommentReducer,
 
 })
 

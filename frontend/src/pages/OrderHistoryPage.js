@@ -85,8 +85,9 @@ export default function OrderHistoryPage() {
                                 {
                                     loadingSpending ? (<LoadingBox></LoadingBox>) : errorSpending ? (<MessageBox variant="error">{error}</MessageBox>)
                                     : (
-                                        userSpending &&
-                                        (<td>{userSpending[0].totalMoneySpent} đồng</td>)
+                                        userSpending.length !== 0 ?  
+                                        (<td>{userSpending[0].totalMoneySpent} đồng</td>) :
+                                        (<td>0 đồng</td>)
                                     )
                                 }
                                 <td></td>

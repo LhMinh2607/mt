@@ -5,7 +5,7 @@ import { ORDER_CREATE_FAILED, ORDER_CREATE_REQUEST, ORDER_CREATE_SUCCESSFUL, ORD
 export const createOrder = (order) =>async(dispatch, getState)=>{
     dispatch({type: ORDER_CREATE_REQUEST, payload: order});
     try {
-        console.log('hi kkkkkkkkkkkkkkkkkkkkkkkkkk');
+        //console.log('hi kkkkkkkkkkkkkkkkkkkkkkkkkk');
         const {userSignin: {userInfo}} = getState();
         console.log(userInfo.token);
         const {data} = await axios.post('/api/order', order, {

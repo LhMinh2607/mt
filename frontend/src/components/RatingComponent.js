@@ -43,7 +43,7 @@ export default function Rating(props){
                 {Math.round(rating * 10) / 10}
             </span>
             <div>
-                {" ("+reviewNum + ' reviews'+")"}
+                {" ("+reviewNum + ' đánh giá'+")"}
             </div>
         </div>
     );

@@ -3,11 +3,12 @@ import expressAsyncHandler from 'express-async-handler';
 import { isAuth } from '../utils.js';
 import Order from '../models/Order.js';
 //import User from '../models/User.js';
+import mongoose from 'mongoose';
 
 const orderRouter = express.Router();
 
 orderRouter.get('/list', isAuth, expressAsyncHandler(async(req, res)=>{
-    console.log(req.user._id);
+    //console.log(req.user._id);
     const orders = await Order.find({user: req.user._id});
     res.send(orders);
 }));
@@ -17,7 +18,7 @@ orderRouter.get('/total/:userId', expressAsyncHandler(async(req, res)=>{
     //console.log(req.params.userId);
     const userSpendings = await Order.aggregate(
         [   
-            {$match: {isPaid: true, user: req.params.userId}},
+            {$match: {isPaid: true, user: mongoose.Types.ObjectId(req.params.userId)}}, //have to use mongoose.Type.ObjectId here cuz it's not a main _id so mongoose won't automatically convert it to ObjectId("")
             {
                 $group: {
                     _id: req.params.userId,
@@ -26,12 +27,10 @@ orderRouter.get('/total/:userId', expressAsyncHandler(async(req, res)=>{
             }
         ]
     )
-
-    console.log(userSpendings);
- 
-    if(userSpendings == []){res.send(userSpendings);}
+    if(userSpendings.length == 0){
+        res.send([{_id: req.params.userId, totalMoneySpent: 0}]);}
     else{
-        res.send([{_id: req.params.userId, totalMoneySpent: 0}]);
+        res.send(userSpendings);
     }
 }));
 
