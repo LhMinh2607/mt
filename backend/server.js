@@ -5,6 +5,8 @@ import dotenv from 'dotenv';
 import userRouter from './routers/userRouter.js';
 import orderRouter from './routers/orderRouter.js';
 import commentRouter from './routers/commentRouter.js';
+import { isAuth, isAdmin } from './utils.js';
+import adminRouter from './routers/adminRouter.js';
 
 dotenv.config();
 const app = express();
@@ -22,10 +24,12 @@ err => {
 });
 
 
-app.use('/api/drink', drinkRouter);
-app.use('/api/user', userRouter);
-app.use('/api/order', orderRouter);
-app.use('/api/comment', commentRouter);
+app.use('/api/drink', drinkRouter); //manages route with db.drinks
+app.use('/api/user', userRouter); //manages route with db.users
+app.use('/api/order', orderRouter); //manages route with db.orders
+app.use('/api/comment', commentRouter); //manages route with db.comments
+app.use('/api/admin', adminRouter); //admin route manage routes with all dbs (only exclusive functions for admin ofc)
+
 
 app.get('/', (req, res) => {
     res.send('Server is ready!');

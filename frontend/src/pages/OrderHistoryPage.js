@@ -72,7 +72,7 @@ export default function OrderHistoryPage() {
                                     <td>{order.isDelivered ? order.paidAt.substring(0, 10): 'Chưa'}</td>
                                     <td>
                                         <button type="button" className="tiny primary" onClick={() => {navigate(`/order/${order._id}`);}}>
-                                            Details
+                                            Chi tiết
                                         </button>
                                     </td>
                                 </tr>

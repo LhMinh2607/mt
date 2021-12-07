@@ -34,6 +34,8 @@ drinkRouter.get('/related/:id', expressAsyncHandler(async(req, res)=>{
     }
 }));
 
+
+
 drinkRouter.get('/:id/rating', expressAsyncHandler(async(req, res)=>{
     const comment = await Comment.findOne({drink: mongoose.Types.ObjectId(req.params.id)});
     if(comment)
@@ -51,7 +53,7 @@ drinkRouter.get('/:id/rating', expressAsyncHandler(async(req, res)=>{
                 }
             ]
         );
-        console.log(overallRatingAndNumbers);
+        //console.log(overallRatingAndNumbers);
         const drink = await Drink.findById(req.params.id);
         drink.rating = overallRatingAndNumbers[0].overallRating;
         drink.reviewNum = overallRatingAndNumbers[0].totalComments;

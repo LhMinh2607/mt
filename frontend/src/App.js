@@ -16,7 +16,9 @@ import OrderPage from './pages/OrderPage';
 import OrderDetailPage from './pages/OrderDetailPage';
 import OrderHistoryPage from './pages/OrderHistoryPage';
 import AdminRoute from './components/AdminRoute';
+import UserOnlyRoute from './components/UserOnlyRoute';
 import OrdersListPage from './pages/OrdersListPage';
+import NotFoundPage from './pages/NotFoundPage';
 
 
 function App() {
@@ -43,12 +45,17 @@ function App() {
                   <div>
                     <Link to="/drink" className="">Xem thêm</Link>
                   </div>
-                    <Link to="/shopping_cart">Giỏ hàng
+                    {userInfo ? (userInfo.role==='user' && <Link to="/shopping_cart">Giỏ hàng
                       <i className="fa fa-shopping-cart"></i>
                     {
                     cartItems.length>0
                     && (<span className="cart-items-count">{cartItems.reduce((a, c) => a + Number(c.quantity), 0)}</span>)
-                    }</Link>
+                    }</Link>) : (<Link to="/shopping_cart">Giỏ hàng
+                    <i className="fa fa-shopping-cart"></i>
+                  {
+                  cartItems.length>0
+                  && (<span className="cart-items-count">{cartItems.reduce((a, c) => a + Number(c.quantity), 0)}</span>)
+                  }</Link>)}
                       {
                       userInfo ? (userInfo.role==='user' ? (
                         <div className="dropDown">
@@ -74,7 +81,7 @@ function App() {
                         
                           <ul className="dropDown-content">
                             <li>
-                              <Link to={`/admin/${userInfo._id}/profile`}>Tài khoản<i className="fa fa-user"></i></Link>
+                              <Link to={`/admin/${userInfo._id}/profile`}>Tài khoản<i className="fa fa-check"></i></Link>
                             </li>
                             <li>
                               <Link  to={`/admin/ordersList/`}>Đơn hàng<i className="fa fa-history"></i></Link>
@@ -91,37 +98,26 @@ function App() {
                         </div>)) : (<Link to="/signin" className="">Đăng nhập</Link>)}
               </header>
               <main>
+                {/* React Router Dom v6 syntax */}
                 <Routes>
-                  {/* React Router Dom v6 syntax */}
+                  <Route path="*" element={<NotFoundPage/>} />
                   <Route exact path="/" element={<HomePage></HomePage>}></Route>
-                  
                   <Route exact path="/signin" element={<SigninPage></SigninPage>}></Route>
                   <Route exact path="/signup" element={<SignUpPage></SignUpPage>}></Route>
-                </Routes>
-                <Routes>
                   <Route exact path="/drink" element={<DrinkPage></DrinkPage>}></Route>
                   <Route exact path="/drink/:drinkId" element={<DrinkDetailPage></DrinkDetailPage>}></Route>
-                </Routes>
-                <Routes>
-                  <Route path="/shopping_cart" element={<CartPage></CartPage>}></Route>
-                  <Route path="/shopping_cart/:drinkId" element={<CartPage></CartPage>}></Route>
-                  <Route path="/shopping_cart/:drinkId/:quantity" element={<CartPage></CartPage>}></Route>
-                </Routes>
-                <Routes>
+                  <Route path="/shopping_cart" element={<UserOnlyRoute><CartPage></CartPage></UserOnlyRoute>}></Route>
+                  <Route path="/shopping_cart/:drinkId" element={<UserOnlyRoute><CartPage></CartPage></UserOnlyRoute>}></Route>
+                  <Route path="/shopping_cart/:drinkId/:quantity" element={<UserOnlyRoute><CartPage></CartPage></UserOnlyRoute>}></Route>
                   <Route path="/user/:id/profile" element={<ProfilePage></ProfilePage>}></Route>
-                </Routes>
-                <Routes>
                   <Route path="/admin/:id/profile" element={<ProfilePage></ProfilePage>}></Route>
-                </Routes>
-                <Routes>
                   <Route exact path="/order" element={<OrderPage></OrderPage>}></Route>
                   <Route exact path={`/order/:orderId`} element={<OrderDetailPage></OrderDetailPage>}></Route>
-                  <Route exact path={"/order/history"} element={<OrderHistoryPage></OrderHistoryPage>}></Route>
-                </Routes>
-                <Routes>
+                  <Route exact path={"/order/history"} element={<UserOnlyRoute><OrderHistoryPage></OrderHistoryPage></UserOnlyRoute>}></Route>
                   <Route exact path="/admin/ordersList" element={<AdminRoute><OrdersListPage></OrdersListPage></AdminRoute>}></Route>
                   <Route exact path="/admin/usersList" element={<AdminRoute><OrdersListPage></OrdersListPage></AdminRoute>}></Route>
                 </Routes>
+                
 
               </main>
               {/* <footer className="row-bottom">

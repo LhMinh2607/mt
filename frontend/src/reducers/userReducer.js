@@ -1,4 +1,4 @@
-import { CLEAR_ALL, USER_DETAIL_FAILED, USER_DETAIL_REQUEST, USER_DETAIL_SUCCESSFUL, USER_LIST_FAILED, USER_LIST_REQUEST, USER_LIST_SUCCESSFUL, USER_SIGNIN_FAILED, USER_SIGNIN_REQUEST, USER_SIGNIN_SUCCESSFUL, USER_SIGNOUT, USER_SIGN_UP_FAILED, USER_SIGN_UP_REQUEST, USER_SIGN_UP_SUCCESSFUL, USER_UPDATE_PROFILE_FAILED, USER_UPDATE_PROFILE_REQUEST, USER_UPDATE_PROFILE_RESET, USER_UPDATE_PROFILE_SUCCESSFUL } from "../constants/userConst";
+import { CLEAR_ALL, USERS_SEARCH_FAILED, USERS_SEARCH_REQUEST, USERS_SEARCH_SUCCESSFUL, USER_DETAIL_FAILED, USER_DETAIL_REQUEST, USER_DETAIL_SUCCESSFUL, USER_LIST_FAILED, USER_LIST_REQUEST, USER_LIST_SUCCESSFUL, USER_SIGNIN_FAILED, USER_SIGNIN_REQUEST, USER_SIGNIN_SUCCESSFUL, USER_SIGNOUT, USER_SIGN_UP_FAILED, USER_SIGN_UP_REQUEST, USER_SIGN_UP_SUCCESSFUL, USER_UPDATE_PROFILE_FAILED, USER_UPDATE_PROFILE_REQUEST, USER_UPDATE_PROFILE_RESET, USER_UPDATE_PROFILE_SUCCESSFUL } from "../constants/userConst";
 
 
 export const userSignupReducer = (state = {}, action)=>{
@@ -81,3 +81,16 @@ export const userUpdateProfileReducer = (state = {}, action)=>{
             return state;
     }    
 };
+
+export const userSearchingReducer = (state={}, action)=>{
+    switch(action.type){
+        case USERS_SEARCH_REQUEST:
+            return {loading: true};
+        case USERS_SEARCH_SUCCESSFUL:
+            return {loading: false, userResult: action.payload};
+        case USERS_SEARCH_FAILED:
+            return {loading: false, error: action.payload};
+        default:
+            return state;
+    }
+}

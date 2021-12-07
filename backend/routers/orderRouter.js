@@ -8,10 +8,10 @@ import mongoose from 'mongoose';
 const orderRouter = express.Router();
 
 orderRouter.get('/list', isAuth, expressAsyncHandler(async(req, res)=>{
-    //console.log(req.user._id);
     const orders = await Order.find({user: req.user._id});
     res.send(orders);
 }));
+
 
 orderRouter.get('/total/:userId', expressAsyncHandler(async(req, res)=>{
     //const totalPrice = await Order.findById({user: req.params.id}, {totalPrice: 1});
@@ -35,7 +35,7 @@ orderRouter.get('/total/:userId', expressAsyncHandler(async(req, res)=>{
 }));
 
 orderRouter.post('/', isAuth, expressAsyncHandler(async(req, res)=>{
-    console.log(req.body.orderItems.length);
+    //console.log(req.body.orderItems.length);
     if(Number(req.body.orderItems.length) == 0){
         res.status(400).send({message: 'Giỏ hàng trống'});
     }else{

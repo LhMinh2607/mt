@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router';
 import { Link } from 'react-router-dom';
 import { commitCommenting, filterCommentByStar, listOfComments, sortComment } from '../actions/commentAction';
-import { detailsOfDrink, getDrinkRating, showRelatedDrinkList } from '../actions/drinkAction';
+import { addTagToDrink, detailsOfDrink, getDrinkRating, removeTagFromDrink, showRelatedDrinkList } from '../actions/drinkAction';
 import { listOfOrders } from '../actions/orderAction';
 import { listOfUsers } from '../actions/userAction';
 import CommentComponent from '../components/CommentComponent';
@@ -77,8 +77,13 @@ export default function DrinkDetailPage(props) {
     }
     const [tagContent, setTagContent] = useState('');
     const addTag = () =>{
-        //dispatch(addTagToDrink(drink._id, tagContent));
+        dispatch(addTagToDrink(drink._id, tagContent));
         enableTagEditBox();
+        window.location.reload()
+    }
+    const removeTag = () => {
+        dispatch(removeTagFromDrink(drink._id));
+        window.location.reload()
     }
 
     const commentSubmitHandler = (e) => {
@@ -193,16 +198,7 @@ export default function DrinkDetailPage(props) {
                             <label className="bold-text">Loại:</label> {drink.type}
                         </li>
                         <li>
-                        {/* {userInfo &&
-                            (userInfo.isAdmin===true &&
-                                (<div className="card card-body">
-                                    <input type="text" hidden={tagEditBox} className="tagInput" onChange={(e)=>setTagContent(e.target.value)}></input>
-                                    <button className="admin block" onClick={addTag} hidden={tagEditBox}>THÊM</button>
-                                    <button className="admin block" onClick={enableTagEditBox}>
-                                        {tagEditBox ? <label>THÊM TAG</label> : <label>ĐÓNG</label>}
-                                    </button>
-                                </div>))
-                        } */}
+                        
                         </li>
                     </ul>
                 </div>
@@ -317,7 +313,7 @@ export default function DrinkDetailPage(props) {
                                     </div>
                             ))))
                             ))
-                                // <div>{user.productIdList}</div>
+                                // <div>{user.drinkIdList}</div>
                             
                         ): (userInfo.role==='user' && <button className="primary block" onClick={changeCommentBoxStatus}>BẮT ĐẦU BÌNH LUẬN</button>)) : <Link to={`/signin?redirect=drink/${id}`}>Đăng nhập để bình luận</Link>
                     }
@@ -325,11 +321,30 @@ export default function DrinkDetailPage(props) {
                         (userInfo.role==='admin' &&
                             (<div className="card card-body">
                                 <input type="text" hidden={tagEditBox} className="tagInput" onChange={(e)=>setTagContent(e.target.value)}></input>
-                                <button className="admin block" onClick={addTag} hidden={tagEditBox}>ADD</button>
+                                <button className="admin block" onClick={addTag} hidden={tagEditBox}>THÊM</button>
                                 <button className="admin block" onClick={enableTagEditBox}>
-                                    {tagEditBox ? <label>ADD TAGS</label> : <label>CLOSE</label>}
+                                    {tagEditBox ? <label>THÊM TAG</label> : <label>ĐÓNG</label>}
                                 </button>
                             </div>))
+                    }
+                    {userInfo && (userInfo.role==='admin' ? 
+                                (<div className="row">
+                                    <label className="bold-text">Tags:</label> {drink.tags.map(tag=>(
+                                <div className="card"><div>{tag}<button onClick={removeTag} className="admin">x</button></div></div>
+                                    ))}
+                                </div>) : (
+                                    <div>
+                                        <label className="bold-text">Tags:</label>  {drink.tags.map(tag=>(
+                                                    <label>{tag}, </label>
+                                                ))}
+                                    </div>
+                                ))}
+                    {!userInfo &&  (<div>
+                        <label className="bold-text">Tags:</label>  {drink.tags.map(tag=>(
+                                        <label>{tag}, </label>
+                                    ))}
+                        </div>)
+                    
                     }
                 </div>
                 <div>

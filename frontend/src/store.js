@@ -1,9 +1,9 @@
 import {createStore, compose, applyMiddleware, combineReducers} from 'redux';
 import thunk from 'redux-thunk';
-import {drinkFilterByPriceReducer, drinkFilterByStarReducer, drinkListReducer, drinkRatingReducer, drinksDetailReducer, drinkSearchReducer, relatedDrinkListReducer} from './reducers/drinkReducer';
+import {drinkFilterByPriceReducer, drinkFilterByStarReducer, drinkListReducer, drinkRatingReducer, drinksDetailReducer, drinkSearchReducer, drinkTagsAddingReducer, drinkTagsRemovingReducer, relatedDrinkListReducer} from './reducers/drinkReducer';
 import { userDetailReducer, userListReducer, userSigninReducer, userSignupReducer, userUpdateProfileReducer } from './reducers/userReducer';
 import {cartReducer} from './reducers/cartReducer';
-import { createOrderReducer, orderAggregateReducer, OrderDetailReducer, orderListReducer } from './reducers/orderReducer';
+import { allOrderDateReducer, allOrderFilterByDateReducer, allOrderListReducer, allOrderMonthReducer, allOrderYearReducer, createOrderReducer, orderAggregateReducer, OrderDetailReducer, orderListReducer } from './reducers/orderReducer';
 import { detailsOfOrder } from './actions/orderAction';
 import { userCommentListReducer, userCommentReducer, userDeleteCommentReducer, userEditCommentReducer, userFilterCommentByStarReducer, userSortCommentReducer } from './reducers/commentReducer';
 
@@ -46,7 +46,13 @@ const reducer = combineReducers({//bugs are fixed on every streak
     userFilterCommentByStar: userFilterCommentByStarReducer,
     userSortComment: userSortCommentReducer,
     drinkRating: drinkRatingReducer,//streak #7 + setup admin and adminRoute + setup some GUIs for admin as well
-    
+    drinkTagsAdding: drinkTagsAddingReducer,//streak #8
+    drinkTagRemoving: drinkTagsRemovingReducer,
+    allOrderList: allOrderListReducer,
+    allOrderFilterByDate: allOrderFilterByDateReducer,
+    allOrderDate: allOrderDateReducer,
+    allOrderMonth: allOrderMonthReducer,
+    allOrderYear: allOrderYearReducer,
 
 })
 

@@ -173,7 +173,7 @@ export default function ProfilePage(props){
                             
                                 : errorUpdateProfile ? (<MessageBox variant="error">{errorUpdateProfile}</MessageBox>)
                             
-                                : successUpdateProfile && (<MessageBox variant="info">Profile Updated</MessageBox>)
+                                : successUpdateProfile && (<MessageBox variant="info">Đã cập nhật thông tin</MessageBox>)
                             }
                         </div>
                         
@@ -182,7 +182,7 @@ export default function ProfilePage(props){
                         (
                             <div>
                                 <div className="row left">
-                                    <label className="bold-text">Tên: ‎</label> <label>{name}</label>
+                                    <label className="bold-text">Tên: ‎</label> <label>{name}</label>{userInfo && userInfo.role==='admin' && <i className="fa fa-check"></i>}
                                 </div>
                                 <div className="row left">
                                     <label className="bold-text">Email: ‎</label> {email}
@@ -195,6 +195,13 @@ export default function ProfilePage(props){
                                 </div>
                                 <div className="row left">
                                     <label className="bold-text">Số điện thoại: ‎</label> {phoneNumber}
+                                </div>
+                                {userInfo && userInfo.role==="admin" && 
+                                    <div className="row left">
+                                        <label className="bold-text">Chức vụ: ‎</label> <label>Quản trị viên</label>
+                                    </div>}
+                                <div className="row left">
+                                    <label className="bold-text">Tham gia: ‎</label> {user && <DateComponent passedDate={user.createdAt}></DateComponent>}
                                 </div>
                                 <div>
                                     {/* {
@@ -231,7 +238,7 @@ export default function ProfilePage(props){
                         {/* <input id="gender" type="text" placeholder="Enter Your gender here" value={user.gender} value={gender} onChange={(e)=> setGender(e.target.value)} disabled={disabled}>
                         </input> */}
                         <select id="gender" value={user.gender} value={gender} onChange={(e)=> setGender(e.target.value)} disabled={disabled}>
-                            <option value="" hidden>Select your gender</option>
+                            <option value="" hidden>Chọn giới tính</option>
                             <option value="male">Nam</option>
                             <option value="female">Nữ</option>
                             <option value="others">Khác</option>
@@ -261,14 +268,14 @@ export default function ProfilePage(props){
                         <div className="bottom-button-div-group">
                             <div className="bottom-button-div">
                                 <button className="primary" type="button" onClick={enableEdit}>
-                                {editButtonName? (<label>EDIT</label>)
-                                : (<label>CLOSE</label>)
+                                {editButtonName? (<label>SỬA</label>)
+                                : (<label>ĐÓNG</label>)
                                 }
                                 </button>
                             </div>
                             {!editButtonName && <div className="bottom-button-div">
                                 <button className="primary" type="submit" disabled={disabled}>
-                                    <label>SUBMIT</label>
+                                    <label>GỬI</label>
                                 </button>
                             </div>}
                             

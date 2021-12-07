@@ -5,6 +5,7 @@ import { useParams } from 'react-router';
 import { detailsOfOrder } from '../actions/orderAction';
 import LoadingBox from '../components/LoadingBox';
 import MessageBox from '../components/MessageBox';
+import DateComponent from '../components/DateComponent';
 
 export default function OrderDetailPage() {
     const params = useParams();
@@ -45,6 +46,11 @@ export default function OrderDetailPage() {
                                 <h2>HÓA ĐƠN</h2>
                                 <ul>
                                     {loading ? <LoadingBox></LoadingBox> : error ? <MessageBox variant="error">{error}</MessageBox> : order &&
+                                    <><li>Username: {order.shippingInfo.username}</li>
+                                    <li>Họ và tên: {order.shippingInfo.fullName}</li>
+                                    <li>Email: {order.shippingInfo.email}</li>
+                                    <li>SĐT: {order.shippingInfo.phoneNumber}</li></>}
+                                    {loading ? <LoadingBox></LoadingBox> : error ? <MessageBox variant="error">{error}</MessageBox> : order &&
                                     order.orderItems.map((item)=>(
                                         <li key={item.drink} className="row purple">
                                             <div className="row">
@@ -72,16 +78,16 @@ export default function OrderDetailPage() {
                                     ))
                                     }
                                     <li>
-                                        Phí giao hàng: {order && order.shippingPrice} đồng
+                                    <strong>Phí giao hàng</strong>: {order && order.shippingPrice} đồng
                                     </li>
                                 </ul>
                                 {order && order.isPaid ? <div>
-                                    Đã thanh toán lúc {order.PaidAt}
+                                    <strong>Đã thanh toán lúc</strong> <DateComponent passedDate={order.paidAt}></DateComponent>
                                 </div> : <div>Chưa thanh toán</div>
                                 }
                                 {order && order.isDelivered ? <div>
-                                    Đã giao
-                                </div> : <div>Chưa giao</div>
+                                    <strong>Đã giao</strong> <DateComponent passedDate={order.deliveredAt}></DateComponent>
+                                </div> : <div><strong>Chưa giao</strong></div>
                                 }
                             </div>
                             
