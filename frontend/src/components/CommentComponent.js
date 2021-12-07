@@ -73,7 +73,7 @@ export default function CommentComponent(props){
                                 </div>
                             )) : (
                                 <div>
-                                    <p>{comment.content}</p>
+                                    <Linkify><p>{comment.content}</p></Linkify>
                                     <Rating rating={comment.rating} reviewNum = ""></Rating>
 
                                 </div>
@@ -83,7 +83,7 @@ export default function CommentComponent(props){
                             editCommentStatus ? 
                             <textarea value={content} className="editComment" type="textarea" onChange={(e)=> setCommentContent(e.target.value)}>
                                                     </textarea>
-                            : <p>{comment.content}</p>))}
+                            : <Linkify><p>{comment.content}</p></Linkify>))}
                         {userInfo && (userInfo._id === personnel._id &&( 
                         editCommentStatus ? <select onChange={(e)=>setRating(e.target.value)}>
                                             <option value="" hidden>rate</option>

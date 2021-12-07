@@ -3,7 +3,7 @@ const {Schema} = mongoose;
 
 const drinkSchema = new mongoose.Schema({
     name: {type: String, required: true, unique: true},
-    category: {type: String, required: true},
+    category: {type: String, required: false},
     image: {type: String},
     price: {type: Number, required: true},
     rating: {type: Number, default: 0},

@@ -15,6 +15,8 @@ import ProfilePage from './pages/ProfilePage';
 import OrderPage from './pages/OrderPage';
 import OrderDetailPage from './pages/OrderDetailPage';
 import OrderHistoryPage from './pages/OrderHistoryPage';
+import AdminRoute from './components/AdminRoute';
+import OrdersListPage from './pages/OrdersListPage';
 
 
 function App() {
@@ -47,7 +49,8 @@ function App() {
                     cartItems.length>0
                     && (<span className="cart-items-count">{cartItems.reduce((a, c) => a + Number(c.quantity), 0)}</span>)
                     }</Link>
-                      {userInfo && userInfo.role==='user' ? (
+                      {
+                      userInfo ? (userInfo.role==='user' ? (
                         <div className="dropDown">
                           <Link to="#">{userInfo.name} <i className="fa fa-caret-down"></i></Link>
                         
@@ -64,7 +67,28 @@ function App() {
                               </Link>
                             </li>
                           </ul> 
-                        </div>) : <Link to="/signin" className="">Đăng nhập</Link>}
+                        </div>) 
+                        : userInfo.role==='admin' && (
+                        <div className="dropDown">
+                          <Link to="#">{userInfo.name} <i className="fa fa-caret-down"></i></Link>
+                        
+                          <ul className="dropDown-content">
+                            <li>
+                              <Link to={`/admin/${userInfo._id}/profile`}>Tài khoản<i className="fa fa-user"></i></Link>
+                            </li>
+                            <li>
+                              <Link  to={`/admin/ordersList/`}>Đơn hàng<i className="fa fa-history"></i></Link>
+                            </li>
+                            <li>
+                              <Link  to={`/admin/usersList/`}>Người dùng<i className="fa fa-users"></i></Link>
+                            </li>
+                            <li>
+                              <Link to="/" onClick={signOutHandler}>
+                                Đăng xuất<i className="fa fa-hand-o-left"></i>
+                              </Link>
+                            </li>
+                          </ul> 
+                        </div>)) : (<Link to="/signin" className="">Đăng nhập</Link>)}
               </header>
               <main>
                 <Routes>
@@ -87,9 +111,16 @@ function App() {
                   <Route path="/user/:id/profile" element={<ProfilePage></ProfilePage>}></Route>
                 </Routes>
                 <Routes>
+                  <Route path="/admin/:id/profile" element={<ProfilePage></ProfilePage>}></Route>
+                </Routes>
+                <Routes>
                   <Route exact path="/order" element={<OrderPage></OrderPage>}></Route>
                   <Route exact path={`/order/:orderId`} element={<OrderDetailPage></OrderDetailPage>}></Route>
                   <Route exact path={"/order/history"} element={<OrderHistoryPage></OrderHistoryPage>}></Route>
+                </Routes>
+                <Routes>
+                  <Route exact path="/admin/ordersList" element={<AdminRoute><OrdersListPage></OrdersListPage></AdminRoute>}></Route>
+                  <Route exact path="/admin/usersList" element={<AdminRoute><OrdersListPage></OrdersListPage></AdminRoute>}></Route>
                 </Routes>
 
               </main>

@@ -1,6 +1,8 @@
 import express from 'express'
 import expressAsyncHandler from 'express-async-handler'
 import Drink from '../models/Drink.js'
+import Comment from '../models/Comment.js';
+import mongoose from 'mongoose';
 
 const drinkRouter = express.Router();
 
@@ -19,6 +21,7 @@ drinkRouter.get('/:id', expressAsyncHandler(async(req, res)=>{
 }));
 
 
+
 drinkRouter.get('/related/:id', expressAsyncHandler(async(req, res)=>{
 
     const drink = await Drink.findById(req.params.id);
@@ -28,6 +31,40 @@ drinkRouter.get('/related/:id', expressAsyncHandler(async(req, res)=>{
         res.send(relatedDrinks);
     }else{
         res.status(404).send({message: 'Không có sản phẩm liên quan'});
+    }
+}));
+
+drinkRouter.get('/:id/rating', expressAsyncHandler(async(req, res)=>{
+    const comment = await Comment.findOne({drink: mongoose.Types.ObjectId(req.params.id)});
+    if(comment)
+    {
+        const overallRatingAndNumbers = await Comment.aggregate(
+            [   
+                {$match: {drink: mongoose.Types.ObjectId(req.params.id)}},
+                {
+                    $group: {
+                        _id: "$drink",
+                        overallRating: {$avg: "$rating"},
+                        totalComments: {$sum: 1 }
+                    },
+                    
+                }
+            ]
+        );
+        console.log(overallRatingAndNumbers);
+        const drink = await Drink.findById(req.params.id);
+        drink.rating = overallRatingAndNumbers[0].overallRating;
+        drink.reviewNum = overallRatingAndNumbers[0].totalComments;
+        
+        await drink.save();
+        //console.log(drink);
+        if(overallRatingAndNumbers){
+            res.send(overallRatingAndNumbers);
+        }else{
+            res.status(404).send({message: 'Không có đánh giá'});
+        }
+    }else{
+        res.send({message: "Đánh giá bằng 0"});
     }
 }));
 
@@ -78,6 +115,8 @@ drinkRouter.get('/filter/price/:price', expressAsyncHandler(async(req, res)=>{
         res.status(404).send({message: 'KHÔNG TÌM ĐƯỢC SẢN PHẨM NÀO KHỚP VỚI GIÁ TIỀN YÊU CẦU'});
     }
 }));
+
+
 
 
 export default drinkRouter;

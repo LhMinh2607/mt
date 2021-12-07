@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import RatingComponent from './RatingComponent'
 import { Link } from 'react-router-dom';
 import { Navigate, useNavigate } from 'react-router';
+import { useSelector } from 'react-redux';
 
 
 
@@ -17,6 +18,9 @@ export default function DrinkPanel(props) {
     }
 
     const [quantity, setquantity] = useState(1);
+
+    const userSignin = useSelector(state => state.userSignin);
+    const {userInfo} = userSignin;
 
     return (
         <div>
@@ -53,9 +57,12 @@ export default function DrinkPanel(props) {
                           </div>
                         </div>
                       </li>
-                      <li>
+                      {userInfo && userInfo.role==='user' && <li>
                         <button onClick={addToCartHandler} className="primary block">Thêm vào giỏ hàng</button>
-                      </li>
+                      </li>}
+                      {!userInfo && <li>
+                        <button onClick={addToCartHandler} className="primary block">Thêm vào giỏ hàng</button>
+                      </li>}
                     </>
                   )}
                 </div>

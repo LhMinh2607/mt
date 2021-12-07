@@ -1,6 +1,6 @@
 import {createStore, compose, applyMiddleware, combineReducers} from 'redux';
 import thunk from 'redux-thunk';
-import {drinkFilterByPriceReducer, drinkFilterByStarReducer, drinkListReducer, drinksDetailReducer, drinkSearchReducer, relatedDrinkListReducer} from './reducers/drinkReducer';
+import {drinkFilterByPriceReducer, drinkFilterByStarReducer, drinkListReducer, drinkRatingReducer, drinksDetailReducer, drinkSearchReducer, relatedDrinkListReducer} from './reducers/drinkReducer';
 import { userDetailReducer, userListReducer, userSigninReducer, userSignupReducer, userUpdateProfileReducer } from './reducers/userReducer';
 import {cartReducer} from './reducers/cartReducer';
 import { createOrderReducer, orderAggregateReducer, OrderDetailReducer, orderListReducer } from './reducers/orderReducer';
@@ -22,7 +22,7 @@ const initialState = {
     }
 };
 
-const reducer = combineReducers({
+const reducer = combineReducers({//bugs are fixed on every streak
     drinkList: drinkListReducer, //streak #1 + set up the project with frontend, backend and database
     userSignup: userSignupReducer, //streak #2
     userSignin: userSigninReducer,
@@ -45,6 +45,8 @@ const reducer = combineReducers({
     userCommentList: userCommentListReducer,
     userFilterCommentByStar: userFilterCommentByStarReducer,
     userSortComment: userSortCommentReducer,
+    drinkRating: drinkRatingReducer,//streak #7 + setup admin and adminRoute + setup some GUIs for admin as well
+    
 
 })
 

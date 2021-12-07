@@ -182,19 +182,19 @@ export default function ProfilePage(props){
                         (
                             <div>
                                 <div className="row left">
-                                    <label className="bold-text">Tên: </label> <label>{name}</label>
+                                    <label className="bold-text">Tên: ‎</label> <label>{name}</label>
                                 </div>
                                 <div className="row left">
-                                    <label className="bold-text">Email: </label> {email}
+                                    <label className="bold-text">Email: ‎</label> {email}
                                 </div>
                                 <div className="row left">
-                                    <label className="bold-text">Giới tính: </label> {gender}
+                                    <label className="bold-text">Giới tính: ‎</label> {gender==='male' ? 'Nam' : gender==='female' ? 'Nữ' : 'Khác'}
                                 </div>
                                 <div className="row left">
-                                    <label className="bold-text">Ngày sinh: </label> <DateComponent isBirthDate = "yes" passedDate = {birthDate}></DateComponent>
+                                    <label className="bold-text">Ngày sinh: ‎</label> <DateComponent isBirthDate = "yes" passedDate = {birthDate}></DateComponent>
                                 </div>
                                 <div className="row left">
-                                    <label className="bold-text">Số điện thoại: </label> {phoneNumber}
+                                    <label className="bold-text">Số điện thoại: ‎</label> {phoneNumber}
                                 </div>
                                 <div>
                                     {/* {
@@ -234,7 +234,7 @@ export default function ProfilePage(props){
                             <option value="" hidden>Select your gender</option>
                             <option value="male">Nam</option>
                             <option value="female">Nữ</option>
-                            <option value="others">3D</option>
+                            <option value="others">Khác</option>
                         </select>
                         <label htmlFor="birthDate">
                             Ngày sinh: 

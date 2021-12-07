@@ -3,7 +3,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router';
 import { Link } from 'react-router-dom';
 import { commitCommenting, filterCommentByStar, listOfComments, sortComment } from '../actions/commentAction';
-import { detailsOfDrink, showRelatedDrinkList } from '../actions/drinkAction';
+import { detailsOfDrink, getDrinkRating, showRelatedDrinkList } from '../actions/drinkAction';
+import { listOfOrders } from '../actions/orderAction';
 import { listOfUsers } from '../actions/userAction';
 import CommentComponent from '../components/CommentComponent';
 import DrinkPanel from '../components/DrinkPanel';
@@ -54,6 +55,8 @@ export default function DrinkDetailPage(props) {
     const userList = useSelector((state) => state.userList);
     const {loading: loadingUserList, error: errorUserList, users} = userList;
 
+    const drinkRating = useSelector(state=>state.drinkRating);
+    const {loading: loadingRating, error: errorRating, success: successRating} = drinkRating;
 
 
     const [commentContent, setCommentContent] = useState('');
@@ -63,12 +66,19 @@ export default function DrinkDetailPage(props) {
     const [tagEditBox, showTagEditBox] = useState(true);
     const [disabled, setDisabled] = useState(false);
 
+    const [commentBox, setCommentBox] = useState(false);
+
     const addToCartHandler = () =>{
         navigate(`/shopping_cart/${drink._id}/1`);
     }
 
     const enableTagEditBox = () => {
         showTagEditBox(!tagEditBox);
+    }
+    const [tagContent, setTagContent] = useState('');
+    const addTag = () =>{
+        //dispatch(addTagToDrink(drink._id, tagContent));
+        enableTagEditBox();
     }
 
     const commentSubmitHandler = (e) => {
@@ -97,6 +107,10 @@ export default function DrinkDetailPage(props) {
         
     }
 
+    const changeCommentBoxStatus = () =>{
+        setCommentBox(!commentBox);
+    }
+
     useEffect(()=>{
         // dispatch({type: USER_FILTER_COMMENT_BY_STAR_RESET});
         // dispatch(getdrinkRating(drinkId));
@@ -113,11 +127,16 @@ export default function DrinkDetailPage(props) {
             
         //     dispatch(showRelateddrinkList(drinkId));
         // }, 50); //time to delay so that i can execute the getdrinkRating first (update the rating field in drink) before getting drinkDetails
+        
+        dispatch(getDrinkRating(id));
         dispatch(listOfUsers());
         dispatch(listOfComments(id));
         dispatch(detailsOfDrink(id));
         dispatch(showRelatedDrinkList(id));
-    }, [dispatch, id]);
+        if(userInfo){
+            dispatch(listOfOrders(userInfo._id));
+        }
+    }, [dispatch, id, userInfo]);
     return (
         <div className="row top">
             {
@@ -198,11 +217,21 @@ export default function DrinkDetailPage(props) {
                             </div>
                         </li>
                         <li>
-                        {
+                        {userInfo && (userInfo.role==='user' ?
                             (
                                 <button onClick={addToCartHandler} className="primary block">THÊM VÀO GIỎ HÀNG</button>
-                            )
+                            ) : userInfo.role==='admin' &&
+                            (
+                                <div className="row"><button className="primary">SỬA</button>
+                                <button className="primary">XÓA</button></div>
+                            ) )
                         }
+                        {!userInfo && 
+                            (
+                                <button onClick={addToCartHandler} className="primary block">THÊM VÀO GIỎ HÀNG</button>
+                            ) 
+                        }
+                        
                         </li>
                     </ul>
                     
@@ -225,9 +254,10 @@ export default function DrinkDetailPage(props) {
                     }
                 </div>
                 <div className="col-1">
-                    <h1>Bình luận đi</h1>
-                    {comments && comments.length>0 && 
+                    
+                    {userInfo && userInfo.role==='user' && comments && comments.length>0 && (
                     <div>
+                        <h1>Bình luận đi</h1>
                         <select className="filterSelect" onChange={filterCommentByRating} value={star}> 
                             <option value="" hidden>Filter by rating</option>
                             <option value="5">5 stars ⭐⭐⭐⭐⭐</option>
@@ -238,15 +268,16 @@ export default function DrinkDetailPage(props) {
                             <option value="0">0 star</option>
                             <option value="">All comments</option>
                         </select>
-                            <select className="filterSelect" onChange={sortCommentByTime} value={time}>
-                                <option value="" hidden>Sort</option>
-                                <option value="-1">Latest</option>
-                                <option value="1">Oldest</option>
-                            </select>
-                    </div>
+                        <select className="filterSelect" onChange={sortCommentByTime} value={time}>
+                            <option value="" hidden>Sort</option>
+                            <option value="-1">Latest</option>
+                            <option value="1">Oldest</option>
+                        </select>
+                        
+                    </div>) 
                     }
                     {
-                        loadingCommitComment ? (<LoadingBox></LoadingBox>) : errorCommitError ? (<MessageBox variant="error">{errorCommitError}</MessageBox>) : 
+                        loadingCommitComment ? (<LoadingBox></LoadingBox>) : errorCommitError && errorCommitError.includes("E11000") ? (<MessageBox variant="error">Bạn đã bình luận rồi. Bạn có thể sửa bình luận</MessageBox>) : 
                         (
                             success && (
                                 <MessageBox variant="info">Đã đăng bình luận</MessageBox>
@@ -254,7 +285,7 @@ export default function DrinkDetailPage(props) {
                         )
                     }
                     {
-                        userInfo && orders ? ( userInfo.role==='user' && (
+                        userInfo ? ( userInfo.role==='user' && commentBox===true ? (
                             loadingOrder ? (<LoadingBox></LoadingBox>) :
                             errorOrder ? (<MessageBox variant="error">{errorOrder}</MessageBox>) :
                             (orders.map(order=>( order.isPaid &&
@@ -264,29 +295,41 @@ export default function DrinkDetailPage(props) {
                                         <label htmlFor="content">
                                             Bình luận với tên {userInfo.name}
                                         </label>
+                                        <button className="primary block" onClick={changeCommentBoxStatus}>ĐÓNG</button>
                                         <form onSubmit={commentSubmitHandler} disabled={disabled}>
                                             <select onChange={(e)=>setRating(e.target.value)} required={true}>
                                                 <option value="" hidden>rate</option>
-                                                <option value="5">💯Excellent (⭐⭐⭐⭐⭐</option>
-                                                <option value="4">👌Very good (⭐⭐⭐⭐)</option>
-                                                <option value="3">👍Good (⭐⭐⭐)</option>
-                                                <option value="2">☹️Bad (⭐⭐)</option>
-                                                <option value="1">😖Meh (⭐)</option>
-                                                <option value="0">👎 (No star for this)</option>
+                                                <option value="5">(⭐⭐⭐⭐⭐)💯</option>
+                                                <option value="4">(⭐⭐⭐⭐)👌</option>
+                                                <option value="3">(⭐⭐⭐)👍</option>
+                                                <option value="2">(⭐⭐)☹️</option>
+                                                <option value="1">(⭐)😖</option>
+                                                <option value="0">(Không sao luôn)👎 </option>
                                             </select>
                                             <div>
                                                 
                                             </div>
-                                            <textarea required={true} disabled={disabled} className="comment" id="content" type="textarea" placeholder="Comments are welcomed... to those who bought this product only" onChange={(e)=> setCommentContent(e.target.value)}>
+                                            <textarea required={true} disabled={disabled} className="comment" id="content" type="textarea" placeholder="" onChange={(e)=> setCommentContent(e.target.value)}>
                                             </textarea>
                                             <button type="submit" className="primary block" disabled={disabled}>ĐĂNG</button>
+                                            
                                         </form>
                                     </div>
                             ))))
                             ))
                                 // <div>{user.productIdList}</div>
                             
-                        )) : <Link to={`/signin?redirect=drink/${id}`}>Đăng nhập để bình luận</Link>
+                        ): (userInfo.role==='user' && <button className="primary block" onClick={changeCommentBoxStatus}>BẮT ĐẦU BÌNH LUẬN</button>)) : <Link to={`/signin?redirect=drink/${id}`}>Đăng nhập để bình luận</Link>
+                    }
+                    {userInfo &&
+                        (userInfo.role==='admin' &&
+                            (<div className="card card-body">
+                                <input type="text" hidden={tagEditBox} className="tagInput" onChange={(e)=>setTagContent(e.target.value)}></input>
+                                <button className="admin block" onClick={addTag} hidden={tagEditBox}>ADD</button>
+                                <button className="admin block" onClick={enableTagEditBox}>
+                                    {tagEditBox ? <label>ADD TAGS</label> : <label>CLOSE</label>}
+                                </button>
+                            </div>))
                     }
                 </div>
                 <div>

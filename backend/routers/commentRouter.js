@@ -46,7 +46,7 @@ commentRouter.get('/list/:id/sort/:time', expressAsyncHandler(async(req, res)=>{
 }));
 
 commentRouter.get('/list/:id', expressAsyncHandler(async(req, res)=>{
-    const comments = await Comment.find({product: req.params.id}).sort({updatedAt: -1});
+    const comments = await Comment.find({drink: req.params.id}).sort({updatedAt: -1});
     if(comments){
         res.send(comments);
     }else{
