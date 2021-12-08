@@ -50,7 +50,8 @@ export default function OrderDetailPage() {
                                     <><li>Username: {order.shippingInfo.username}</li>
                                     <li>Họ và tên: {order.shippingInfo.fullName}</li>
                                     <li>Email: {order.shippingInfo.email}</li>
-                                    <li>SĐT: {order.shippingInfo.phoneNumber}</li></>}
+                                    <li>SĐT: {order.shippingInfo.phoneNumber}</li>
+                                    <li>Địa chỉ: {order.shippingInfo.shippingAddress}</li></>}
                                     {loading ? <LoadingBox></LoadingBox> : error ? <MessageBox variant="error">{error}</MessageBox> : order &&
                                     order.orderItems.map((item)=>(
                                         <li key={item.drink} className="row purple">

@@ -19,6 +19,7 @@ import AdminRoute from './components/AdminRoute';
 import UserOnlyRoute from './components/UserOnlyRoute';
 import OrdersListPage from './pages/OrdersListPage';
 import NotFoundPage from './pages/NotFoundPage';
+import UserListPage from './pages/UserListPage';
 
 
 function App() {
@@ -115,7 +116,7 @@ function App() {
                   <Route exact path={`/order/:orderId`} element={<OrderDetailPage></OrderDetailPage>}></Route>
                   <Route exact path={"/order/history"} element={<UserOnlyRoute><OrderHistoryPage></OrderHistoryPage></UserOnlyRoute>}></Route>
                   <Route exact path="/admin/ordersList" element={<AdminRoute><OrdersListPage></OrdersListPage></AdminRoute>}></Route>
-                  <Route exact path="/admin/usersList" element={<AdminRoute><OrdersListPage></OrdersListPage></AdminRoute>}></Route>
+                  <Route exact path="/admin/usersList" element={<AdminRoute><UserListPage></UserListPage></AdminRoute>}></Route>
                 </Routes>
                 
 

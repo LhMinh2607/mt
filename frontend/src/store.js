@@ -1,9 +1,9 @@
 import {createStore, compose, applyMiddleware, combineReducers} from 'redux';
 import thunk from 'redux-thunk';
 import {drinkFilterByPriceReducer, drinkFilterByStarReducer, drinkListReducer, drinkRatingReducer, drinksDetailReducer, drinkSearchReducer, drinkTagsAddingReducer, drinkTagsRemovingReducer, relatedDrinkListReducer} from './reducers/drinkReducer';
-import { userDetailReducer, userListReducer, userSigninReducer, userSignupReducer, userUpdateProfileReducer } from './reducers/userReducer';
+import { userDetailReducer, userListReducer, userMostSpendingReducer, userSearchingReducer, userSigninReducer, userSignupReducer, userSortedByDateReducer, userSortedByNameReducer, userSortedByOrderReducer, userSortedBySpendingReducer, userUpdateProfileReducer } from './reducers/userReducer';
 import {cartReducer} from './reducers/cartReducer';
-import { allOrderDateReducer, allOrderFilterByDateReducer, allOrderListReducer, allOrderMonthReducer, allOrderYearReducer, createOrderReducer, orderAggregateReducer, OrderDetailReducer, orderListReducer } from './reducers/orderReducer';
+import { allOrderDateReducer, allOrderFilterByDateReducer, allOrderListReducer, allOrderMonthReducer, allOrderYearReducer, createOrderReducer, deliveredOrderReducer, drinkLeastOrderedReducer, drinkMostOrderedReducer, leastOrderedDrinkReducer, maxTotalOrderReducer, mostOrderedDrinkReducer, orderAggregateListReducer, orderAggregateReducer, orderDeliveredReducer, OrderDetailReducer, orderListReducer, orderMaxTotalReducer, orderPaidReducer, orderSortedByDateReducer, orderSortedByTotalReducer, paidOrderReducer } from './reducers/orderReducer';
 import { detailsOfOrder } from './actions/orderAction';
 import { userCommentListReducer, userCommentReducer, userDeleteCommentReducer, userEditCommentReducer, userFilterCommentByStarReducer, userSortCommentReducer } from './reducers/commentReducer';
 
@@ -56,7 +56,20 @@ const reducer = combineReducers({//bugs are fixed on every streak
     
     //streak #9 + set up topping function (Add to cart with topping as well as the order)
 
-    //streak #10 coming soon
+    orderPaid: orderPaidReducer,//streak #10 done
+    orderDelivered: orderDeliveredReducer,
+    orderMaxTotal: orderMaxTotalReducer,
+    orderSortedByDate: orderSortedByDateReducer,
+    orderSortedByTotal: orderSortedByTotalReducer,
+    drinkMostOrdered: drinkMostOrderedReducer,
+    drinkLeastOrdered: drinkLeastOrderedReducer,
+    userSearching: userSearchingReducer,
+    userMostSpending: userMostSpendingReducer,
+    userSortedBySpending: userSortedBySpendingReducer,
+    userSortedByOrder: userSortedByOrderReducer,
+    userSortedByName: userSortedByNameReducer,
+    userSortedByDate: userSortedByDateReducer,
+    orderAggregateList: orderAggregateListReducer,
 
 })
 

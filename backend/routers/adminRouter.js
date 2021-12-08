@@ -2,6 +2,7 @@ import express from 'express'
 import expressAsyncHandler from 'express-async-handler'
 import Drink from '../models/Drink.js';
 import Order from '../models/Order.js';
+import User from '../models/User.js';
 import { isAuth, isAdmin } from '../utils.js';
 
 
@@ -36,6 +37,96 @@ adminRouter.put('/drink/tag/remove/:id', expressAsyncHandler(async(req, res)=>{
 adminRouter.get('/order/list/all', expressAsyncHandler(async(req, res)=>{
     const allOrders = await Order.find({});
     res.send(allOrders);
+}));
+
+adminRouter.get('/order/total/all', expressAsyncHandler(async(req, res)=>{
+    const userSpendingsList = await Order.aggregate(
+        [   
+            {$match: {isPaid: true}},
+            
+            {
+                $group: {
+                    _id: "$user",
+                    totalMoneySpent: {$sum: {$cond: [{ $eq: [{ $type: "$totalPrice" }, ""] }, 0, "$totalPrice"]}},
+                    
+                },
+            },
+            {$project: {
+                totalMoneySpent: {$ifNull: ["$totalMoneySpent", 0]}
+            },}
+        ]
+    )
+    if(userSpendingsList.length == 0){
+        res.send([{_id: null, totalMoneySpent: 0}]);}
+    else{
+        res.send(userSpendingsList);
+    }
+}));
+
+adminRouter.get('/order/list/paid/:boo', expressAsyncHandler(async(req, res)=>{
+    if(req.params.boo==='true'){
+        const paidOrders = await Order.find({isPaid: true});
+        res.send(paidOrders);
+    }else{
+        const paidOrders = await Order.find({isPaid: false});
+        res.send(paidOrders);
+    }
+}));
+
+adminRouter.get('/order/list/delivered/:boo', expressAsyncHandler(async(req, res)=>{
+    if(req.params.boo==='true'){
+        const deliveredOrders = await Order.find({isDelivered: true});
+        res.send(deliveredOrders);
+    }else{
+        const deliveredOrders = await Order.find({isDelivered: false});
+        res.send(deliveredOrders);
+    }
+}));
+
+adminRouter.get('/order/list/sort/date/:boo', expressAsyncHandler(async(req, res)=>{
+    if(req.params.boo==='date-asc'){
+        const sortedOrdersByDate = await Order.find({}).sort({createdAt: 1});
+        res.send(sortedOrdersByDate);
+    }
+    if(req.params.boo==='date-desc'){
+        const sortedOrdersByDate = await Order.find({}).sort({createdAt: -1});
+        res.send(sortedOrdersByDate);
+    }
+    
+}));
+
+adminRouter.get('/order/list/sort/total/:boo', expressAsyncHandler(async(req, res)=>{
+    if(req.params.boo==='total-asc'){
+        const sortedOrdersByTotal = await Order.find({}).sort({totalPrice: 1});
+        res.send(sortedOrdersByTotal);
+    }
+    if(req.params.boo==='total-desc'){
+        const sortedOrdersByTotal = await Order.find({}).sort({totalPrice: -1});
+        res.send(sortedOrdersByTotal);
+    }
+}));
+
+adminRouter.get('/order/list/total/max', expressAsyncHandler(async(req, res)=>{
+    const maxTotalOrders = await Order.find({}).sort({totalPrice: -1}).limit(1);
+    res.send(maxTotalOrders);
+}));
+
+adminRouter.get('/order/list/drink/most', expressAsyncHandler(async(req, res)=>{
+    // const mostOrderedDrink = await Order.aggregate([
+    //     {$project:{
+    //         id: "$userId", count: {$size:{"$ifNull":["$Product",[]]} }
+    //     }},
+    //     {$group: {
+    //         _id: null, 
+    //         max: { $max: "$count" }
+    //     }}
+    // ]);
+    // res.send(mostOrderedDrink);
+}));
+
+adminRouter.get('/order/list/drink/least', expressAsyncHandler(async(req, res)=>{
+    // const leastOrderedDrink = await Order.find({}).sort({totalPrice: -1}).limit(1);
+    // res.send(leastOrderedDrink);
 }));
 
 adminRouter.get('/order/list/filter/:year/:month/:day', expressAsyncHandler(async(req, res)=>{
@@ -134,6 +225,193 @@ adminRouter.get('/order/list/date/day/month/:month/year/:year', expressAsyncHand
         res.status(404).send("Không tìm được ngày");
     }
 }));
+
+adminRouter.get('/user/tag/add/:id', expressAsyncHandler(async(req, res)=>{
+    const drink = await Drink.findById(req.params.id);
+    if(drink){
+        //console.log(user);
+        drink.tags.push(req.body.tagContent);
+        
+        await drink.save();
+        res.send({message: "Đã thêm tag"});
+    }else{
+        res.status(404).send("404");
+    }
+}));
+
+adminRouter.get('/user/search/:keyword', expressAsyncHandler(async(req, res)=>{
+    //const totalPrice = await Order.findById({user: req.params.id}, {totalPrice: 1});
+    var splitStr = req.params.keyword.toLowerCase().split(' ');
+    for (var i = 0; i < splitStr.length; i++) {
+        splitStr[i] = splitStr[i].charAt(0).toUpperCase() + splitStr[i].substring(1);     
+    }
+    
+    const userResult = await User.find({$or: [ 
+        {name: {$regex: req.params.keyword.toUpperCase()}},
+        {name: {$regex: req.params.keyword.charAt(0).toUpperCase() + req.params.keyword.slice(1)}},
+        {name: {$regex: splitStr.join(' ')}},
+        {email: {$regex: req.params.keyword.toLowerCase()}},
+        {email: {$regex: req.params.keyword}},
+        {email: {$regex: req.params.keyword.toUpperCase()}},
+
+    ]});
+ 
+    if(userResult.length>0){
+        res.send(userResult);
+    }else{
+        res.status(404).send({message: '404 Không tìm thấy'});
+    }
+}));
+
+adminRouter.get('/user/spending/most', expressAsyncHandler(async(req, res)=>{
+    
+    const mostSpendingUser = await Order.aggregate(
+        [   
+            {$match: {isPaid: true}}, 
+            {
+                $group: {
+                    _id: "$user",
+                    totalMoneySpent: {$sum: "$totalPrice"}
+                },
+            },
+            {$sort: {totalMoneySpent: -1}},
+            {$limit: 1},
+        ]
+    );
+    if(mostSpendingUser.length>0){
+        res.send(mostSpendingUser);
+    }else{
+        res.status(404).send({message: '404 Không tìm thấy'});
+    }
+}));
+
+adminRouter.get('/user/list/sort/spending/:boo', expressAsyncHandler(async(req, res)=>{
+    
+    if(req.params.boo==='spending-asc'){
+        const sortedUsersBySpending = await Order.aggregate(
+            [   
+                {$match: {isPaid: true}}, 
+                {
+                    $group: {
+                        _id: "$user",
+                        totalMoneySpent: {$sum: "$totalPrice"}
+                    },
+                },
+                {$sort: {totalMoneySpent: 1}},
+            ]
+        );
+        if(sortedUsersBySpending.length>0){
+            res.send(sortedUsersBySpending);
+        }else{
+            res.status(404).send({message: '404 Không tìm thấy'});
+        }
+    }
+    if(req.params.boo==='spending-desc'){
+        const sortedUsersBySpending = await Order.aggregate(
+            [   
+                {$match: {isPaid: true}}, 
+                {
+                    $group: {
+                        _id: "$user",
+                        totalMoneySpent: {$sum: "$totalPrice"}
+                    },
+                },
+                {$sort: {totalMoneySpent: -1}},
+            ]
+        );
+        if(sortedUsersBySpending.length>0){
+            res.send(sortedUsersBySpending);
+        }else{
+            res.status(404).send({message: '404 Không tìm thấy'});
+        }
+    }
+    
+    
+}));
+
+adminRouter.get('/user/list/sort/order/:boo', expressAsyncHandler(async(req, res)=>{
+    
+    if(req.params.boo==='order-asc'){
+    const sortedUsersByOrder = await Order.aggregate(
+        [   
+            {$match: {isPaid: true}}, 
+            {
+                $group: {
+                    _id: "$user",
+                    orderCount: {$sum: 1} //changed from $count to $sum: 1
+                },
+            },
+            {$sort: {orderCount: 1}},
+        ]
+    );
+        if(sortedUsersByOrder.length>0){
+            res.send(sortedUsersByOrder);
+        }else{
+            res.status(404).send({message: '404 Không tìm thấy'});
+        }
+    }
+    if(req.params.boo==='order-desc'){
+        const sortedUsersByOrder = await Order.aggregate(
+            [   
+                {$match: {isPaid: true}}, 
+                {
+                    $group: {
+                        _id: "$user",
+                        orderCount: {$sum: 1}
+                    },
+                },
+                {$sort: {orderCount: -1}},
+            ]
+        );
+            if(sortedUsersByOrder.length>0){
+                res.send(sortedUsersByOrder);
+            }else{
+                res.status(404).send({message: '404 Không tìm thấy'});
+            }
+        }
+}));
+
+adminRouter.get('/user/list/sort/name/:boo', expressAsyncHandler(async(req, res)=>{
+    if(req.params.boo==='name-asc'){
+
+        const sortedUsersByName = await User.find().sort({name: 1});
+        if(sortedUsersByName.length>0){
+            res.send(sortedUsersByName);
+        }else{
+            res.status(404).send({message: '404 Không tìm thấy'});
+        }
+    }
+    if(req.params.boo==='name-desc'){
+
+        const sortedUsersByName = await User.find().sort({name: -1});
+        if(sortedUsersByName.length>0){
+            res.send(sortedUsersByName);
+        }else{
+            res.status(404).send({message: '404 Không tìm thấy'});
+        }
+    }
+}));
+
+adminRouter.get('/user/list/sort/date/:boo', expressAsyncHandler(async(req, res)=>{
+    if(req.params.boo==='date-asc'){
+        const sortedUsersByDate = await User.find().sort({createdAt: 1});
+        if(sortedUsersByDate.length>0){
+            res.send(sortedUsersByDate);
+        }else{
+            res.status(404).send({message: '404 Không tìm thấy'});
+        }
+    }
+    if(req.params.boo==='date-desc'){
+        const sortedUsersByDate = await User.find().sort({createdAt: -1});
+        if(sortedUsersByDate.length>0){
+            res.send(sortedUsersByDate);
+        }else{
+            res.status(404).send({message: '404 Không tìm thấy'});
+        }
+    }
+}));
+
+
 
 
 export default adminRouter;
