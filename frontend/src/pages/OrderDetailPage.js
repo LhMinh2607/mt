@@ -44,6 +44,7 @@ export default function OrderDetailPage() {
                         <li>
                             <div className="card card-body">
                                 <h2>HÓA ĐƠN</h2>
+                                <h1>{order && <DateComponent passedDate={order.createdAt}></DateComponent>}</h1>
                                 <ul>
                                     {loading ? <LoadingBox></LoadingBox> : error ? <MessageBox variant="error">{error}</MessageBox> : order &&
                                     <><li>Username: {order.shippingInfo.username}</li>
@@ -61,16 +62,23 @@ export default function OrderDetailPage() {
                                             </div>
                                             <div className="min-30">
                                                 <Link to={`/drink/${item.drink}`}>{item.name}</Link>
+                                                <div className="row">
+                                                    Topping: {item.topping}
+                                                </div>
                                             </div>
+                                            
                                             <div>
                                                 <div>
                                                     Đơn giá: {item.price} đồng
                                                 </div>
                                                 <div>
+                                                    Giá topping: {item.toppingPrice} đồng
+                                                </div>
+                                                <div>
                                                     Số lượng: {item.quantity}
                                                 </div>
                                                 <div>
-                                                    <strong>Tổng: {item.quantity*item.price} đồng </strong>
+                                                    <strong>Tổng: {item.quantity*(item.price+item.toppingPrice)} đồng </strong>
                                                 </div>
                                             </div>
                                         </li>

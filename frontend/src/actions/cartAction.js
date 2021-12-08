@@ -3,7 +3,7 @@ import { CART_ADDED_ITEM, CART_REMOVED_ITEM, CART_SAVE_PAYMENT_METHOD, CART_SAVE
 import {
 } from '../constants/cartConst';
 
-export const addToCart = (drinkId, quantity) => async (dispatch, getState) => {
+export const addToCart = (drinkId, quantity, topping, toppingPrice) => async (dispatch, getState) => {
   const { data } = await Axios.get(`/api/drink/${drinkId}`);
   const {
     cart: { cartItems },
@@ -16,6 +16,8 @@ export const addToCart = (drinkId, quantity) => async (dispatch, getState) => {
         price: data.price,
         //countInStock: data.countInStock,
         drink: data._id,
+        topping, //topping data is too simple no need to get topping id or sth just toppingName would be fine. Moreover Topping doesn't have its own page like drink so toppingId to reference back to its page is not necessary. It doesn't need toppingId cuz it's gonna be ON A BILL. A BILL'S DATA IS FIXED.
+        toppingPrice,
         quantity,
       },
     });
@@ -25,8 +27,8 @@ export const addToCart = (drinkId, quantity) => async (dispatch, getState) => {
     );
 };
 
-export const removeFromCart = (drinkId) => (dispatch, getState) => {
-  dispatch({ type: CART_REMOVED_ITEM, payload: drinkId });
+export const removeFromCart = (drinkId, topping) => (dispatch, getState) => {
+  dispatch({ type: CART_REMOVED_ITEM, payload: drinkId, payload2: topping });
   localStorage.setItem('cartItems', JSON.stringify(getState().cart.cartItems));
 };
 

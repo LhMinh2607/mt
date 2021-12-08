@@ -53,6 +53,10 @@ const reducer = combineReducers({//bugs are fixed on every streak
     allOrderDate: allOrderDateReducer,
     allOrderMonth: allOrderMonthReducer,
     allOrderYear: allOrderYearReducer,
+    
+    //streak #9 + set up topping function (Add to cart with topping as well as the order)
+
+    //streak #10 coming soon
 
 })
 

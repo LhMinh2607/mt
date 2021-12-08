@@ -1,4 +1,4 @@
-import React, { Children, useEffect } from 'react';
+import React, { Children, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { addToCart, removeFromCart } from '../actions/cartAction';
@@ -9,6 +9,9 @@ export default function CartPage(props){
     const params = useParams();
     const id = params.drinkId;
     const quantity = Number(params.quantity);
+    const topping = params.topping;
+
+    const [toppingPrice, setToppingPrice] = useState(0); 
     
     const userSignin = useSelector((state)=> state.userSignin);
     const {userInfo, loading, error} = userSignin;
@@ -23,10 +26,10 @@ export default function CartPage(props){
     const dispatch = useDispatch();
 
 
-    const removeFromCartHandler = (id) => {
+    const removeFromCartHandler = (id, itemTopping) => {
         //remove item
         //alert(id); results in undefined, ok my bad
-        dispatch(removeFromCart(id));
+        dispatch(removeFromCart(id, itemTopping));
 
     }
 
@@ -34,13 +37,23 @@ export default function CartPage(props){
         window.scrollTo({
             top: 0, 
           });
-        //
+        // experimental
+        // const arr = [{dd: 'a', tt: 'b'}, {dd: 'a', tt: 'd'}, {dd: 'c', tt: 'd'}];
+        // const arrR = arr.filter((x) => (x.dd !== 'a' || x.tt !='b')); //hmmm may be because of `!==`, `&&` must be flipped to `||`
+        //alert(JSON.stringify(arrR));
+        //this experiment walks so the code in cartReducer could fly lol
         if(id){
             //alert(id);
             //alert(quantity);
-            dispatch(addToCart(id, quantity));
+            if(topping!=='Mặc định'){
+                setToppingPrice(10000);
+                //alert(toppingPrice);
+                dispatch(addToCart(id, quantity, topping, toppingPrice));
+            }else{
+                dispatch(addToCart(id, quantity, topping, toppingPrice));
+            }
         }
-    }, [dispatch, id]);
+    }, [dispatch, id, toppingPrice]);
 
     
 
@@ -68,25 +81,34 @@ export default function CartPage(props){
                 (
                 <ul>
                     {cartItems.map((item)=>(
-                        <li key={item.drink} className="row purple">
-                            <div className="row">
-                                <img 
+                        <li key={item.drink, item.topping} className="row purple left">
+                            <div className="row top">
+                            <Link to={`/drink/${item.drink}`}><img 
                                 src={item.image}
                                 alt={item.name}
-                                className="tiny"></img>
+                                className="tiny"></img></Link>
+                                <li className="col-1">
+                                    <Link to={`/drink/${item.drink}`}>{item.name}</Link>
+                                </li>
                             </div>
-                            <div className="min-30">
-                                <Link to={`/drink/${item.drink}`}>{item.name}</Link>
-                            </div>
-                            <div>
-                                {item.price} đồng
-                            </div>
-                            <div>
+                            <li className="row top">
+                                <li className="col-2">
+                                    {item.price} đồng
+                                </li>
+                                <li className="col-2">
+                                    Topping: {item.topping}
+                                </li>
+                                <li className="col-2">
+                                    Giá Topping: {item.toppingPrice}
+                                </li>
+                            </li>
+                            
+                            <li className="row top">
                                 <select
                                     value={item.quantity}
                                     onChange={(e) =>
                                         dispatch(
-                                        addToCart(item.drink, Number(e.target.value))
+                                        addToCart(item.drink, Number(e.target.value), item.topping, item.toppingPrice)
                                         )
                                     }
                                     >
@@ -96,12 +118,12 @@ export default function CartPage(props){
                                         </option>
                                     ))}
                                 </select>
-                            </div>
-                            <div>
-                                <button className="primary" type="button" onClick={()=> removeFromCartHandler(item.drink)}>
+                            </li>
+                            <li>
+                                <button className="primary" type="button" onClick={()=> removeFromCartHandler(item.drink, item.topping)}>
                                     Gỡ
                                 </button>
-                            </div>
+                            </li>
                         </li>
                     ))
                     }
@@ -114,7 +136,7 @@ export default function CartPage(props){
                     <ul>
                         <li>
                             <h2>
-                                Tổng thành tiền của ({cartItems.reduce((a, c) => a + Number(c.quantity), 0)} sản phẩm) : {cartItems.reduce((a, c)=> a + c.price * Number(c.quantity), 0)} đồng 
+                                Tổng thành tiền của ({cartItems.reduce((a, c) => a + Number(c.quantity), 0)} sản phẩm) : {cartItems.reduce((a, c)=> a + (c.toppingPrice + c.price) * Number(c.quantity), 0)} đồng 
                             </h2>
                         </li>
                         <li>

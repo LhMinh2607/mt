@@ -10,6 +10,7 @@ const drinkSchema = new mongoose.Schema({
     reviewNum: {type: Number, default: 0},
     description: {type: String, required: true},
     tags: [{type: String}],
+    
 },
     {
         timestamps: true,

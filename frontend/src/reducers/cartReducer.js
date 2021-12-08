@@ -4,13 +4,13 @@ import { CART_ADDED_ITEM, CART_ADDED_ITEM_FAILED, CART_EMPTY, CART_REMOVED_ITEM,
     switch (action.type) {
       case CART_ADDED_ITEM:
         const item = action.payload;
-        const existItem = state.cartItems.find((x) => x.drink === item.drink);
+        const existItem = state.cartItems.find((x) => x.drink === item.drink && x.topping === item.topping);
         if (existItem) {
           return {
             ...state,
             error: '',
             cartItems: state.cartItems.map((x) =>
-              x.drink === existItem.drink ? item : x
+              x.drink === existItem.drink && x.topping === existItem.topping ? item : x
             ),
           };
         } else {
@@ -20,7 +20,7 @@ import { CART_ADDED_ITEM, CART_ADDED_ITEM_FAILED, CART_EMPTY, CART_REMOVED_ITEM,
         return {
           ...state,
           error: '',
-          cartItems: state.cartItems.filter((x) => x.drink !== action.payload),
+          cartItems: state.cartItems.filter((x) => (x.drink !== action.payload || x.topping !== action.payload2)),
         };
       case CART_SAVE_SHIPPING_INFO:
         return { ...state, shippingInfo: action.payload };

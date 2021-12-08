@@ -108,7 +108,7 @@ function App() {
                   <Route exact path="/drink/:drinkId" element={<DrinkDetailPage></DrinkDetailPage>}></Route>
                   <Route path="/shopping_cart" element={<UserOnlyRoute><CartPage></CartPage></UserOnlyRoute>}></Route>
                   <Route path="/shopping_cart/:drinkId" element={<UserOnlyRoute><CartPage></CartPage></UserOnlyRoute>}></Route>
-                  <Route path="/shopping_cart/:drinkId/:quantity" element={<UserOnlyRoute><CartPage></CartPage></UserOnlyRoute>}></Route>
+                  <Route path="/shopping_cart/:drinkId/topping=:topping/quantity=:quantity" element={<UserOnlyRoute><CartPage></CartPage></UserOnlyRoute>}></Route>
                   <Route path="/user/:id/profile" element={<ProfilePage></ProfilePage>}></Route>
                   <Route path="/admin/:id/profile" element={<ProfilePage></ProfilePage>}></Route>
                   <Route exact path="/order" element={<OrderPage></OrderPage>}></Route>

@@ -14,10 +14,11 @@ export default function DrinkPanel(props) {
     const navigate = useNavigate();
     
     const addToCartHandler = () =>{
-        navigate(`/shopping_cart/${d._id}/${quantity}`);
+        navigate(`/shopping_cart/${d._id}/topping=${topping}/quantity=${quantity}`);
     }
 
     const [quantity, setquantity] = useState(1);
+    const [topping, setTopping] = useState("Mặc định"); //default name of topping
 
     const userSignin = useSelector(state => state.userSignin);
     const {userInfo} = userSignin;
@@ -59,9 +60,19 @@ export default function DrinkPanel(props) {
                       </li>
                       {userInfo && userInfo.role==='user' && <li>
                         <button onClick={addToCartHandler} className="primary block">Thêm vào giỏ hàng</button>
+                        <select onChange={(e) => setTopping(e.target.value)} value={topping}>
+                          <option value="Mặc định" >Mặc định</option> {/*default topping, whether the drink has topping by default or not. It says clearly in the name so....*/}
+                          <option value="Trân châu đen">Trân châu đen</option> {/*black bubble or black pearl*/}
+                          <option value="Thạch phô mai">Thạch phô mai</option>
+                        </select>
                       </li>}
                       {!userInfo && <li>
                         <button onClick={addToCartHandler} className="primary block">Thêm vào giỏ hàng</button>
+                        <select onChange={(e) => setTopping(e.target.value)} value={topping}>
+                          <option value="Mặc định" >Mặc định</option> {/*default topping, whether the drink has topping by default or not. It says clearly in the name so....*/}
+                          <option value="Trân châu đen">Trân châu đen</option> {/*black bubble or black pearl*/}
+                          <option value="Thạch phô mai">Thạch phô mai</option>
+                        </select>
                       </li>}
                     </>
                   )}
