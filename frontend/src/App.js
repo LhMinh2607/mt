@@ -20,6 +20,8 @@ import UserOnlyRoute from './components/UserOnlyRoute';
 import OrdersListPage from './pages/OrdersListPage';
 import NotFoundPage from './pages/NotFoundPage';
 import UserListPage from './pages/UserListPage';
+import DrinkAddingPage from './pages/DrinkAddingPage';
+import DrinkUpdatingPage from './pages/DrinkUpdatingPage';
 
 
 function App() {
@@ -82,7 +84,10 @@ function App() {
                         
                           <ul className="dropDown-content">
                             <li>
-                              <Link to={`/admin/${userInfo._id}/profile`}>Tài khoản<i className="fa fa-check"></i></Link>
+                              <Link to={`/admin/profile`}>Tài khoản<i className="fa fa-check"></i></Link>
+                            </li>
+                            <li>
+                              <Link  to={`/admin/drink/add`}>Thêm món<i className="fa fa-plus"></i></Link>
                             </li>
                             <li>
                               <Link  to={`/admin/ordersList/`}>Đơn hàng<i className="fa fa-history"></i></Link>
@@ -108,15 +113,17 @@ function App() {
                   <Route exact path="/drink" element={<DrinkPage></DrinkPage>}></Route>
                   <Route exact path="/drink/:drinkId" element={<DrinkDetailPage></DrinkDetailPage>}></Route>
                   <Route path="/shopping_cart" element={<UserOnlyRoute><CartPage></CartPage></UserOnlyRoute>}></Route>
-                  <Route path="/shopping_cart/:drinkId" element={<UserOnlyRoute><CartPage></CartPage></UserOnlyRoute>}></Route>
+                  {/* <Route path="/shopping_cart/:drinkId" element={<UserOnlyRoute><CartPage></CartPage></UserOnlyRoute>}></Route> */}
                   <Route path="/shopping_cart/:drinkId/topping=:topping/quantity=:quantity" element={<UserOnlyRoute><CartPage></CartPage></UserOnlyRoute>}></Route>
                   <Route path="/user/:id/profile" element={<ProfilePage></ProfilePage>}></Route>
-                  <Route path="/admin/:id/profile" element={<ProfilePage></ProfilePage>}></Route>
+                  <Route path="/admin/profile" element={<ProfilePage></ProfilePage>}></Route>
                   <Route exact path="/order" element={<OrderPage></OrderPage>}></Route>
                   <Route exact path={`/order/:orderId`} element={<OrderDetailPage></OrderDetailPage>}></Route>
                   <Route exact path={"/order/history"} element={<UserOnlyRoute><OrderHistoryPage></OrderHistoryPage></UserOnlyRoute>}></Route>
                   <Route exact path="/admin/ordersList" element={<AdminRoute><OrdersListPage></OrdersListPage></AdminRoute>}></Route>
                   <Route exact path="/admin/usersList" element={<AdminRoute><UserListPage></UserListPage></AdminRoute>}></Route>
+                  <Route exact path="/admin/drink/add" element={<AdminRoute><DrinkAddingPage></DrinkAddingPage></AdminRoute>}></Route>
+                  <Route exact path="/admin/drink/update/:drinkId" element={<AdminRoute><DrinkUpdatingPage></DrinkUpdatingPage></AdminRoute>}></Route>
                 </Routes>
                 
 

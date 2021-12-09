@@ -2,6 +2,7 @@ import React, { Children, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { addToCart, removeFromCart } from '../actions/cartAction';
+import { listOfDrinks } from '../actions/drinkAction';
 import MessageBox from '../components/MessageBox';
 
 export default function CartPage(props){
@@ -25,6 +26,10 @@ export default function CartPage(props){
 
     const dispatch = useDispatch();
 
+    const drinkList = useSelector((state) => state.drinkList);
+    const {loading: loadingList, error: errorList, drinks} = drinkList;
+
+
 
     const removeFromCartHandler = (id, itemTopping) => {
         //remove item
@@ -42,6 +47,7 @@ export default function CartPage(props){
         // const arrR = arr.filter((x) => (x.dd !== 'a' || x.tt !='b')); //hmmm may be because of `!==`, `&&` must be flipped to `||`
         //alert(JSON.stringify(arrR));
         //this experiment walks so the code in cartReducer could fly lol
+        dispatch(listOfDrinks());
         if(id){
             //alert(id);
             //alert(quantity);
@@ -112,11 +118,14 @@ export default function CartPage(props){
                                         )
                                     }
                                     >
-                                    {[...Array(10).keys()].map((x) => (
-                                        <option key={x + 1} value={x + 1}>
-                                        {x + 1}
-                                        </option>
-                                    ))}
+                                    {drinks && drinks.map(d=>(
+                                        d._id === item.drink &&
+                                        [...Array(d.quantity).keys()].map((x) => (
+                                            <option key={x + 1} value={x + 1}>
+                                            {x + 1}
+                                            </option>
+                                        ))
+                                    )) }
                                 </select>
                             </li>
                             <li>

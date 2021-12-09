@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import RatingComponent from './RatingComponent'
 import { Link } from 'react-router-dom';
 import { Navigate, useNavigate } from 'react-router';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { deleteDrink, detailsOfDrink } from '../actions/drinkAction';
 
 
 
@@ -12,6 +13,7 @@ export default function DrinkPanel(props) {
     const {d} = props;
 
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     
     const addToCartHandler = () =>{
         navigate(`/shopping_cart/${d._id}/topping=${topping}/quantity=${quantity}`);
@@ -22,6 +24,21 @@ export default function DrinkPanel(props) {
 
     const userSignin = useSelector(state => state.userSignin);
     const {userInfo} = userSignin;
+
+    const deleteHandler = (e) =>{
+      e.preventDefault();
+      if(window.confirm('CHẮC CHƯA?'))
+      {
+          dispatch(deleteDrink(d._id));
+      };
+  }
+
+  // useEffect(() => {
+  //     window.scrollTo({
+  //         top: 0, 
+  //       });
+  //     dispatch(detailsOfDrink(d._id));
+  // }, [dispatch, d._id]);
 
     return (
         <div>
@@ -40,6 +57,15 @@ export default function DrinkPanel(props) {
                     {(
                     <>
                       <li>
+                        
+                      </li>
+                      {userInfo && userInfo.role==='user' && <li>
+                        <button onClick={addToCartHandler} className="primary block">Thêm vào giỏ hàng</button>
+                        <select onChange={(e) => setTopping(e.target.value)} value={topping}>
+                          <option value="Mặc định" >Mặc định</option> {/*default topping, whether the drink has topping by default or not. It says clearly in the name so....*/}
+                          <option value="Trân châu đen">Trân châu đen</option> {/*black bubble or black pearl*/}
+                          <option value="Thạch phô mai">Thạch phô mai</option>
+                        </select>
                         <div className="row">
                           <div>Số lượng</div>
                           <div>
@@ -47,7 +73,7 @@ export default function DrinkPanel(props) {
                               value={quantity}
                               onChange={(e) => setquantity(e.target.value)}
                             >
-                              {[...Array(5).keys()].map(
+                              {[...Array(d.quantity).keys()].map(
                                 (x) => (
                                   <option key={x + 1} value={x + 1}>
                                     {x + 1}
@@ -57,14 +83,6 @@ export default function DrinkPanel(props) {
                             </select>
                           </div>
                         </div>
-                      </li>
-                      {userInfo && userInfo.role==='user' && <li>
-                        <button onClick={addToCartHandler} className="primary block">Thêm vào giỏ hàng</button>
-                        <select onChange={(e) => setTopping(e.target.value)} value={topping}>
-                          <option value="Mặc định" >Mặc định</option> {/*default topping, whether the drink has topping by default or not. It says clearly in the name so....*/}
-                          <option value="Trân châu đen">Trân châu đen</option> {/*black bubble or black pearl*/}
-                          <option value="Thạch phô mai">Thạch phô mai</option>
-                        </select>
                       </li>}
                       {!userInfo && <li>
                         <button onClick={addToCartHandler} className="primary block">Thêm vào giỏ hàng</button>
@@ -73,7 +91,32 @@ export default function DrinkPanel(props) {
                           <option value="Trân châu đen">Trân châu đen</option> {/*black bubble or black pearl*/}
                           <option value="Thạch phô mai">Thạch phô mai</option>
                         </select>
+                        <div className="row">
+                          <div>Số lượng</div>
+                          <div>
+                            <select
+                              value={quantity}
+                              onChange={(e) => setquantity(e.target.value)}
+                            >
+                              {[...Array(d.quantity).keys()].map(
+                                (x) => (
+                                  <option key={x + 1} value={x + 1}>
+                                    {x + 1}
+                                  </option>
+                                )
+                              )}
+                            </select>
+                          </div>
+                        </div>
                       </li>}
+                      {
+                        userInfo && userInfo.role==='admin' && 
+                        <div className="row">
+                            <Link to={`/admin/drink/update/${d._id}`}>
+                                <button className="admin">SỬA</button>
+                            </Link>
+                        <button className="admin" onClick={deleteHandler}>XÓA</button></div>
+                      }
                     </>
                   )}
                 </div>

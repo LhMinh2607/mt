@@ -50,10 +50,8 @@ export default function ProfilePage(props){
     // const {loading: loadingSpending, error: errorSpending, userSpending} = orderAggregate;
 
     const enableEdit = ()=>{
-        
         setDisabled(!disabled);
         editButtonNameChange();
-        
     }
 
     const editButtonNameChange = () =>{

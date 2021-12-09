@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router';
 import { Link } from 'react-router-dom';
 import { commitCommenting, filterCommentByStar, listOfComments, sortComment } from '../actions/commentAction';
-import { addTagToDrink, detailsOfDrink, getDrinkRating, removeTagFromDrink, showRelatedDrinkList } from '../actions/drinkAction';
+import { addTagToDrink, deleteDrink, detailsOfDrink, getDrinkRating, removeTagFromDrink, showRelatedDrinkList } from '../actions/drinkAction';
 import { listOfOrders } from '../actions/orderAction';
 import { listOfUsers } from '../actions/userAction';
 import CommentComponent from '../components/CommentComponent';
@@ -58,6 +58,9 @@ export default function DrinkDetailPage(props) {
     const drinkRating = useSelector(state=>state.drinkRating);
     const {loading: loadingRating, error: errorRating, success: successRating} = drinkRating;
 
+    const drinkDeleting = useSelector(state=>state.drinkDeleting);
+    const {loading: loadingDeleting, error: errorDeleting, success: successDeleting} = drinkDeleting;
+
 
     const [commentContent, setCommentContent] = useState('');
     const [rating, setRating] = useState('');
@@ -69,8 +72,11 @@ export default function DrinkDetailPage(props) {
     const [commentBox, setCommentBox] = useState(false);
 
     const addToCartHandler = () =>{
-        navigate(`/shopping_cart/${drink._id}/1`);
+        navigate(`/shopping_cart/${id}/topping=${topping}/quantity=${quantity}`);
     }
+
+    const [quantity, setquantity] = useState(1);
+    const [topping, setTopping] = useState("Mặc định"); //default name of topping
 
     const enableTagEditBox = () => {
         showTagEditBox(!tagEditBox);
@@ -114,6 +120,15 @@ export default function DrinkDetailPage(props) {
 
     const changeCommentBoxStatus = () =>{
         setCommentBox(!commentBox);
+    }
+
+    const deleteHandler = (e) =>{
+        e.preventDefault();
+        if(window.confirm('CHẮC CHƯA?'))
+        {
+            dispatch(deleteDrink(id));
+        };
+        
     }
 
     useEffect(()=>{
@@ -215,16 +230,62 @@ export default function DrinkDetailPage(props) {
                         <li>
                         {userInfo && (userInfo.role==='user' ?
                             (
-                                <button onClick={addToCartHandler} className="primary block">THÊM VÀO GIỎ HÀNG</button>
+                                <div>
+                                    <button onClick={addToCartHandler} className="primary block">THÊM VÀO GIỎ HÀNG</button>
+                                    <select onChange={(e) => setTopping(e.target.value)} value={topping}>
+                                        <option value="Mặc định" >Mặc định</option> {/*default topping, whether the drink has topping by default or not. It says clearly in the name so....*/}
+                                        <option value="Trân châu đen">Trân châu đen</option> {/*black bubble or black pearl*/}
+                                        <option value="Thạch phô mai">Thạch phô mai</option>
+                                    </select>
+                                    <div className="row">
+                                    <div>Số lượng</div>
+                                        <div>
+                                            <select
+                                            value={quantity}
+                                            onChange={(e) => setquantity(e.target.value)}
+                                            >
+                                            {drink && [...Array(drink.quantity).keys()].map(
+                                                (x) => (
+                                                <option key={x + 1} value={x + 1}>
+                                                    {x + 1}
+                                                </option>
+                                                )
+                                            )}
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
                             ) : userInfo.role==='admin' &&
                             (
-                                <div className="row"><button className="primary">SỬA</button>
-                                <button className="primary">XÓA</button></div>
+                                <div className="row">
+                                    <Link to={`/admin/drink/update/${drink._id}`}>
+                                        <button className="admin">SỬA</button>
+                                    </Link>
+                                <button className="admin" onClick={deleteHandler}>XÓA</button></div>
                             ) )
                         }
                         {!userInfo && 
                             (
-                                <button onClick={addToCartHandler} className="primary block">THÊM VÀO GIỎ HÀNG</button>
+                                <div>
+                                    <button onClick={addToCartHandler} className="primary block">THÊM VÀO GIỎ HÀNG</button>
+                                    <div className="row">
+                                    <div>Số lượng</div>
+                                        <div>
+                                            <select
+                                            value={quantity}
+                                            onChange={(e) => setquantity(e.target.value)}
+                                            >
+                                            {drink && [...Array(drink.quantity).keys()].map(
+                                                (x) => (
+                                                <option key={x + 1} value={x + 1}>
+                                                    {x + 1}
+                                                </option>
+                                                )
+                                            )}
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
                             ) 
                         }
                         

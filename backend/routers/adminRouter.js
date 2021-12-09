@@ -114,7 +114,7 @@ adminRouter.get('/order/list/total/max', expressAsyncHandler(async(req, res)=>{
 adminRouter.get('/order/list/drink/most', expressAsyncHandler(async(req, res)=>{
     // const mostOrderedDrink = await Order.aggregate([
     //     {$project:{
-    //         id: "$userId", count: {$size:{"$ifNull":["$Product",[]]} }
+    //         id: "$userId", count: {$size:{"$ifNull":["$Drink",[]]} }
     //     }},
     //     {$group: {
     //         _id: null, 
@@ -408,6 +408,93 @@ adminRouter.get('/user/list/sort/date/:boo', expressAsyncHandler(async(req, res)
         }else{
             res.status(404).send({message: '404 Không tìm thấy'});
         }
+    }
+}));
+
+adminRouter.post('/drink/add', expressAsyncHandler(async(req, res)=>{
+    const drink = new Drink({
+        name: req.body.name,
+        category: req.body.category,
+        image: req.body.image,
+        price: req.body.price,
+        description: req.body.description,
+    });
+    const newDrink = await drink.save();
+    res.send({
+        _id: newDrink._id,
+        name: newDrink.name,
+        category: newDrink.category,
+        image: newDrink.image,
+        price: newDrink.price,
+        description: newDrink.description,
+    });
+}));
+
+adminRouter.put('/drink/update/:id', expressAsyncHandler(async(req, res)=>{
+    const drink = await Drink.findById(req.params.id);
+    if(drink){
+        drink.name = req.body.name || drink.name;
+        drink.category = req.body.category || drink.category;
+        drink.image = req.body.image || drink.image;
+        drink.price = req.body.price || drink.price;
+        drink.description = req.body.description || drink.description;
+        drink.quantity = req.body.quantity || drink.quantity;
+
+        const updatedDrink = await drink.save();
+        res.send({
+            _id: updatedDrink._id,
+            name: updatedDrink.name,
+            category: updatedDrink.category,
+            image: updatedDrink.image,
+            price: updatedDrink.price,
+            description: updatedDrink.description,
+            quantity: updatedDrink.quantity,
+            updatedAt: Date.now(),
+        });
+    }
+    
+}));
+
+adminRouter.put('/drink/delete/:id', expressAsyncHandler(async(req, res)=>{
+    const drink = await Drink.findById(req.params.id);
+    if(drink){
+        await Drink.findByIdAndDelete(req.params.id);
+    }
+    res.send({message: "ĐÃ XÓA SẢN PHẨM"});
+}));
+
+adminRouter.put('/feature/add_drink/:id', expressAsyncHandler(async(req, res)=>{
+    const user = await User.findOne({role: 'admin'});
+    if(user){
+        user.drinkIdList.push(req.params.id);
+        await user.save();
+        res.send({message: "ĐÃ THÊM SẢN PHẨM VÀO PHẦN TRƯNG BÀY"});
+    }else{
+        res.status(404).send("KHÔNG TÌM THẤY QUẢN TRỊ VIÊN");
+    }
+}));
+
+adminRouter.put('/feature/delete_drink/:id', expressAsyncHandler(async(req, res)=>{
+    const user = await User.findOne({isAdmin: true});
+    if(user){
+        user.drinkIdList.splice(user.drinkIdList.indexOf(req.params.id), 1);
+        
+        await user.save();
+        res.send({message: "ĐÃ GỠ SẢN PHẨM KHỎI PHẦN TRƯNG BÀY"});
+    }else{
+        res.status(404).send("KHÔNG TÌM THẤY QUẢN TRỊ VIÊN");
+    }
+}));
+
+adminRouter.put('/feature/delete_drinks/', expressAsyncHandler(async(req, res)=>{
+    const user = await User.findOne({role: 'admin'});
+    if(user){
+        user.drinkIdList = [];
+        
+        await user.save();
+        res.send({message: "ĐÃ GỠ HẾT SẢN PHẨM KHỎI PHẦN TRƯNG BÀY"});
+    }else{
+        res.status(404).send("KHÔNG TÌM THẤY QUẢN TRỊ VIÊN");
     }
 }));
 

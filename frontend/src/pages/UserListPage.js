@@ -11,8 +11,8 @@ export default function UserListPage() {
     const dispatch = useDispatch();
 
     
-    const userSignin = useSelector(state => state.userSignin);
-    const {userInfo} = userSignin;
+    // const userSignin = useSelector(state => state.userSignin);
+    // const {userInfo} = userSignin;
 
     const userList = useSelector((state) => state.userList);
     const {loading, error, users} = userList;
@@ -91,7 +91,7 @@ export default function UserListPage() {
         <div>
             <div className="row center orange-background"> 
                 <div>
-                    <Link to={`/admin/${userInfo._id}/profile`} className="admin linkButton">Back to Profile</Link>
+                    <Link to={`/admin/profile`} className="admin linkButton">Back to Profile</Link>
                 </div>
             </div>
             <div className="row center orange-background">

@@ -1,6 +1,6 @@
 import {createStore, compose, applyMiddleware, combineReducers} from 'redux';
 import thunk from 'redux-thunk';
-import {drinkFilterByPriceReducer, drinkFilterByStarReducer, drinkListReducer, drinkRatingReducer, drinksDetailReducer, drinkSearchReducer, drinkTagsAddingReducer, drinkTagsRemovingReducer, relatedDrinkListReducer} from './reducers/drinkReducer';
+import {drinkAddingReducer, drinkFeatureAddingReducer, drinkFeatureRemovingAllReducer, drinkFeatureRemovingReducer, drinkFilterByPriceReducer, drinkFilterByStarReducer, drinkListReducer, drinkRatingReducer, drinksDetailReducer, drinkSearchReducer, drinkTagsAddingReducer, drinkTagsRemovingReducer, drinkUpdatingReducer, relatedDrinkListReducer} from './reducers/drinkReducer';
 import { userDetailReducer, userListReducer, userMostSpendingReducer, userSearchingReducer, userSigninReducer, userSignupReducer, userSortedByDateReducer, userSortedByNameReducer, userSortedByOrderReducer, userSortedBySpendingReducer, userUpdateProfileReducer } from './reducers/userReducer';
 import {cartReducer} from './reducers/cartReducer';
 import { allOrderDateReducer, allOrderFilterByDateReducer, allOrderListReducer, allOrderMonthReducer, allOrderYearReducer, createOrderReducer, deliveredOrderReducer, drinkLeastOrderedReducer, drinkMostOrderedReducer, leastOrderedDrinkReducer, maxTotalOrderReducer, mostOrderedDrinkReducer, orderAggregateListReducer, orderAggregateReducer, orderDeliveredReducer, OrderDetailReducer, orderListReducer, orderMaxTotalReducer, orderPaidReducer, orderSortedByDateReducer, orderSortedByTotalReducer, paidOrderReducer } from './reducers/orderReducer';
@@ -70,6 +70,14 @@ const reducer = combineReducers({//bugs are fixed on every streak
     userSortedByName: userSortedByNameReducer,
     userSortedByDate: userSortedByDateReducer,
     orderAggregateList: orderAggregateListReducer,
+    
+    drinkAdding: drinkAddingReducer,//streak #11
+    drinkUpdating: drinkUpdatingReducer,
+    drinkDeleting: drinksDetailReducer,
+    drinkFeatureAdding: drinkFeatureAddingReducer, //not yet implemented
+    drinkFeatureRemoving: drinkFeatureRemovingReducer,//not yet implemented
+    drinkFeatureRemovingAll: drinkFeatureRemovingAllReducer,//not yet implemented
+
 
 })
 
