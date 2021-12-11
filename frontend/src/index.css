@@ -157,7 +157,7 @@ a:hover {
   background-color:#ffffff; 
   transition: .2s;
 }
-.orange-background{
+.cyan-background{
   background-color: #6e9fe7;
   padding: 1rem 0rem 1rem 0rem;
 }
@@ -239,7 +239,7 @@ h2{
 }
 
 p{
-  /*word-wrap: break-word;*/
+  word-wrap: break-word;
   /* display: table-cell; */
 }
 

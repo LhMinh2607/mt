@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { totalMoneySpent, totalMoneySpentOfAllUsers } from '../actions/orderAction';
 import { getMostSpendingUser, listOfUsers, listTotalMoneySpent, searchUser, sortUserByDate, sortUserByName, sortUserByOrder, sortUserBySpending } from '../actions/userAction';
 import DateComponent from '../components/DateComponent';
@@ -39,7 +39,9 @@ export default function UserListPage() {
     const userSortedByOrder = useSelector(state=>state.userSortedByOrder);
     const {loading: loadingSortByOrder, error: errorSortByOrder, sortedUsersByOrder} = userSortedByOrder;
 
-    
+    const navigate = useNavigate();
+
+
     const [spendingFilter, setSpendingFilter] = useState("");
     const [sortingCondition, setSortingCondition] = useState("");
 
@@ -89,12 +91,12 @@ export default function UserListPage() {
 
     return (
         <div>
-            <div className="row center orange-background"> 
+            <div className="row center cyan-background"> 
                 <div>
                     <Link to={`/admin/profile`} className="admin linkButton">Back to Profile</Link>
                 </div>
             </div>
-            <div className="row center orange-background">
+            <div className="row center cyan-background">
                 <div className="search-background row center">
                     <input type="text" id="searchField" className="searchInput" onChange={setTheKeyword} placeholder="🔍Seach For User"></input>
                 </div>
@@ -137,6 +139,7 @@ export default function UserListPage() {
                                             <option value='max'>Nhiều nhất</option>
                                             <option value='hmm'>hmm</option>
                                         </select></th>
+                                    <th>HÓA ĐƠN</th>
                                 </tr>
                             </thead>
                         <tbody>  
@@ -161,6 +164,9 @@ export default function UserListPage() {
                                         <p key={userSpend._id}>{userSpend.totalMoneySpent}</p>
                                     )) )
                                 }</td>
+                                <td><button type="button" className="tiny admin" onClick={() => {navigate(`/order/history/${user._id}`);}}>
+                                    Danh sách
+                                </button></td>
                             </tr>
                         ))))}
 

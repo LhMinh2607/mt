@@ -205,6 +205,34 @@ adminRouter.get('/order/list/date/month/year/:year', expressAsyncHandler(async(r
     }
 }));
 
+adminRouter.put('/order/verify/paid/:id', expressAsyncHandler(async(req, res)=>{
+    console.log(req.params.id);
+
+    const order = await Order.findById(req.params.id);
+
+    if(order){
+        order.isPaid = true;
+        order.paidAt = new Date();
+        order.save();
+        
+        res.send({
+        message: "Đã xác nhận đã thanh toán"
+    })};
+}));
+
+adminRouter.put('/order/verify/delivered/:id', expressAsyncHandler(async(req, res)=>{
+    const order = await Order.findById(req.params.id);
+
+    if(order){
+        order.isDelivered = true;
+        order.deliveredAt = new Date();
+        order.save();
+        
+        res.send({
+        message: "Đã xác nhận đã giao hàng"
+    })};
+}));
+
 adminRouter.get('/order/list/date/day/month/:month/year/:year', expressAsyncHandler(async(req, res)=>{
     const start = new Date(`${req.params.year}-${req.params.month}-01 23:00:00`);
     const end = new Date(`${req.params.year}-${req.params.month}-31 23:00:00`);
@@ -497,6 +525,7 @@ adminRouter.put('/feature/delete_drinks/', expressAsyncHandler(async(req, res)=>
         res.status(404).send("KHÔNG TÌM THẤY QUẢN TRỊ VIÊN");
     }
 }));
+
 
 
 

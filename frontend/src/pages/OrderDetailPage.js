@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { useParams } from 'react-router';
-import { detailsOfOrder } from '../actions/orderAction';
+import { useParams, useNavigate } from 'react-router';
+import { detailsOfOrder, verifyDeliveredOrder, verifyPaidOrder } from '../actions/orderAction';
 import LoadingBox from '../components/LoadingBox';
 import MessageBox from '../components/MessageBox';
 import DateComponent from '../components/DateComponent';
@@ -14,14 +14,31 @@ export default function OrderDetailPage() {
     const orderDetail = useSelector(state => state.orderDetail);
     const {order, loading, error} = orderDetail;
 
+    const userSignin = useSelector(state => state.userSignin);
+    const {userInfo} = userSignin;
+
 
     const dispatch = useDispatch();
+    const navigate = useNavigate();
+
+    const verifyPaid = () =>{
+        dispatch(verifyPaidOrder(id));
+        window.location.reload();
+    }
+
+    const verifyDelivered= () =>{
+        dispatch(verifyDeliveredOrder(id));
+        window.location.reload();
+    }
 
 
     useEffect(()=>{
         window.scrollTo({
             top: 0, 
           });
+        if(userInfo && userInfo.role==='user' && userInfo._id!==id){
+            navigate(`/order/history/${userInfo._id}`);
+        }
         dispatch(detailsOfOrder(id));
     }, [dispatch, id]);
 
@@ -94,10 +111,19 @@ export default function OrderDetailPage() {
                                     <strong>Đã thanh toán lúc</strong> <DateComponent passedDate={order.paidAt}></DateComponent>
                                 </div> : <div>Chưa thanh toán</div>
                                 }
+                                {userInfo && userInfo.role==="admin" && order && order.paymentMethod==='Cash' && order.isPaid === false &&
+                                <div>
+                                    <button className='admin' onClick={verifyPaid}>XÁC NHẬN ĐÃ THANH TOÁN (TIỀN MẶT)</button>    
+                                </div>}
                                 {order && order.isDelivered ? <div>
                                     <strong>Đã giao</strong> <DateComponent passedDate={order.deliveredAt}></DateComponent>
                                 </div> : <div><strong>Chưa giao</strong></div>
                                 }
+                                
+                                {userInfo && userInfo.role==="admin" && order && order.paymentMethod==='Cash' && order.isDelivered === false &&
+                                <div>
+                                    <button className='admin' onClick={verifyDelivered}>XÁC NHẬN ĐÃ GIAO HÀNG</button>    
+                                </div>}
                             </div>
                             
                         </li>

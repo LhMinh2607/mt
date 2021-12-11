@@ -38,7 +38,7 @@ export default function DrinkAddingPage() {
     
     return (
         <div>
-            <div className="row center orange-background"> 
+            <div className="row center cyan-background"> 
                 <div>
                     <Link to={`/admin/profile`} className="admin linkButton">Về trang cá nhân</Link>
                 </div>

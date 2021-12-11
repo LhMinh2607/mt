@@ -84,7 +84,7 @@ export default function ProfilePage(props){
     }, [dispatch, userInfo._id, user]);
     return (
         <div>
-            {/* <div className="row center orange-background"> 
+            {/* <div className="row center cyan-background"> 
                 
                 {
                     userInfo.role==='admin' ? (

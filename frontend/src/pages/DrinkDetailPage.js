@@ -13,7 +13,7 @@ import MessageBox from '../components/MessageBox';
 import Rating from '../components/RatingComponent';
 import { USER_COMMENT_RESET } from '../constants/commentConst';
 
-export default function DrinkDetailPage(props) {
+export default function DrinkDetailPage() {
 
     const params = useParams();
     const id = params.drinkId;

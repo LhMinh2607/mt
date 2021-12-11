@@ -2,13 +2,14 @@ import express from 'express';
 import expressAsyncHandler from 'express-async-handler';
 import { isAuth } from '../utils.js';
 import Order from '../models/Order.js';
-//import User from '../models/User.js';
+import Drink from '../models/Drink.js';
 import mongoose from 'mongoose';
 
 const orderRouter = express.Router();
 
-orderRouter.get('/list', isAuth, expressAsyncHandler(async(req, res)=>{
-    const orders = await Order.find({user: req.user._id});
+orderRouter.get('/list/:id', isAuth, expressAsyncHandler(async(req, res)=>{
+    console.log(req.params.id);
+    const orders = await Order.find({user: req.params.id});
     res.send(orders);
 }));
 
@@ -48,6 +49,22 @@ orderRouter.post('/', isAuth, expressAsyncHandler(async(req, res)=>{
             totalPrice: req.body.totalPrice,
             shippingPrice: req.body.shippingPrice,
         });
+
+        //console.log("Qfqfqef");
+        //console.log(req.body.orderItems.length);
+        for(var i=0; i<Number(req.body.orderItems.length); i++){
+            //console.log(mongoose.Types.ObjectId(req.body.orderItems[i].drink));
+
+            const drink = await Drink.findById(mongoose.Types.ObjectId(req.body.orderItems[i].drink));
+            //console.log(req.body.orderItems[i].quantity.toString());
+            const qty = drink.quantity - Number(req.body.orderItems[i].quantity);
+            //console.log("qty="+qty.toString());
+
+            const updatedDrink = await Drink.findOneAndUpdate({_id: mongoose.Types.ObjectId(req.body.orderItems[i].drink)}, {quantity: qty}, { new: true });
+            //console.log(drink);
+            updatedDrink.save();
+        }
+        
         const createdOrder = await order.save();
         res.status(201).send({message: 'Tạo thành công 1 đơn hàng', order: createdOrder});
     }

@@ -17,8 +17,17 @@
   },
   "author": "",
   "license": "ISC",
-  "description": "",
   "devDependencies": {
     "nodemon": "^2.0.15"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LhMinh2607/mt.git"
+  },
+  "keywords": [],
+  "bugs": {
+    "url": "https://github.com/LhMinh2607/mt/issues"
+  },
+  "homepage": "https://github.com/LhMinh2607/mt#readme",
+  "description": ""
 }

@@ -3,9 +3,10 @@ import thunk from 'redux-thunk';
 import {drinkAddingReducer, drinkFeatureAddingReducer, drinkFeatureRemovingAllReducer, drinkFeatureRemovingReducer, drinkFilterByPriceReducer, drinkFilterByStarReducer, drinkListReducer, drinkRatingReducer, drinksDetailReducer, drinkSearchReducer, drinkTagsAddingReducer, drinkTagsRemovingReducer, drinkUpdatingReducer, relatedDrinkListReducer} from './reducers/drinkReducer';
 import { userDetailReducer, userListReducer, userMostSpendingReducer, userSearchingReducer, userSigninReducer, userSignupReducer, userSortedByDateReducer, userSortedByNameReducer, userSortedByOrderReducer, userSortedBySpendingReducer, userUpdateProfileReducer } from './reducers/userReducer';
 import {cartReducer} from './reducers/cartReducer';
-import { allOrderDateReducer, allOrderFilterByDateReducer, allOrderListReducer, allOrderMonthReducer, allOrderYearReducer, createOrderReducer, deliveredOrderReducer, drinkLeastOrderedReducer, drinkMostOrderedReducer, leastOrderedDrinkReducer, maxTotalOrderReducer, mostOrderedDrinkReducer, orderAggregateListReducer, orderAggregateReducer, orderDeliveredReducer, OrderDetailReducer, orderListReducer, orderMaxTotalReducer, orderPaidReducer, orderSortedByDateReducer, orderSortedByTotalReducer, paidOrderReducer } from './reducers/orderReducer';
+import { allOrderDateReducer, allOrderFilterByDateReducer, allOrderListReducer, allOrderMonthReducer, allOrderYearReducer, createOrderReducer, deliveredOrderReducer, deliveredOrderVerifyingReducer, drinkLeastOrderedReducer, drinkMostOrderedReducer, leastOrderedDrinkReducer, maxTotalOrderReducer, mostOrderedDrinkReducer, orderAggregateListReducer, orderAggregateReducer, orderDeliveredReducer, OrderDetailReducer, orderListReducer, orderMaxTotalReducer, orderPaidReducer, orderSortedByDateReducer, orderSortedByTotalReducer, paidOrderReducer, paidOrderVerifyingReducer } from './reducers/orderReducer';
 import { detailsOfOrder } from './actions/orderAction';
 import { userCommentListReducer, userCommentReducer, userDeleteCommentReducer, userEditCommentReducer, userFilterCommentByStarReducer, userSortCommentReducer } from './reducers/commentReducer';
+import { postCommentEditingReducers, postCommentPostingReducers, postCreatingReducers, postDeletingReducers, postDetailsReducers, postEditingReducers, postFilteringReducers, postListReducers, postSearchingReducers, postSortingReducers } from './reducers/postReducer';
 
 const initialState = {
     userSignin: {
@@ -78,6 +79,19 @@ const reducer = combineReducers({//bugs are fixed on every streak
     drinkFeatureRemoving: drinkFeatureRemovingReducer,//not yet implemented
     drinkFeatureRemovingAll: drinkFeatureRemovingAllReducer,//not yet implemented
 
+    postCreating: postCreatingReducers,//streak #12 + quantity can be subtracted by ordering now, admin can confirm isPaid and isDelivered now, fixed several minor issues
+    postList: postListReducers,
+    postDetails: postDetailsReducers,
+    postEditing: postEditingReducers,
+    postDeleting: postDeletingReducers,
+    postCommentPosting: postCommentPostingReducers,
+    postComemntEditing: postCommentEditingReducers,
+    postCommentDeleting: postDeletingReducers,
+    postSearching: postSearchingReducers,
+    postSorting: postSortingReducers,
+    postFiltering: postFilteringReducers,
+    paidOrderVerifying: paidOrderVerifyingReducer,
+    deliveredOrderVerifying: deliveredOrderVerifyingReducer,
 
 })
 

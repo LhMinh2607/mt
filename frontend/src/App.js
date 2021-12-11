@@ -22,6 +22,8 @@ import NotFoundPage from './pages/NotFoundPage';
 import UserListPage from './pages/UserListPage';
 import DrinkAddingPage from './pages/DrinkAddingPage';
 import DrinkUpdatingPage from './pages/DrinkUpdatingPage';
+import ForumPage from './pages/ForumPage';
+import PostDetailPage from './pages/PostDetailPage';
 
 
 function App() {
@@ -48,6 +50,9 @@ function App() {
                   <div>
                     <Link to="/drink" className="">Xem thêm</Link>
                   </div>
+                  <div>
+                    <Link to="/forum" className="">Diễn đàn</Link>
+                  </div>
                     {userInfo ? (userInfo.role==='user' && <Link to="/shopping_cart">Giỏ hàng
                       <i className="fa fa-shopping-cart"></i>
                     {
@@ -69,7 +74,7 @@ function App() {
                               <Link to={`/user/${userInfo._id}/profile`}>Tài khoản<i className="fa fa-user"></i></Link>
                             </li>
                             <li>
-                              <Link  to={`/order/history`}>Lịch sử mua hàng<i className="fa fa-history"></i></Link>
+                              <Link  to={`/order/history/${userInfo._id}`}>Lịch sử mua hàng<i className="fa fa-history"></i></Link>
                             </li>
                             <li>
                               <Link to="/" onClick={signOutHandler}>
@@ -119,11 +124,13 @@ function App() {
                   <Route path="/admin/profile" element={<ProfilePage></ProfilePage>}></Route>
                   <Route exact path="/order" element={<OrderPage></OrderPage>}></Route>
                   <Route exact path={`/order/:orderId`} element={<OrderDetailPage></OrderDetailPage>}></Route>
-                  <Route exact path={"/order/history"} element={<UserOnlyRoute><OrderHistoryPage></OrderHistoryPage></UserOnlyRoute>}></Route>
+                  <Route exact path={"/order/history/:userId"} element={<OrderHistoryPage></OrderHistoryPage>}></Route>
                   <Route exact path="/admin/ordersList" element={<AdminRoute><OrdersListPage></OrdersListPage></AdminRoute>}></Route>
                   <Route exact path="/admin/usersList" element={<AdminRoute><UserListPage></UserListPage></AdminRoute>}></Route>
                   <Route exact path="/admin/drink/add" element={<AdminRoute><DrinkAddingPage></DrinkAddingPage></AdminRoute>}></Route>
                   <Route exact path="/admin/drink/update/:drinkId" element={<AdminRoute><DrinkUpdatingPage></DrinkUpdatingPage></AdminRoute>}></Route>
+                  <Route exact path="/forum" element={<ForumPage></ForumPage>}></Route> 
+                  <Route exact path="/forum/post/:id" element={<PostDetailPage></PostDetailPage>}></Route>     
                 </Routes>
                 
 

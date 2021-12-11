@@ -1,7 +1,9 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
+import {useParams} from 'react-router-dom';
 import { listOfOrders, totalMoneySpent } from '../actions/orderAction';
+import { detailsOfUser } from '../actions/userAction';
 import DateComponent from '../components/DateComponent';
 import LoadingBox from '../components/LoadingBox';
 import MessageBox from '../components/MessageBox';
@@ -13,6 +15,8 @@ import MessageBox from '../components/MessageBox';
 
 export default function OrderHistoryPage() {
 
+    const params = useParams();
+    const id = params.userId;
 
 
     const orderList = useSelector(state => state.orderList);
@@ -24,6 +28,9 @@ export default function OrderHistoryPage() {
     const userSignin = useSelector(state => state.userSignin);
     const {userInfo} = userSignin;
 
+    const userDetail = useSelector(state => state.userDetail);
+    const {loading: loadingUser, error: errorUser, user} = userDetail;
+
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -32,19 +39,23 @@ export default function OrderHistoryPage() {
         window.scrollTo({
             top: 0, 
           });
-        dispatch(listOfOrders());
-        //alert(userInfo._id);
-        dispatch(totalMoneySpent(userInfo._id));
+        if(userInfo && userInfo.role==='user' && userInfo._id!==id){
+            navigate(`/order/history/${userInfo._id}`);
+        }
+        dispatch(listOfOrders(id));
+        dispatch(detailsOfUser(id));
+        dispatch(totalMoneySpent(id));
+
     }, [dispatch])
 
     return (
         <div>   
-            {/* <div className="row center orange-background"> 
+            {/* <div className="row center cyan-background"> 
                 <div>
                     <Link to="/profile" className="linkButton">Back to Profile</Link>
                 </div>
             </div> */}
-            <h1>LỊCH SỬ MUA HÀNG</h1>
+            <h1>LỊCH SỬ MUA HÀNG CỦA {user && user.name}</h1>
             {
                 loading ? <LoadingBox></LoadingBox>
                 : error ? <MessageBox variant="error">{error}</MessageBox>
@@ -69,7 +80,7 @@ export default function OrderHistoryPage() {
                                     <td><DateComponent passedDate = {order.createdAt}></DateComponent></td>
                                     <td>{order.totalPrice} đồng</td>
                                     <td>{order.isPaid ? order.paidAt.substring(0, 10): 'Chưa'}</td>
-                                    <td>{order.isDelivered ? order.paidAt.substring(0, 10): 'Chưa'}</td>
+                                    <td>{order.isDelivered ? order.deliveredAt.substring(0, 10): 'Chưa'}</td>
                                     <td>
                                         <button type="button" className="tiny primary" onClick={() => {navigate(`/order/${order._id}`);}}>
                                             Chi tiết

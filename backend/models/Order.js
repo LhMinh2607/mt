@@ -15,12 +15,12 @@ const orderSchema = new mongoose.Schema(
             quantity: {type: Number, required: true},
         }],
         paymentMethod: {type: String, required: true},
-        paymentResult: {
-            id: String, 
-            status: String, 
-            update_time: String,  
-            email_address: String, 
-        },
+        // paymentResult: {
+        //     id: String, 
+        //     status: String, 
+        //     update_time: String,  
+        //     email_address: String, 
+        // },
         shippingInfo: {
             username: {type: String, required: true},
             fullName: {type: String, required: true},
