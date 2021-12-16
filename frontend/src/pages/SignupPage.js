@@ -83,12 +83,12 @@ export default function SignUpPage(props) {
                 </label>
                 {/* <input id="gender" type="text" placeholder="Enter Your gender here" value={user.gender} value={gender} onChange={(e)=> setGender(e.target.value)} disabled={disabled}>
                 </input> */}
-                <select id="gender" onChange={(e)=> setGender(e.target.value)}>
+                <div className='box'><select id="gender" onChange={(e)=> setGender(e.target.value)}>
                     <option value="" hidden>Chọn giới tính</option>
                     <option value="male">Nam</option>
                     <option value="female">Nữ</option>
                     <option value="others">Khác</option>
-                </select>
+                </select></div>
                 <label htmlFor="birthDate">
                     Ngày sinh: 
                 </label>

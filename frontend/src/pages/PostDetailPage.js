@@ -140,7 +140,7 @@ export default function PostDetailPage() {
                         }
                         <div className="card card-body">
                             <div><TopicIcon topicName = {post.topic}></TopicIcon></div>
-                            {users.map(u=>(u._id===post.user && ( u.isAdmin ? (<h1 title="✓: Signature of Superiority">{u.name}<i className="fa fa-check"></i></h1>) : (<h1><i className="fa fa-user"></i>{u.name}</h1>))))}
+                            {users.map(u=>(u._id===post.user && ( u.role==='admin' ? (<h1 className='glitch-div user-name-display' title={u.name}>{u.name}<i className="fa fa-check" title="✓: Signature of Superiority/ Biểu tượng của sự thượng đẳng"></i></h1>) : (<h1 className=' user-name-display'><i className="fa fa-user"></i>{u.name}</h1>))))}
                         <div className="row left">
                             {
                             userInfo && (userInfo._id === post.user && (
@@ -149,7 +149,7 @@ export default function PostDetailPage() {
                                 
                             }
                             {
-                            userInfo && (userInfo._id !== post.user && userInfo.isAdmin && (
+                            userInfo && (userInfo._id !== post.user && userInfo.role==='admin' && (
                                 <div>
                                     <button className="admin" onClick={deleteHandler}><i className="fa fa-trash" ></i>XÓA</button>
                                 </div>))
@@ -158,10 +158,10 @@ export default function PostDetailPage() {
                         {
                             editPostStatus && (<form className="editPostForm" onSubmit={postSubmitingHandler}>
                                             <div>
-                                                <input placeholder="Title goes here" className="postText" required={true} type="text" value={title} onChange={(e)=>setTitle(e.target.value)}></input>
+                                                <input placeholder="Tiêu đề" className="basic-slide" required={true} type="text" value={title} onChange={(e)=>setTitle(e.target.value)}></input>
                                             </div>
                                             <div>
-                                                <textarea placeholder="Content goes here" className="postText" required={true} value={content} type="textarea" onChange={(e)=> setContent(e.target.value)}>
+                                                <textarea placeholder="Nội dung" className="basic-slide" required={true} value={content} type="textarea" onChange={(e)=> setContent(e.target.value)}>
                                                 </textarea>
                                             </div>
                                             <div><button className="primary">ĐĂNG</button></div>
@@ -193,7 +193,7 @@ export default function PostDetailPage() {
                         {userInfo ? (<form className="editPostForm" onSubmit={commentPostingHandler}>
                             <div className="row center">Phản hồi dưới tên <label className="bold-text">{userInfo.name}</label></div>
                             <div>
-                                <textarea placeholder="Content goes here" className="postText" required={true} value={replyContent} type="textarea" onChange={(e)=> setReplyContent(e.target.value)}>
+                                <textarea placeholder="Nội dung" className="basic-slide" required={true} value={replyContent} type="textarea" onChange={(e)=> setReplyContent(e.target.value)}>
                                 </textarea>
                             </div>
                             <div><button className="primary">PHẢN HỒI</button></div>
@@ -239,7 +239,7 @@ export default function PostDetailPage() {
                                     (
                                         <form className="editPostForm" onSubmit={commentEditingHandler}>
                                             <div>
-                                                <textarea placeholder="Content goes here" className="postText" required={true} value={replyContent} type="textarea" onChange={(e)=> setReplyContent(e.target.value)}>
+                                                <textarea placeholder="Nội dung" className="basic-slide" required={true} value={replyContent} type="textarea" onChange={(e)=> setReplyContent(e.target.value)}>
                                                 </textarea>
                                             </div>
                                             <div><button className="primary">PHẢN HỒI</button></div>

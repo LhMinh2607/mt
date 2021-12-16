@@ -96,7 +96,7 @@ export default function DrinkDetailPage() {
         e.preventDefault();
         dispatch(commitCommenting(userInfo._id, id, commentContent, rating));
         dispatch({type: USER_COMMENT_RESET});
-        enableTagEditBox(); 
+        window.location.reload();
     }
 
     const filterCommentByRating = (e) =>{
@@ -169,9 +169,6 @@ export default function DrinkDetailPage() {
             <div>
             <div>
                 <p id="top"><Link to="/drink"  className="linkButton">Quay về browse</Link></p>
-                <div className="row center">
-                    <label className="drink-Title">{drink.name}</label>
-                </div>
                 <div className="floatingDiv">
                     <button onClick={scrollToTopHandler}><i className="fa fa-arrow-up"></i></button>
                 </div>
@@ -232,15 +229,14 @@ export default function DrinkDetailPage() {
                             (
                                 <div>
                                     <button onClick={addToCartHandler} className="primary block">THÊM VÀO GIỎ HÀNG</button>
-                                    <select onChange={(e) => setTopping(e.target.value)} value={topping}>
+                                    <div className='box'><select onChange={(e) => setTopping(e.target.value)} value={topping}>
                                         <option value="Mặc định" >Mặc định</option> {/*default topping, whether the drink has topping by default or not. It says clearly in the name so....*/}
                                         <option value="Trân châu đen">Trân châu đen</option> {/*black bubble or black pearl*/}
                                         <option value="Thạch phô mai">Thạch phô mai</option>
-                                    </select>
+                                    </select></div>
                                     <div className="row">
                                     <div>Số lượng</div>
-                                        <div>
-                                            <select
+                                        <div className='box'><select
                                             value={quantity}
                                             onChange={(e) => setquantity(e.target.value)}
                                             >
@@ -251,17 +247,16 @@ export default function DrinkDetailPage() {
                                                 </option>
                                                 )
                                             )}
-                                            </select>
+                                            </select></div>
                                         </div>
-                                    </div>
                                 </div>
                             ) : userInfo.role==='admin' &&
                             (
                                 <div className="row">
-                                    <Link to={`/admin/drink/update/${drink._id}`}>
+                                    <div><Link to={`/admin/drink/update/${drink._id}`}>
                                         <button className="admin">SỬA</button>
-                                    </Link>
-                                <button className="admin" onClick={deleteHandler}>XÓA</button></div>
+                                    </Link></div>
+                                    <div><button className="admin" onClick={deleteHandler}>XÓA</button></div></div>
                             ) )
                         }
                         {!userInfo && 
@@ -271,7 +266,7 @@ export default function DrinkDetailPage() {
                                     <div className="row">
                                     <div>Số lượng</div>
                                         <div>
-                                            <select
+                                        <div className='box'><select
                                             value={quantity}
                                             onChange={(e) => setquantity(e.target.value)}
                                             >
@@ -282,7 +277,7 @@ export default function DrinkDetailPage() {
                                                 </option>
                                                 )
                                             )}
-                                            </select>
+                                            </select></div>
                                         </div>
                                     </div>
                                 </div>
@@ -315,21 +310,21 @@ export default function DrinkDetailPage() {
                     {userInfo && userInfo.role==='user' && comments && comments.length>0 && (
                     <div>
                         <h1>Bình luận đi</h1>
-                        <select className="filterSelect" onChange={filterCommentByRating} value={star}> 
-                            <option value="" hidden>Filter by rating</option>
-                            <option value="5">5 stars ⭐⭐⭐⭐⭐</option>
-                            <option value="4">4 stars ⭐⭐⭐⭐</option>
-                            <option value="3">3 stars ⭐⭐⭐</option>
-                            <option value="2">2 stars ⭐⭐</option>
-                            <option value="1">1 star ⭐</option>
-                            <option value="0">0 star</option>
-                            <option value="">All comments</option>
-                        </select>
-                        <select className="filterSelect" onChange={sortCommentByTime} value={time}>
-                            <option value="" hidden>Sort</option>
-                            <option value="-1">Latest</option>
-                            <option value="1">Oldest</option>
-                        </select>
+                        <div className='box'><select className="filterSelect" onChange={filterCommentByRating} value={star}> 
+                            <option value="" hidden>Lọc theo đánh giá</option>
+                            <option value="5">5 sao ⭐⭐⭐⭐⭐</option>
+                            <option value="4">4 sao ⭐⭐⭐⭐</option>
+                            <option value="3">3 sao ⭐⭐⭐</option>
+                            <option value="2">2 sao ⭐⭐</option>
+                            <option value="1">1 sao ⭐</option>
+                            <option value="0">0 sao</option>
+                            <option value="">Bỏ lọc</option>
+                        </select></div>
+                        <div className='box'><select className="filterSelect" onChange={sortCommentByTime} value={time}>
+                            <option value="" hidden>Sắp xếp</option>
+                            <option value="-1">Mới nhất</option>
+                            <option value="1">Cũ nhất</option>
+                        </select></div>
                         
                     </div>) 
                     }
@@ -354,7 +349,7 @@ export default function DrinkDetailPage() {
                                         </label>
                                         <button className="primary block" onClick={changeCommentBoxStatus}>ĐÓNG</button>
                                         <form onSubmit={commentSubmitHandler} disabled={disabled}>
-                                            <select onChange={(e)=>setRating(e.target.value)} required={true}>
+                                            {/* <div className='box'><select onChange={(e)=>setRating(e.target.value)} required={true}>
                                                 <option value="" hidden>rate</option>
                                                 <option value="5">(⭐⭐⭐⭐⭐)💯</option>
                                                 <option value="4">(⭐⭐⭐⭐)👌</option>
@@ -362,12 +357,26 @@ export default function DrinkDetailPage() {
                                                 <option value="2">(⭐⭐)☹️</option>
                                                 <option value="1">(⭐)😖</option>
                                                 <option value="0">(Không sao luôn)👎 </option>
-                                            </select>
+                                            </select></div> */}
+                                            <div class="rating-css">
+                                                <div class="star-icon">
+                                                    <input value="1" type="radio" name="rating1" id="rating1" onChange={(e)=>setRating(e.target.value)} required={true}/>
+                                                    <label for="rating1" class="fa fa-star"></label>
+                                                    <input value="2" type="radio" name="rating1" id="rating2" onChange={(e)=>setRating(e.target.value)} required={true}/>
+                                                    <label for="rating2" class="fa fa-star"></label>
+                                                    <input value="3" type="radio" name="rating1" id="rating3" onChange={(e)=>setRating(e.target.value)} required={true}/>
+                                                    <label for="rating3" class="fa fa-star"></label>
+                                                    <input value="4" type="radio" name="rating1" id="rating4" onChange={(e)=>setRating(e.target.value)} required={true}/>
+                                                    <label for="rating4" class="fa fa-star"></label>
+                                                    <input value="5" type="radio" name="rating1" id="rating5" onChange={(e)=>setRating(e.target.value)} required={true}/>
+                                                    <label for="rating5" class="fa fa-star"></label>
+                                                </div>
+                                            </div>
                                             <div>
                                                 
                                             </div>
-                                            <textarea required={true} disabled={disabled} className="comment" id="content" type="textarea" placeholder="" onChange={(e)=> setCommentContent(e.target.value)}>
-                                            </textarea>
+                                            <div className='card'><textarea required={true} disabled={disabled} className="basic-slide" id="content" type="textarea" placeholder="Bình luận ở đây" onChange={(e)=> setCommentContent(e.target.value)}>
+                                            </textarea></div>
                                             <button type="submit" className="primary block" disabled={disabled}>ĐĂNG</button>
                                             
                                         </form>
@@ -381,7 +390,7 @@ export default function DrinkDetailPage() {
                     {userInfo &&
                         (userInfo.role==='admin' &&
                             (<div className="card card-body">
-                                <input type="text" hidden={tagEditBox} className="tagInput" onChange={(e)=>setTagContent(e.target.value)}></input>
+                                <input required={true} type="text" hidden={tagEditBox} className="tagInput basic-slide" onChange={(e)=>setTagContent(e.target.value)}></input>
                                 <button className="admin block" onClick={addTag} hidden={tagEditBox}>THÊM</button>
                                 <button className="admin block" onClick={enableTagEditBox}>
                                     {tagEditBox ? <label>THÊM TAG</label> : <label>ĐÓNG</label>}
@@ -391,7 +400,7 @@ export default function DrinkDetailPage() {
                     {userInfo && (userInfo.role==='admin' ? 
                                 (<div className="row">
                                     <label className="bold-text">Tags:</label> {drink.tags.map(tag=>(
-                                <div className="card"><div>{tag}<button onClick={removeTag} className="admin">x</button></div></div>
+                                <div className="card"><div>{tag}<button style={{width: '50px', height: '50px', textAlign: 'center'}} onClick={removeTag} className="admin">x</button></div></div>
                                     ))}
                                 </div>) : (
                                     <div>
@@ -407,8 +416,6 @@ export default function DrinkDetailPage() {
                         </div>)
                     
                     }
-                </div>
-                <div>
                         {
                             star==="" && time==="" && comments &&(
                             loadingCommentList ? (<LoadingBox></LoadingBox>) : errorCommentList ? (<MessageBox variant="error">{errorCommentList}</MessageBox>) : 
@@ -467,7 +474,7 @@ export default function DrinkDetailPage() {
                                 </div>
                             )
                             ) : (
-                                <MessageBox variant="error">NO COMMENT WITH THIS RATING</MessageBox>
+                                <MessageBox variant="error">{errorStarFilter}</MessageBox>
                             ))
                         }
                         {

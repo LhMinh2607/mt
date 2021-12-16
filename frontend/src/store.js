@@ -93,6 +93,8 @@ const reducer = combineReducers({//bugs are fixed on every streak
     paidOrderVerifying: paidOrderVerifyingReducer,
     deliveredOrderVerifying: deliveredOrderVerifyingReducer,
 
+    //streak #13 + #14 + #15 impoving GUIs
+
 })
 
 

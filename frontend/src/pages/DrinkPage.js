@@ -72,7 +72,7 @@ export default function DrinkPage() {
                 {/* <label htmlFor="searchField" className="fa fa-search"></label>
                 <button type="button" className="searchBtn"></button> */}
                 <div>
-                    <select onChange={filterStarBy} value={filteredStar}> 
+                    <div className='box'><select onChange={filterStarBy} value={filteredStar}> 
                     <option value="" hidden>Filter rating</option>
                     <option value="5">Less than or equals 5 stars ⭐⭐⭐⭐⭐</option>
                     <option value="4">Less than or equals 4 stars ⭐⭐⭐⭐</option>
@@ -80,13 +80,14 @@ export default function DrinkPage() {
                     <option value="2">Less than or equals 2 stars ⭐⭐</option>
                     <option value="1">Less than or equals 1 star ⭐</option>
                     <option value="0">0 star</option>
-                    </select>
+                    </select></div>
                     </div>
                     <div>
-                    <input type="text" id="searchField" className="searchInput" value={keyword} onChange={setTheKeyword} placeholder="🔍Seach anything"></input>
+                    <input type="text" id="searchField" className="basic-slide" value={keyword} onChange={setTheKeyword} placeholder="🔍Tìm kiếm"></input>
+                    <label for="searchField"></label>
                     </div>
                     <div>
-                    <input pattern="[0-9]+" step="1" min="0" max="9999999999" type="number" id="priceField" className="" value={priceRange} onChange={setThePrice} placeholder="Lọc giá <="></input>
+                    <input className="basic-slide" pattern="[0-9]+" step="1" min="0" max="9999999999" type="number" id="priceField" value={priceRange} onChange={setThePrice} placeholder="Lọc giá <="></input>
                     
                     </div>
                 </div>

@@ -6,7 +6,7 @@ import LoadingBox from '../components/LoadingBox';
 import MessageBox from '../components/MessageBox';
 import DateComponent from '../components/DateComponent';
 import DatePicker from 'react-datepicker'; //pre-made from react-datepicker
-//import 'react-datepicker/dist/react-datepicker.css'; 
+import 'react-datepicker/dist/react-datepicker.css'; 
 
 
 export default function ProfilePage(props){
@@ -213,34 +213,34 @@ export default function ProfilePage(props){
                         (<><label htmlFor="name">
                             Tên: 
                         </label>
-                        <input id="name" type="text" placeholder="Enter Your Name here" value={user.name} value={name} onChange={(e)=> setName(e.target.value)} disabled={disabled}>
+                        <input className='basic-slide' id="name" type="text" placeholder="Enter Your Name here" value={user.name} value={name} onChange={(e)=> setName(e.target.value)} disabled={disabled}  autocomplete="off">
                         </input>
                         <label htmlFor="email">
                             Email: 
                         </label>
-                        <input id="email" type="email" placeholder="Enter Your Email here" value={user.email} value={email} onChange={(e)=> setEmail(e.target.value)} disabled={disabled}>
+                        <input className='basic-slide' id="email" type="email" placeholder="Enter Your Email here" value={user.email} value={email} onChange={(e)=> setEmail(e.target.value)} disabled={disabled}  autocomplete="off">
                         </input>
                         <label htmlFor="password">
                             Mật khẩu: 
                         </label>
-                        <input id="password" type="password" placeholder="hidden" onChange={(e)=> setPassword(e.target.value)} disabled={disabled}>
+                        <input className='basic-slide' id="password" type="password" placeholder="hidden" onChange={(e)=> setPassword(e.target.value)} disabled={disabled}  autocomplete="off">
                         </input>
                         <label htmlFor="confirmPassword">
                             Xác nhận mật khẩu: 
                         </label>
-                        <input id="confirmPassword" type="password" placeholder="hidden" onChange={(e)=> setConfirmPassword(e.target.value)} disabled={disabled}>
+                        <input className='basic-slide' id="confirmPassword" type="password" placeholder="hidden" onChange={(e)=> setConfirmPassword(e.target.value)} disabled={disabled}  autocomplete="off">
                         </input>
                         <label htmlFor="gender">
                             Giới tính: 
                         </label>
                         {/* <input id="gender" type="text" placeholder="Enter Your gender here" value={user.gender} value={gender} onChange={(e)=> setGender(e.target.value)} disabled={disabled}>
                         </input> */}
-                        <select id="gender" value={user.gender} value={gender} onChange={(e)=> setGender(e.target.value)} disabled={disabled}>
+                        <div className='box'><select id="gender" value={user.gender} value={gender} onChange={(e)=> setGender(e.target.value)} disabled={disabled}  autocomplete="off">
                             <option value="" hidden>Chọn giới tính</option>
                             <option value="male">Nam</option>
                             <option value="female">Nữ</option>
                             <option value="others">Khác</option>
-                        </select>
+                        </select></div>
                         <label htmlFor="birthDate">
                             Ngày sinh: 
                         </label>
@@ -249,7 +249,7 @@ export default function ProfilePage(props){
                         {/* <input type="date" id="birthDate2" name="birthDate2" onChange={(e)=> setGender(e.target.value)}></input>
                          */}
                         
-                        <DatePicker
+                        <DatePicker  className='basic-slide'
 
                             dateFormat="dd/MM/yyyy"
                             selected={birthDate}
@@ -260,7 +260,7 @@ export default function ProfilePage(props){
                         <label htmlFor="phoneNumber">
                             Số điện thoại:
                         </label>
-                        <input id="phoneNumber" type="text" placeholder="hidden" value={phoneNumber} onChange={(e)=> setPhoneNumber(e.target.value)} disabled={disabled}>
+                        <input className='basic-slide' id="phoneNumber" type="text" placeholder="hidden" value={phoneNumber} onChange={(e)=> setPhoneNumber(e.target.value)} disabled={disabled}  autocomplete="off">
                         </input>
                         </>)}
                         <div className="bottom-button-div-group">

@@ -30,6 +30,7 @@ export default function DrinkPanel(props) {
       if(window.confirm('CHẮC CHƯA?'))
       {
           dispatch(deleteDrink(d._id));
+          window.location.reload();
       };
   }
 
@@ -43,33 +44,33 @@ export default function DrinkPanel(props) {
     return (
         <div>
             <div key={d._id} className="card">
-                <Link to={`/drink/${d._id}`}>
-                    <img className="medium" src={d.image} alt={d.name}/>
-                </Link>
-                <div className="card-body card-body-limit">
-                    <Link to={`/drink/${d._id}`}>
-                        <h2>{d.name}</h2>
-                    </Link>
-                    <RatingComponent rating={d.rating} reviewNum = {d.reviewNum}></RatingComponent>
-                    <div className="price">
-                        {d.price}đ
+                <div className='img-container'>
+                  <Link to={`/drink/${d._id}`}>
+                    <div className='effect effect-glitch' style={{backgroundImage: `url(${d.image})`, backgroundPosition: 'center', backgroundSize: 'cover', backgroundRepeat: 'no-repeat',}}>
+                      <img className="medium effect-img" src={d.image} alt={d.name}/>
                     </div>
+                  </Link>
+                <h2 title={d.name}><Link to={`/drink/${d._id}`}>
+                  {d.name}
+                </Link></h2>
+                <div className='card'><RatingComponent rating={d.rating} reviewNum = {d.reviewNum}></RatingComponent>
+                    <div className="price">
+                        {d.price}đ</div>
+                    </div>
+                <div className="card-body card-body-limit centered" >
                     {(
-                    <>
-                      <li>
-                        
-                      </li>
+                    <ul>
                       {userInfo && userInfo.role==='user' && <li>
                         <button onClick={addToCartHandler} className="primary block">Thêm vào giỏ hàng</button>
-                        <select onChange={(e) => setTopping(e.target.value)} value={topping}>
+                        <div className='box'><select onChange={(e) => setTopping(e.target.value)} value={topping}>
                           <option value="Mặc định" >Mặc định</option> {/*default topping, whether the drink has topping by default or not. It says clearly in the name so....*/}
                           <option value="Trân châu đen">Trân châu đen</option> {/*black bubble or black pearl*/}
                           <option value="Thạch phô mai">Thạch phô mai</option>
-                        </select>
+                        </select></div>
                         <div className="row">
                           <div>Số lượng</div>
                           <div>
-                            <select
+                          <div className='box'><select
                               value={quantity}
                               onChange={(e) => setquantity(e.target.value)}
                             >
@@ -80,21 +81,21 @@ export default function DrinkPanel(props) {
                                   </option>
                                 )
                               )}
-                            </select>
+                            </select></div>
                           </div>
                         </div>
                       </li>}
                       {!userInfo && <li>
                         <button onClick={addToCartHandler} className="primary block">Thêm vào giỏ hàng</button>
-                        <select onChange={(e) => setTopping(e.target.value)} value={topping}>
+                        <div className='box'><select onChange={(e) => setTopping(e.target.value)} value={topping}>
                           <option value="Mặc định" >Mặc định</option> {/*default topping, whether the drink has topping by default or not. It says clearly in the name so....*/}
                           <option value="Trân châu đen">Trân châu đen</option> {/*black bubble or black pearl*/}
                           <option value="Thạch phô mai">Thạch phô mai</option>
-                        </select>
+                        </select></div>
                         <div className="row">
                           <div>Số lượng</div>
                           <div>
-                            <select
+                          <div className='box'><select
                               value={quantity}
                               onChange={(e) => setquantity(e.target.value)}
                             >
@@ -105,22 +106,24 @@ export default function DrinkPanel(props) {
                                   </option>
                                 )
                               )}
-                            </select>
+                            </select></div>
                           </div>
                         </div>
                       </li>}
                       {
                         userInfo && userInfo.role==='admin' && 
                         <div className="row">
-                            <Link to={`/admin/drink/update/${d._id}`}>
+                            <div><Link to={`/admin/drink/update/${d._id}`}>
                                 <button className="admin">SỬA</button>
-                            </Link>
-                        <button className="admin" onClick={deleteHandler}>XÓA</button></div>
+                            </Link></div>
+                            <div><button className="admin" onClick={deleteHandler}>XÓA</button></div>
+                            </div>
                       }
-                    </>
+                    </ul>
                   )}
                 </div>
-            </div>     
+            </div>   
+            </div>  
         </div>
     );
 }

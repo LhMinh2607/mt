@@ -183,41 +183,52 @@ export default function OrderListsPage() {
                     <Link to="/profile" className="admin linkButton">Về trang cá nhân<i className="fa fa-book"></i></Link>
                 </div>
             </div> */}
-            <div className="row">
-                <div className="col-2">
-                        <div className="row center">
-                            {ordersList && (<h1>Tổng thu nhập: {ordersList.reduce((a, b)=> b.isPaid ? a+b.totalPrice : a+0, 0)} đồng</h1>)}
-                        </div>
-                        <div className="row center">
-                            {ordersList && (<h2>Tổng số đơn hàng: {ordersList.length} </h2>)}
-                        </div>
-                        <div className="row center">
-                            {ordersList && (<h2>Số đơn hàng đã thanh toán: {ordersList.filter((order)=>order.isPaid).length} </h2>)}
-                        </div>
-                        <div className="row center">
-                            {ordersList && (<h2>Số đơn hàng chưa thanh toán: {ordersList.filter((order)=>!order.isPaid).length} </h2>)}
-                        </div>
-                        <div className="row center">
-                            {ordersList && (<h2>Thu nhập trung bình cho mỗi đơn hàng (đã thanh toán): {Math.floor(ordersList.reduce((a, b)=>b.isPaid ? a + b.totalPrice : a+0, 0)/ordersList.filter((order)=>order.isPaid).length)} đồng </h2>)}
-                        </div>
-                </div>
-                {year!=="" && <div className="col-1">
-                    
-                        <div className="row center">
-                            {filteredOrders && (<h1>Thu nhập (đã lọc): {filteredOrders.reduce((a, b)=> b.isPaid ? a+ b.totalPrice : a+0, 0)} đồng </h1>)}
-                        </div>
-                        <div className="row center">  
-                            {filteredOrders && (<h1>Số đơn hàng (đã lọc): {filteredOrders.length} </h1>)}
-                        </div>
-                        <div className="row center">
-                            {ordersList && (<h1>Thu nhập trung bình mỗi tháng: {Math.floor(ordersList.reduce((a, b)=> b.isPaid ? a + b.totalPrice : a + 0, 0)/12)} đồng</h1>)}
-                        </div>
-                    </div>}
+            <div>
+                {year==="" && <table className="table" style={{width: '50%'}}>
+                    <tbody>
+                        <tr>
+                            <td><h3>Tổng thu nhập:</h3></td>
+                            {ordersList && ( <td>{ordersList.reduce((a, b)=> b.isPaid ? a+b.totalPrice : a+0, 0)} đồng</td>)}
+                        </tr>
+                        <tr>
+                            <td><h3>Tổng số đơn hàng:</h3></td>
+                            {ordersList && ( <td>{ordersList.length}</td> )}
+                        </tr>
+                        <tr>
+                            <td><h3>Số đơn hàng đã thanh toán:</h3></td>
+                            {ordersList && ( <td>{ordersList.filter((order)=>order.isPaid).length}</td> )}
+                        </tr>
+                        <tr>
+                            <td><h3>Số đơn hàng chưa thanh toán:</h3></td>
+                            {ordersList && ( <td>{ordersList.filter((order)=>!order.isPaid).length}</td> )}
+                        </tr>
+                        <tr>
+                            <td><h3>Thu nhập trung bình cho mỗi đơn hàng (đã thanh toán): </h3></td>
+                            {ordersList && ( <td>{Math.floor(ordersList.reduce((a, b)=>b.isPaid ? a + b.totalPrice : a+0, 0)/ordersList.filter((order)=>order.isPaid).length)} đồng</td>)}
+                        </tr>
+                    </tbody>
+                </table>}
+                {year!=="" && <table className="table" style={{width: '50%', right: 0}}>
+                        <tbody>
+                            <tr>
+                                <td><h3>Thu nhập (đã lọc):</h3></td>
+                                {filteredOrders && ( <td>{filteredOrders.reduce((a, b)=> b.isPaid ? a+ b.totalPrice : a+0, 0)} đồng </td>)}
+                            </tr>
+                            <tr>  
+                                <td><h3>Số đơn hàng (đã lọc):</h3></td>
+                                {filteredOrders && ( <td>{filteredOrders.length}</td> )}
+                            </tr>
+                            <tr>
+                                <td><h3>Thu nhập trung bình mỗi tháng:</h3></td>
+                                {ordersList && ( <td>{Math.floor(ordersList.reduce((a, b)=> b.isPaid ? a + b.totalPrice : a + 0, 0)/12)} đồng</td>)}
+                            </tr>
+                        </tbody>
+                    </table>}
                 <div className="col-1 card">
                     <div className="row">
                         <div>
                             <div className="row center">Năm:</div>
-                            <select id="years" onChange={filterByYearHandler} value={year}>
+                            <div className='box'><select id="years" onChange={filterByYearHandler} value={year}>
                                 <option hidden value="">Chọn năm</option>
                                 <option value="">Hiện hết</option>
                                 {ordersYear && ( 
@@ -225,11 +236,11 @@ export default function OrderListsPage() {
                                         <option value={i._id.year}>{i._id.year}</option>
                                     ))))
                                 }
-                            </select>
+                            </select></div>
                         </div>
                         <div>
                             <div className="row center">Tháng:</div>
-                            <select id="months" onChange={filterByMonthHandler}  value={month}>
+                            <div className='box'><select id="months" onChange={filterByMonthHandler}  value={month}>
                                 <option hidden value="">Chọn tháng</option>
                                 <option>Bỏ trống</option>
                                 {ordersMonth && ( 
@@ -239,11 +250,11 @@ export default function OrderListsPage() {
                                 }
                                 
 
-                            </select>
+                            </select></div>
                         </div>
                         <div>
                             <div className="row center">Ngày:</div>
-                            <select id="days" onChange={filterByDayHandler}  value={day}>
+                            <div className='box'><select id="days" onChange={filterByDayHandler}  value={day}>
                                 <option hidden value="">Chọn ngày</option>
                                 <option>Bỏ trống</option>
                                 {ordersDate && ( 
@@ -252,15 +263,15 @@ export default function OrderListsPage() {
                                     ))))
                                 }
                                 
-                            </select>
+                            </select></div>
                         </div>
                         <div>
-                            <select onChange={sortOrders} value={sortingCondition}>
+                            <div className='box'><select onChange={sortOrders} value={sortingCondition}>
                                 <option value='date-desc'>Ngày Giảm dần</option>
                                 <option value='date-asc'>Ngày Tăng dần</option>
                                 <option value='total-desc'>Thành tiền Giảm dần</option>
                                 <option value='total-asc'>Thành tiền Tăng dần</option>
-                            </select>
+                            </select></div>
                         </div>
                     </div>
                     
@@ -277,21 +288,21 @@ export default function OrderListsPage() {
                                     <th>MÃ NGƯỜI DÙNG</th>
                                     <th>TÊN NGƯỜI DÙNG</th>
                                     <th>TÊN ĐẦY ĐỦ</th>
-                                    <th>TỔNG THÀNH TIỀN<select onChange={filterByTotalPrice} value={orderTotalPrice}>
+                                    <th>TỔNG THÀNH TIỀN<div className='box'><select onChange={filterByTotalPrice} value={orderTotalPrice}>
                                             <option value="">Tất cả</option>
                                             <option value='max'>Lớn nhất</option>
                                             <option value='no'>hmm</option>
-                                        </select></th>
-                                    <th>THANH TOÁN<select onChange={filterByIsPaid} value={paidOrder}>
+                                        </select></div></th>
+                                    <th>THANH TOÁN<div className='box'><select onChange={filterByIsPaid} value={paidOrder}>
                                             <option value="">Tất cả</option>
                                             <option value='yes'>Rồi</option>
                                             <option value='no'>Chưa</option>
-                                        </select></th>
-                                    <th>GIAO HÀNG <select onChange={filterByIsDelivered} value={deliveredOrder}>
+                                        </select></div></th>
+                                    <th>GIAO HÀNG <div className='box'><select onChange={filterByIsDelivered} value={deliveredOrder}>
                                             <option value="">Tất cả</option>
                                             <option value='yes'>Rồi</option>
                                             <option value='no'>Chưa</option>
-                                        </select></th>
+                                        </select></div></th>
                                     <th>CHI TIẾT</th>
                                 </tr>
                             </thead>

@@ -58,46 +58,53 @@ export default function CommentComponent(props){
 
                 <div className="card displayComment">
                     <div className="card-body ">
-                        <h2>{personnel.isAdmin === false && <font><i className="fa fa-user"></i></font>}{personnel.name}  
+                        <p className='user-name-display'>{personnel.role==='admin' === false && <font><i className="fa fa-user"></i></font>}{personnel.name}  
                         {/* {personnel.onlineStatus ? 
                         <i className="fas fa-circle online"> </i> : <i className="fas fa-circle offline"></i>} */}
                         
-                        {personnel.isAdmin && <font><i className="fa fa-check">Chủ bình luận</i></font>}
-                        </h2> 
+                        {personnel.role==='admin' && <font><i className="fa fa-check">Chủ bình luận</i></font>}
+                        </p> 
                         {
                             userInfo ? (userInfo._id !== personnel._id &&( 
                                 <div>
-                                    <Linkify><p>{comment.content}</p></Linkify>
                                     <Rating rating={comment.rating} reviewNum = ""></Rating>
+                                    <Linkify><p>{comment.content}</p></Linkify>
+                                    
 
                                 </div>
                             )) : (
                                 <div>
-                                    <Linkify><p>{comment.content}</p></Linkify>
                                     <Rating rating={comment.rating} reviewNum = ""></Rating>
+                                    <Linkify><p>{comment.content}</p></Linkify>
+                                    
 
                                 </div>
                             )
                         }
                         {userInfo && (userInfo._id === personnel._id &&( 
                             editCommentStatus ? 
-                            <textarea value={content} className="editComment" type="textarea" onChange={(e)=> setCommentContent(e.target.value)}>
+                            <textarea value={content} className="basic-slide" type="textarea" onChange={(e)=> setCommentContent(e.target.value)}>
                                                     </textarea>
                             : <Linkify><p>{comment.content}</p></Linkify>))}
                         {userInfo && (userInfo._id === personnel._id &&( 
-                        editCommentStatus ? <select onChange={(e)=>setRating(e.target.value)}>
-                                            <option value="" hidden>rate</option>
-                                            <option value="5">💯Excellent (5 stars)</option>
-                                            <option value="4">👌Very good (4 stars)</option>
-                                            <option value="3">👍Good (3 stars)</option>
-                                            <option value="2">☹️Bad (2 stars)</option>
-                                            <option value="1">😖Meh (1 star)</option>
-                                            <option value="0">👎 (No star for this)</option> 
-                                    </select>
+                        editCommentStatus ? <div class="rating-css">
+                        <div class="star-icon">
+                            <input value="1" type="radio" name="rating1" id="rating1" onChange={(e)=>setRating(e.target.value)} required={true}/>
+                            <label for="rating1" class="fa fa-star"></label>
+                            <input value="2" type="radio" name="rating1" id="rating2" onChange={(e)=>setRating(e.target.value)} required={true}/>
+                            <label for="rating2" class="fa fa-star"></label>
+                            <input value="3" type="radio" name="rating1" id="rating3" onChange={(e)=>setRating(e.target.value)} required={true}/>
+                            <label for="rating3" class="fa fa-star"></label>
+                            <input value="4" type="radio" name="rating1" id="rating4" onChange={(e)=>setRating(e.target.value)} required={true}/>
+                            <label for="rating4" class="fa fa-star"></label>
+                            <input value="5" type="radio" name="rating1" id="rating5" onChange={(e)=>setRating(e.target.value)} required={true}/>
+                            <label for="rating5" class="fa fa-star"></label>
+                        </div>
+                    </div>
                             : <Rating rating={comment.rating} reviewNum = ""></Rating>))}
                             {userInfo && (userInfo._id === personnel._id &&( 
                                 editCommentStatus && <div>
-                                    <button type="submit" className="primary block" onClick={commentSubmitHandler}>SUBMIT</button>
+                                    <button type="submit" className="primary block" onClick={commentSubmitHandler}>OK</button>
                                 </div>
                             ))}
                         <div className="price">
@@ -118,24 +125,24 @@ export default function CommentComponent(props){
                             
                             {", "+commentPublishedDate+"/"+commentPublishedMonth+"/"+commentPublishedYear} */}
                             {comment.createdAt === comment.updatedAt ? 
-                                (<DateComponent passedDate = {comment.createdAt}></DateComponent>) :
+                                (<div style={{fontSize: '1rem'}}><DateComponent passedDate = {comment.createdAt}></DateComponent></div>) :
                                 (<div>
-                                    <div className="row left">Ngày đăng: <DateComponent passedDate = {comment.createdAt}></DateComponent></div>
-                                    <div className="row left">Ngày sửa: <DateComponent passedDate = {comment.updatedAt}></DateComponent></div>
+                                    <div style={{fontSize: '1rem'}} className="row left">Ngày đăng: <DateComponent passedDate = {comment.createdAt}></DateComponent></div>
+                                    <div style={{fontSize: '1rem'}} className="row left">Ngày sửa: <DateComponent passedDate = {comment.updatedAt}></DateComponent></div>
                                 </div>)
                             }
                         </div>
                         {
                             userInfo && (
                                 userInfo._id===personnel._id &&(
-                                    <div className="row">
-                                        <button className="primary" onClick={editCommentHandler}>
+                                    <div className="row left">
+                                        <div><button className="primary" onClick={editCommentHandler}>
                                             {editCommentStatus ?
-                                                <label>Xong</label> :
+                                                <label>Hủy</label> :
                                                 <label>Edit<i className="fa fa-edit"></i></label> 
                                             }
-                                            </button>
-                                        <button className="primary" onClick={deleteCommentHandler}>Xóa <i className="fa fa-trash"></i></button>
+                                            </button></div>
+                                            <div><button className="primary" onClick={deleteCommentHandler}>Xóa <i className="fa fa-trash"></i></button></div>
                                     </div>
                                 )
                             )

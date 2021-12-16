@@ -115,26 +115,26 @@ export default function ForumPage() {
             <div className="row center cyan-background">
                 <div className="row center search-background"> 
                     <div> 
-                        <select onChange={sortThePosts} className="" value={sorting}>
+                        <div className='box'><select onChange={sortThePosts} className="" value={sorting}>
                             <option value="-1">Mới nhất</option>
                             <option value="1">Cũ nhất</option>
-                        </select>
+                        </select></div>
                     </div>
                     <div> 
-                        <select onChange={filterThePosts} className="">
-                            <option value="" hidden>Chọn chủ đề</option>
+                        <div className='box'><select onChange={filterThePosts} className="">
                             <option value="">Tất cả</option>
-                            <option value="News">Tin tức</option>
-                            <option value="Support">Hỗ trợ</option>
-                            <option value="General">Chung</option>
-                            <option value="OffTopic">Lạc đề</option>
-                        </select>
+                            { 
+                                topicArray.map(top=>(
+                                    <option value={top.vi}>{top.vi}</option>
+                                ))
+                            }
+                        </select></div>
                     </div>
                     <div>
-                        <input type="text" id="searchField" className="searchInput" value={keyword} onChange={setTheKeyword} placeholder="🔍Seach for post title"></input>
+                        <input type="text" id="searchField" className="basic-slide" value={keyword} onChange={setTheKeyword} placeholder="🔍Tìm bài đăng"></input>
                     </div>
                     
-                    {userInfo && <button className="primary" onClick={enablePosting}>{createAPost ? <>ĐÓNG</> : <>TẠO BÀI ĐĂNG</>}</button>}
+                    {userInfo && <div><button className="primary" onClick={enablePosting}>{createAPost ? <>ĐÓNG</> : <>TẠO BÀI ĐĂNG</>}</button></div>}
 
                 </div>
             </div>
@@ -147,33 +147,33 @@ export default function ForumPage() {
             <form onSubmit={postHandler}>
                 <div className="row center">Tạo 1 bài đăng dưới tên ‎<label className="bold-text">{userInfo.name}</label></div>
                 <div>
-                    <select className="topic" required={true} onChange={(e)=> setTopic(e.target.value)}>
+                    <div className='box'><select className="topic" required={true} onChange={(e)=> setTopic(e.target.value)}>
                         <option value="" hidden>Chọn chủ đề</option>
-                        {   userInfo.isAdmin ?
+                        {   userInfo.role==='admin' ?
                             topicArray.map(top=>(
-                                <option value={top.en}>{top.vi}</option>
+                                <option value={top.vi}>{top.vi}</option>
                             )) :
                             topicArray.map(top=>(
-                                top !== "News" &&
-                                <option value={top.en}>{top.vi}</option>
+                                top.en !== "News" &&
+                                <option value={top.vi}>{top.vi}</option>
                             ))
                         }
-                    </select>
+                    </select></div>
                 </div>
                 {/* <div className="row center">
-                    <select required={true} onChange={(e)=> setIsPublic(e.target.value)}>
+                    <div className='box'><select required={true} onChange={(e)=> setIsPublic(e.target.value)}>
                         <option value="true">Public</option>
                         <option value="false">Admin only</option>
                     </select>
                 </div> */}
                 <div>
-                    <input className="postTitle" required={true} placeholder="Post's title" value={postTitle} className="postText" type="text" onChange={(e)=> setPostTitle(e.target.value)}>
+                    <input className="postTitle" required={true} placeholder="Tiêu đề" value={postTitle} className="basic-slide" type="text" onChange={(e)=> setPostTitle(e.target.value)}>
                     </input>
                 </div><div>
-                    <textarea className="postContent" required={true} placeholder="Post's content" value={postContent} className="postText" type="textarea" onChange={(e)=> setPostContent(e.target.value)}>
+                    <textarea className="postContent" required={true} placeholder="Nội dung" value={postContent} className="basic-slide" type="textarea" onChange={(e)=> setPostContent(e.target.value)}>
                     </textarea>
                 </div>
-                    <button type="submit" className="primary block">POST</button>
+                    <button type="submit" className="primary block">ĐĂNG</button>
             </form>))
             : (<div>
                         <div className="row center">
@@ -194,7 +194,7 @@ export default function ForumPage() {
                                 users && (users.map(u=>(
                                     p.user === u._id && 
                                     <Link to={`/forum/post/${p._id}`}><div className="card card-body postBasic" key={p._id}>
-                                        <label className="bold-text">{u.name}</label>
+                                        <label className="bold-text">{u.role==='admin' ? (<h3 title={u.name} className='glitch-div'>{u.name}<i className="fa fa-check" title="✓: Signature of Superiority/ Biểu tượng của sự thượng đẳng"></i></h3>) :   u.name}</label>
                                         <div className="row left">
                                             <TopicIcon topicName = {p.topic}></TopicIcon>
                                         </div>

@@ -16,7 +16,7 @@ export default function DateComponent(props) {
     return (
 
         <div>
-            {props.children}
+            <i className='fa fa-calendar'></i>{props.children}
             {!isBirthDate && (publishedHour+":")}
             {
                 !isBirthDate &&

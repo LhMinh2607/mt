@@ -93,12 +93,12 @@ export default function UserListPage() {
         <div>
             <div className="row center cyan-background"> 
                 <div>
-                    <Link to={`/admin/profile`} className="admin linkButton">Back to Profile</Link>
+                    <Link to={`/admin/profile`} className="admin linkButton">Về trang cá nhân</Link>
                 </div>
             </div>
             <div className="row center cyan-background">
                 <div className="search-background row center">
-                    <input type="text" id="searchField" className="searchInput" onChange={setTheKeyword} placeholder="🔍Seach For User"></input>
+                    <input type="text" id="searchField" className="basic-slide" onChange={setTheKeyword} placeholder="🔍Tìm người dùng"></input>
                 </div>
             </div>
             <h2>DANH SÁCH NGƯỜI DÙNG </h2>
@@ -113,7 +113,7 @@ export default function UserListPage() {
                 </div>
             }
 
-            <select onChange={sortUsers} value={sortingCondition}>
+            <div className='box'><select onChange={sortUsers} value={sortingCondition}>
                 <option value="">Tất cả</option>
                 <option value='date-asc'>Ngày tham gia (Tăng dần)</option>
                 <option value='date-desc'>Ngày tham gia (Giảm dần)</option>
@@ -123,7 +123,7 @@ export default function UserListPage() {
                 <option value='order-desc'>Số đơn hàng đã thanh toán (Giảm dần)</option>
                 <option value='spending-asc'>Số tiền tiêu (Tăng dần)</option>
                 <option value='spending-asc'>Số tiền tiêu (Giảm dần)</option>
-            </select>
+            </select></div>
             
             <div className="row center">
                         <table className="table">
@@ -134,11 +134,11 @@ export default function UserListPage() {
                                     <th>EMAIL</th>
                                     <th>SĐT</th>
                                     <th>NGÀY THAM GIA</th>
-                                    <th>SỐ TIỀN TIÊU THỤ (ĐỒNG)<select onChange={filterBySpending} value={spendingFilter}>
+                                    <th>SỐ TIỀN TIÊU THỤ (ĐỒNG)<div className='box'><select onChange={filterBySpending} value={spendingFilter}>
                                             <option value="">Tất cả</option>
                                             <option value='max'>Nhiều nhất</option>
                                             <option value='hmm'>hmm</option>
-                                        </select></th>
+                                        </select></div></th>
                                     <th>HÓA ĐƠN</th>
                                 </tr>
                             </thead>
@@ -191,6 +191,9 @@ export default function UserListPage() {
                                             <p key={userSpend._id}>{userSpend.totalMoneySpent}</p>
                                         )) )
                                     }</td>
+                                    <td><button type="button" className="tiny admin" onClick={() => {navigate(`/order/history/${user._id}`);}}>
+                                        Danh sách
+                                    </button></td>
                             </tr>
                             
                             )))))}
@@ -213,6 +216,9 @@ export default function UserListPage() {
                                                 <td>{us.phoneNumber}</td>
                                                 <td><DateComponent passedDate={us.createdAt}></DateComponent></td>
                                                 <td>{u.totalMoneySpent}</td>
+                                                <td><button type="button" className="tiny admin" onClick={() => {navigate(`/order/history/${u._id}`);}}>
+                                                    Danh sách
+                                                </button></td>
                                             </tr>)
                                         )) )
                                     }
@@ -240,6 +246,9 @@ export default function UserListPage() {
                                         <p key={userSpend._id}>{userSpend.totalMoneySpent}</p>
                                     )) )
                                 }</td>
+                                <td><button type="button" className="tiny admin" onClick={() => {navigate(`/order/history/${user._id}`);}}>
+                                    Danh sách
+                                </button></td>
                         </tr>
                         
                         ))))}
@@ -264,6 +273,9 @@ export default function UserListPage() {
                                         <p key={userSpend._id}>{userSpend.totalMoneySpent}</p>
                                     )) )
                                 }</td>
+                                <td><button type="button" className="tiny admin" onClick={() => {navigate(`/order/history/${user._id}`);}}>
+                                    Danh sách
+                                </button></td>
                         </tr>
                         
                         ))))}
@@ -312,6 +324,9 @@ export default function UserListPage() {
                                         <p key={userSpend._id}>{userSpend.totalMoneySpent}</p>
                                     )) )
                                 }</td>
+                                <td><button type="button" className="tiny admin" onClick={() => {navigate(`/order/history/${user._id}`);}}>
+                                    Danh sách
+                                </button></td>
                         </tr>
                         
                         ))))}
@@ -340,6 +355,9 @@ export default function UserListPage() {
                                                         <p key={userSpend._id}>{userSpend.totalMoneySpent} ({u.orderCount}đơn hàng)</p>
                                                     )) )
                                                 }</td>
+                                                <td><button type="button" className="tiny admin" onClick={() => {navigate(`/order/history/${u._id}`);}}>
+                                                    Danh sách
+                                                </button></td>
                                             </tr>)
                                         )) )
                                     }

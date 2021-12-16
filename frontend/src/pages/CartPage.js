@@ -92,7 +92,7 @@ export default function CartPage(props){
                             <Link to={`/drink/${item.drink}`}><img 
                                 src={item.image}
                                 alt={item.name}
-                                className="tiny"></img></Link>
+                                className="tiny effect-img effect-glitch"></img></Link>
                                 <li className="col-1">
                                     <Link to={`/drink/${item.drink}`}>{item.name}</Link>
                                 </li>
@@ -110,7 +110,7 @@ export default function CartPage(props){
                             </li>
                             
                             <li className="row top">
-                                <select
+                            <div className='box'><select
                                     value={item.quantity}
                                     onChange={(e) =>
                                         dispatch(
@@ -126,7 +126,7 @@ export default function CartPage(props){
                                             </option>
                                         ))
                                     )) }
-                                </select>
+                                </select></div>
                             </li>
                             <li>
                                 <button className="primary" type="button" onClick={()=> removeFromCartHandler(item.drink, item.topping)}>
@@ -159,10 +159,10 @@ export default function CartPage(props){
                             </button>
                         </li>
                         <li>
-                            <select>
+                        <div className='box'><select>
                                 <option value='cash'>Tiền mặt</option>
                                 <option value='momo'>Ví điện tử Momo</option>
-                            </select>
+                            </select></div>
                         </li>
                     </ul>
                 </div>

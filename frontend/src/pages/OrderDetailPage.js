@@ -36,7 +36,7 @@ export default function OrderDetailPage() {
         window.scrollTo({
             top: 0, 
           });
-        if(userInfo && userInfo.role==='user' && userInfo._id!==id){
+        if(userInfo && userInfo.role==='user' && order && userInfo._id!==order.user){
             navigate(`/order/history/${userInfo._id}`);
         }
         dispatch(detailsOfOrder(id));
@@ -72,12 +72,12 @@ export default function OrderDetailPage() {
                                     {loading ? <LoadingBox></LoadingBox> : error ? <MessageBox variant="error">{error}</MessageBox> : order &&
                                     order.orderItems.map((item)=>(
                                         <li key={item.drink} className="row purple">
-                                            <div className="row">
-                                            <Link to={`/drink/${item.drink}`}><img 
+                                            <Link to={`/drink/${item.drink}`}><div className="row effect effect-glitch" style={{backgroundImage: `url(${item.image})`, backgroundPosition: 'center', backgroundSize: 'cover', backgroundRepeat: 'no-repeat',}}>
+                                            <img 
                                                 src={item.image}
                                                 alt={item.name}
-                                                className="tiny"></img></Link>
-                                            </div>
+                                                className="tiny effect-img"></img>
+                                            </div></Link>
                                             <div className="min-30">
                                                 <Link to={`/drink/${item.drink}`}>{item.name}</Link>
                                                 <div className="row">
@@ -106,6 +106,9 @@ export default function OrderDetailPage() {
                                     <li>
                                     <strong>Phí giao hàng</strong>: {order && order.shippingPrice} đồng
                                     </li>
+                                    <h2>
+                                        Tổng cộng {order && order.orderItems.reduce((a, c)=> a + c.quantity, 0)} món: {order && order.totalPrice} đồng
+                                    </h2>
                                 </ul>
                                 {order && order.isPaid ? <div>
                                     <strong>Đã thanh toán lúc</strong> <DateComponent passedDate={order.paidAt}></DateComponent>

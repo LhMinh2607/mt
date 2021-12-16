@@ -59,27 +59,27 @@ export default function DrinkAddingPage() {
                         <label htmlFor="name">
                             Tên: 
                         </label>
-                        <input id="name" type="text" placeholder="Name" onChange={(e)=> setName(e.target.value)}  required={true}>
+                        <input className='basic-slide' id="name" type="text" placeholder="Tên" onChange={(e)=> setName(e.target.value)}  required={true}>
                         </input>
                         <label htmlFor="category">
                             Loại: 
                         </label>
                         <div>
-                            <select id="type" onChange={(e)=>setCategory(e.target.value)} required={true} >
+                        <div className='box'><select id="type" onChange={(e)=>setCategory(e.target.value)} required={true} >
                                 <option selected={true} hidden>Chọn</option> 
                                     {
                                         categoriesArray.map(item=>(
                                             <option type="text">{item}</option>
                                         ))
                                     }
-                            </select>
+                            </select></div>
                             {/* <input id="category" type="text" placeholder="Type" onChange={(e)=> setCategory(e.target.value)} disabled={disabled} required={true}>
                             </input> */}
                         </div>
                         <label htmlFor="image">
                             Hình ảnh: 
                         </label>
-                        <input id="image" type="text" placeholder="Image" onChange={(e)=> setImage(e.target.value)} >
+                        <input className='basic-slide' id="image" type="text" placeholder="Hình ảnh" onChange={(e)=> setImage(e.target.value)} >
                         </input>
                         {/* <div>
                             <FilleUpload>
@@ -91,12 +91,12 @@ export default function DrinkAddingPage() {
                         <label htmlFor="price">
                             Giá: 
                         </label>
-                        <input id="price" type="text" placeholder="Price" onChange={(e)=> setPrice(e.target.value)} required={true}>
+                        <input className='basic-slide' id="price" type="text" placeholder="Giá" onChange={(e)=> setPrice(e.target.value)} required={true}>
                         </input>
                         <label htmlFor="desc">
                             Mô tả: 
                         </label>
-                        <input id="description" type="text" placeholder="Description" onChange={(e)=> setDescription(e.target.value)} required={true}>
+                        <input className='basic-slide' id="description" type="text" placeholder="Mô tả" onChange={(e)=> setDescription(e.target.value)} required={true}>
                         </input>
                         
                         <div className="bottom-button-div-group">

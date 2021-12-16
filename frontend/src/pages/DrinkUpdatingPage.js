@@ -128,7 +128,7 @@ export default function DrinkUpdatingPage(props) {
                         <label htmlFor="name">
                             Tên: 
                         </label>
-                        <input id="name" type="text" placeholder="Tên" onChange={(e)=> setName(e.target.value)} 
+                        <input className='basic-slide' id="name" type="text" placeholder="Tên" onChange={(e)=> setName(e.target.value)} 
                         value={drink.name} 
                         value={name} required={true}>
                         </input>
@@ -136,40 +136,40 @@ export default function DrinkUpdatingPage(props) {
                             Loại: 
                         </label>
                         <div>
-                           <select id="category" onChange={(e)=>setCategory(e.target.value)} required={true}  value={drink.category} value={category}>
+                           <div className='box'><select id="category" onChange={(e)=>setCategory(e.target.value)} required={true}  value={drink.category} value={category}>
                                 {
                                     categoriesArray.map(categoryItem=>(
                                         <option key={categoryItem}>{categoryItem}</option>
                                     ))
                                 }
-                            </select>
+                            </select></div>
                         </div>
                         <label htmlFor="image">
                             Hình: 
                         </label>
-                        <input id="image" type="text" placeholder="Hình" onChange={(e)=> setImage(e.target.value)} value={drink.image} value={image}>
+                        <input className='basic-slide' id="image" type="text" placeholder="Hình" onChange={(e)=> setImage(e.target.value)} value={drink.image} value={image}>
                         </input>
                         {/* <input type="file" onChange={(e)=>browseFile(e.target.value)}></input> */}
                         
                         <label htmlFor="price">
                             Giá: 
                         </label>
-                        <input id="price" type="text" placeholder="Giá" onChange={(e)=> setPrice(e.target.value)} required={true} value={drink.price} value={price}>
+                        <input className='basic-slide' id="price" type="text" placeholder="Giá" onChange={(e)=> setPrice(e.target.value)} required={true} value={drink.price} value={price}>
                         </input>
                         <label htmlFor="desc">
                             Mô tả: 
                         </label>
-                        <input id="description" type="text" placeholder="Mô tả" onChange={(e)=> setDescription(e.target.value)} required={true} value={drink.description} value={description}> 
+                        <input className='basic-slide' id="description" type="text" placeholder="Mô tả" onChange={(e)=> setDescription(e.target.value)} required={true} value={drink.description} value={description}> 
                         </input>
                         <label htmlFor="qty">
                             Số lượng hiện có: 
                         </label>
-                        <input id="quantity" type="text" placeholder="Số lượng" value={drink.quantity} disabled></input>
+                        <input className='basic-slide' id="quantity" type="text" placeholder="Số lượng" value={drink.quantity} disabled></input>
                         <label htmlFor="addQty">
                             Nhập thêm số lượng: 
                         </label>
                         {/* <input id="addQuantity" type="numnber" placeholder="Thêm số lượng" value='0' onChange={(e)=> setQuantity(e.target.value)}></input> */}
-                        <input id="addQuantity" type="numnber" placeholder="Số lượng" value={addedQuantity} onChange={(e)=> addQuantity(e.target.value)}></input>
+                        <input className='basic-slide' id="addQuantity" type="numnber" placeholder="Số lượng" value={addedQuantity} onChange={(e)=> addQuantity(e.target.value)}></input>
 
                     </div>)
                 }
