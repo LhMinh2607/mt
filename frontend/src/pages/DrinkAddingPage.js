@@ -28,7 +28,7 @@ export default function DrinkAddingPage() {
     const {loading, error, success} = drinkAdding;
 
     
-    const categoriesArray = ["Nước uống", "Không biết nữa"]; //hmmmm food for thought
+    const categoriesArray = ["Trà sữa", "Loại khác"]; //hmmmm food for thought
 
     useEffect(()=>{
         window.scrollTo({

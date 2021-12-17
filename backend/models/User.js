@@ -10,6 +10,7 @@ const userSchema = new mongoose.Schema({
     birthDate: {type: Date, required: true},
     phoneNumber: {type: String, required: false},
     totalMoneySpent: {type: Number, default: 0},
+    drinkIdList: [{type: String}],
 },
     {
         timestamps: true,

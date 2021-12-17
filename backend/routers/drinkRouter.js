@@ -2,6 +2,8 @@ import express from 'express'
 import expressAsyncHandler from 'express-async-handler'
 import Drink from '../models/Drink.js'
 import Comment from '../models/Comment.js';
+import User from '../models/User.js';
+import Order from '../models/Order.js';
 import mongoose from 'mongoose';
 
 const drinkRouter = express.Router();
@@ -9,6 +11,22 @@ const drinkRouter = express.Router();
 drinkRouter.get('/list', expressAsyncHandler(async (req, res)=>{
     const drinks = await Drink.find({});
     res.send(drinks);
+}));
+
+drinkRouter.get('/feature', expressAsyncHandler(async(req, res)=>{
+    const user = await User.findOne({role: 'admin'});
+    //console.log(user);
+    //console.log(user.drinkIdList);
+    const drinkFeatureList = [];
+    for(var i=0; i<user.drinkIdList.length; i++)
+    {
+        drinkFeatureList.push(user.drinkIdList[i]);
+    }
+    if(drinkFeatureList){
+        res.send(drinkFeatureList);
+    }else{
+        res.status(404).send({message: 'Không có admin'});
+    }
 }));
 
 drinkRouter.get('/:id', expressAsyncHandler(async(req, res)=>{
@@ -19,6 +37,7 @@ drinkRouter.get('/:id', expressAsyncHandler(async(req, res)=>{
         res.status(404).send({message: 'Không tìm thấy sản phẩm'});
     }
 }));
+
 
 
 
@@ -33,6 +52,23 @@ drinkRouter.get('/related/:id', expressAsyncHandler(async(req, res)=>{
         res.status(404).send({message: 'Không có sản phẩm liên quan'});
     }
 }));
+
+drinkRouter.get('/suggested/:id', expressAsyncHandler(async(req, res)=>{
+
+    const order = await Order.find({user: mongoose.Types.ObjectId(req.params.id)});
+
+    const drink = await Drink.findById(order[order.length-1].orderItems[order[order.length-1].orderItems.length-1].drink)
+
+    const suggestedDrinks = await Drink.find({tags: {$in: drink.tags}, _id: {$nin: req.params.id}}).sort({rating: 1, reviewNum: 1}).limit(4);
+    
+    if(suggestedDrinks){
+        res.send(suggestedDrinks);
+    }else{
+        res.status(404).send({message: 'Không có sản phẩm đề xuất'});
+    }
+}));
+
+
 
 
 

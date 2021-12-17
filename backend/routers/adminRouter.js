@@ -112,16 +112,17 @@ adminRouter.get('/order/list/total/max', expressAsyncHandler(async(req, res)=>{
 }));
 
 adminRouter.get('/order/list/drink/most', expressAsyncHandler(async(req, res)=>{
-    // const mostOrderedDrink = await Order.aggregate([
-    //     {$project:{
-    //         id: "$userId", count: {$size:{"$ifNull":["$Drink",[]]} }
-    //     }},
-    //     {$group: {
-    //         _id: null, 
-    //         max: { $max: "$count" }
-    //     }}
-    // ]);
-    // res.send(mostOrderedDrink);
+    const mostOrderedDrink = await Order.aggregate([
+        {$unwind: '$orderItems.drink'},
+        {$project:{
+            id: "$drink", count: "$drink"
+        }},
+        {$group: {
+            _id: null, 
+            max: { $max: "$count" }
+        }}
+    ]);
+    res.send(mostOrderedDrink);
 }));
 
 adminRouter.get('/order/list/drink/least', expressAsyncHandler(async(req, res)=>{
@@ -206,7 +207,7 @@ adminRouter.get('/order/list/date/month/year/:year', expressAsyncHandler(async(r
 }));
 
 adminRouter.put('/order/verify/paid/:id', expressAsyncHandler(async(req, res)=>{
-    console.log(req.params.id);
+    //console.log(req.params.id);
 
     const order = await Order.findById(req.params.id);
 
@@ -503,7 +504,7 @@ adminRouter.put('/feature/add_drink/:id', expressAsyncHandler(async(req, res)=>{
 }));
 
 adminRouter.put('/feature/delete_drink/:id', expressAsyncHandler(async(req, res)=>{
-    const user = await User.findOne({isAdmin: true});
+    const user = await User.findOne({role: 'admin'});
     if(user){
         user.drinkIdList.splice(user.drinkIdList.indexOf(req.params.id), 1);
         

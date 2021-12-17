@@ -31,7 +31,7 @@ export default function DrinkUpdatingPage(props) {
     const drinkDetail = useSelector(state=>state.drinkDetail);
     const {loading: loadingDetails, error: errorDetails, drink} = drinkDetail;
     
-    const categoriesArray = ["Nước uống", "hmm"];
+    const categoriesArray = ["Trà sữa", "Loại khác"];
 
     const [disabled, setDisabled] = useState(true); //const disabled = true, const setDisabled = () =>{};
     const [editButtonName, setButtonName] = useState(true);

@@ -89,10 +89,13 @@ export default function CartPage(props){
                     {cartItems.map((item)=>(
                         <li key={item.drink, item.topping} className="row purple left">
                             <div className="row top">
-                            <Link to={`/drink/${item.drink}`}><img 
-                                src={item.image}
-                                alt={item.name}
-                                className="tiny effect-img effect-glitch"></img></Link>
+                            <Link to={`/drink/${item.drink}`}>
+                                <div className='effect effect-glitch' style={{backgroundImage: `url(${item.image})`, backgroundPosition: 'center', backgroundSize: 'cover', backgroundRepeat: 'no-repeat',}}>
+                                    <img 
+                                    src={item.image}
+                                    alt={item.name}
+                                    className="tiny effect-img effect-glitch"></img>
+                                </div></Link>
                                 <li className="col-1">
                                     <Link to={`/drink/${item.drink}`}>{item.name}</Link>
                                 </li>

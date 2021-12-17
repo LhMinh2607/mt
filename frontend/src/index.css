@@ -1,3 +1,4 @@
+@import "react-slideshow-image/dist/styles.css";
 
 body {
   margin: 0;
@@ -1255,7 +1256,7 @@ option{
 /* React-Slideshow */
 .slide-container{
   width: 100%;
-  max-width: 80rem;
+  max-width: 40rem;
   margin: auto;
 }
 

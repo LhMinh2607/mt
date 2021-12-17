@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router';
 import { Link } from 'react-router-dom';
 import { commitCommenting, filterCommentByStar, listOfComments, sortComment } from '../actions/commentAction';
-import { addTagToDrink, deleteDrink, detailsOfDrink, getDrinkRating, removeTagFromDrink, showRelatedDrinkList } from '../actions/drinkAction';
+import { addDrinkToFeatureList, addTagToDrink, deleteDrink, detailsOfDrink, getDrinkRating, removeTagFromDrink, showRelatedDrinkList } from '../actions/drinkAction';
 import { listOfOrders } from '../actions/orderAction';
 import { listOfUsers } from '../actions/userAction';
 import CommentComponent from '../components/CommentComponent';
@@ -60,6 +60,9 @@ export default function DrinkDetailPage() {
 
     const drinkDeleting = useSelector(state=>state.drinkDeleting);
     const {loading: loadingDeleting, error: errorDeleting, success: successDeleting} = drinkDeleting;
+
+    const drinkFeatureAdding = useSelector(state=>state.drinkFeatureAdding);
+    const {loading: loadingFeature, error: errorFeature, success: successFeature} = drinkFeatureAdding;
 
 
     const [commentContent, setCommentContent] = useState('');
@@ -129,6 +132,12 @@ export default function DrinkDetailPage() {
             dispatch(deleteDrink(id));
         };
         
+    }
+
+    const addToFeatureHandler =(e)=>{
+        e.preventDefault();
+        //add to feature list to be displayed in HomePage.js
+        dispatch(addDrinkToFeatureList(id));
     }
 
     useEffect(()=>{
@@ -213,7 +222,6 @@ export default function DrinkDetailPage() {
                         
                         </li>
                     </ul>
-                </div>
                 <div className="card card-body">
                     <ul>
                         <li>
@@ -256,7 +264,21 @@ export default function DrinkDetailPage() {
                                     <div><Link to={`/admin/drink/update/${drink._id}`}>
                                         <button className="admin">SỬA</button>
                                     </Link></div>
-                                    <div><button className="admin" onClick={deleteHandler}>XÓA</button></div></div>
+                                    <div><button className="admin" onClick={deleteHandler}>XÓA</button></div>
+                                    <div>
+                                    <button className="admin block" onClick={addToFeatureHandler}>THÊM VÀO TRƯNG BÀY</button>
+                                    </div>
+                                    {
+                                        loadingFeature ? (<LoadingBox></LoadingBox>) : errorFeature ? (<MessageBox variant="error">{errorFeature}</MessageBox>) : 
+                                        (
+                                            successFeature &&
+                                            (<div>
+                                                <MessageBox variant="info">Đã thêm vào trưng bày</MessageBox>
+                                            </div>)
+                                        )
+                                    }
+                                </div>
+
                             ) )
                         }
                         {!userInfo && 
@@ -287,7 +309,9 @@ export default function DrinkDetailPage() {
                         </li>
                     </ul>
                     
+                </div>                    
                 </div>
+                
             
                 <div className="row center">
                     {

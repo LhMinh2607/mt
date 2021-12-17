@@ -73,13 +73,13 @@ export default function DrinkPage() {
                 <button type="button" className="searchBtn"></button> */}
                 <div>
                     <div className='box'><select onChange={filterStarBy} value={filteredStar}> 
-                    <option value="" hidden>Filter rating</option>
-                    <option value="5">Less than or equals 5 stars ⭐⭐⭐⭐⭐</option>
-                    <option value="4">Less than or equals 4 stars ⭐⭐⭐⭐</option>
-                    <option value="3">Less than or equals 3 stars ⭐⭐⭐</option>
-                    <option value="2">Less than or equals 2 stars ⭐⭐</option>
-                    <option value="1">Less than or equals 1 star ⭐</option>
-                    <option value="0">0 star</option>
+                    <option value="" hidden>Lọc theo đánh giá</option>
+                    <option value="5">5 sao trở xuống ⭐⭐⭐⭐⭐</option>
+                    <option value="4">4 sao trở xuống ⭐⭐⭐⭐</option>
+                    <option value="3">3 sao trở xuống ⭐⭐⭐</option>
+                    <option value="2">2 sao trở xuống ⭐⭐</option>
+                    <option value="1">1 sao trở xuống ⭐</option>
+                    <option value="0">0 sao trở xuống</option>
                     </select></div>
                     </div>
                     <div>
