@@ -31,7 +31,9 @@ app.use('/api/order', orderRouter); //manages route with db.orders
 app.use('/api/comment', commentRouter); //manages route with db.comments
 app.use('/api/admin', adminRouter); //admin route manage routes with all dbs (only exclusive functions for admin ofc)
 app.use('/api/forum', forumRouter);
-
+app.get('/api/config/paypal', (req, res)=>{
+    res.send(process.env.PAYPAL_CLIENT_ID || 'sb');
+})
 app.get('/', (req, res) => {
     res.send('Server is ready!');
     

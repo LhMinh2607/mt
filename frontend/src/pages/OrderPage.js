@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
-import { saveShippingInfo } from '../actions/cartAction';
+import { savePaymentMethod, saveShippingInfo } from '../actions/cartAction';
 import { createOrder, detailsOfOrder } from '../actions/orderAction';
 import { detailsOfUser } from '../actions/userAction';
 import { CART_EMPTY } from '../constants/cartConst';
@@ -14,6 +14,7 @@ export default function OrderPage() {
     const [shippingAddress, setShippingAddress] = useState();
     const [lat, setLat] = useState(); //latitude
     const [lng, setLng] = useState(); //longtitude
+    const [paymentMethod, setPaymentMethod] = useState('cash');
 
     // setLat(0);
     // setLng(0); these 2 causes infinite loop re-render
@@ -55,10 +56,11 @@ export default function OrderPage() {
             const phoneNumber = user.phoneNumber; 
             //alert(phoneNumber);
             //alert(email);
-        
+            alert(paymentMethod);
             dispatch(
                 saveShippingInfo({ username, fullName, shippingAddress, email, phoneNumber, lat, lng,})
             );
+            dispatch(savePaymentMethod(paymentMethod));
             dispatch(createOrder({...cart, orderItems: cart.cartItems}));
         
         
@@ -94,6 +96,10 @@ export default function OrderPage() {
                         </label>
                         <input id="shippingAddress" type="text" placeholder="Nhập địa chỉ giao hàng" value={shippingAddress} onChange={(e)=> setShippingAddress(e.target.value)}>
                         </input>
+                        <div className='box'><select id="payment" value={paymentMethod} onChange={(e) => setPaymentMethod(e.target.value)}>
+                                <option value='cash'>Tiền mặt</option>
+                                <option value='paypal'>Paypal / thẻ quốc tế</option>
+                            </select></div>
                         <button type="button" onClick={submitHandler} className="primary block">
                             Xác nhận đặt hàng
                         </button>

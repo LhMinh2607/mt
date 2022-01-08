@@ -162,10 +162,7 @@ export default function CartPage(props){
                             </button>
                         </li>
                         <li>
-                        <div className='box'><select>
-                                <option value='cash'>Tiền mặt</option>
-                                <option value='momo'>Ví điện tử Momo</option>
-                            </select></div>
+                        
                         </li>
                     </ul>
                 </div>
