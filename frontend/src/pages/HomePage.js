@@ -38,20 +38,7 @@ export default function HomePage() {
         dispatch(removeDrinkFromFeatureList(d));
     }
 
-    const slideImages = [
-        {
-          url: 'https://styles.redditmedia.com/t5_2b5e2g/styles/profileIcon_snoob208c0c6-0f5e-4fab-bc85-36f4f41d2d06-headshot-f.png?width=256&height=256&crop=256:256,smart&s=c76d8073f4d60216a43e7237131be15538578c67',
-          caption: 'Slide 1'
-        },
-        {
-          url: 'https://scontent.fsgn6-1.fna.fbcdn.net/v/t1.15752-9/250771644_410615750559520_2201615669129828114_n.png?_nc_cat=103&ccb=1-5&_nc_sid=ae9488&_nc_ohc=PLvdzfvFGPUAX8t2Jxs&_nc_ht=scontent.fsgn6-1.fna&oh=03_AVLU4ZmRntPyGiqIdeBXBaSY7og0W3kBMW4GtZdHf8I-6A&oe=61DCF5F7',
-          caption: 'Slide 2'
-        },
-        {
-          url: 'https://scontent.fsgn6-1.fna.fbcdn.net/v/t1.15752-9/250771644_410615750559520_2201615669129828114_n.png?_nc_cat=103&ccb=1-5&_nc_sid=ae9488&_nc_ohc=PLvdzfvFGPUAX8t2Jxs&_nc_ht=scontent.fsgn6-1.fna&oh=03_AVLU4ZmRntPyGiqIdeBXBaSY7og0W3kBMW4GtZdHf8I-6A&oe=61DCF5F7',
-          caption: 'Slide 3'
-        },
-      ];
+    
 
     useEffect(()=>{
         window.scrollTo({
@@ -122,8 +109,8 @@ export default function HomePage() {
             </div>
             
 
-            {suggestedDrinks && <h2 className="row center">SẢN PHẨM ĐỀ XUẤT</h2>}
-            {
+            {userInfo && userInfo.role==='user' && suggestedDrinks && <h2 className="row center">SẢN PHẨM ĐỀ XUẤT</h2>}
+            {userInfo && userInfo.role==='user' &&(
                 loadingRelated ? (
                     <LoadingBox></LoadingBox>
                 ) :
@@ -140,7 +127,7 @@ export default function HomePage() {
                         </DrinkPanel>
                         
                         ))}
-                    </div>)}
+                    </div>))}
         </div>
     )
 }

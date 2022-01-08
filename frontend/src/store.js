@@ -3,7 +3,7 @@ import thunk from 'redux-thunk';
 import {drinkAddingReducer, drinkFeatureAddingReducer, drinkFeatureListReducer, drinkFeatureRemovingAllReducer, drinkFeatureRemovingReducer, drinkFilterByPriceReducer, drinkFilterByStarReducer, drinkListReducer, drinkRatingReducer, drinksDetailReducer, drinkSearchReducer, drinkTagsAddingReducer, drinkTagsRemovingReducer, drinkUpdatingReducer, relatedDrinkListReducer, suggestedDrinkListReducer} from './reducers/drinkReducer';
 import { userDetailReducer, userListReducer, userMostSpendingReducer, userSearchingReducer, userSigninReducer, userSignupReducer, userSortedByDateReducer, userSortedByNameReducer, userSortedByOrderReducer, userSortedBySpendingReducer, userUpdateProfileReducer } from './reducers/userReducer';
 import {cartReducer} from './reducers/cartReducer';
-import { allOrderDateReducer, allOrderFilterByDateReducer, allOrderListReducer, allOrderMonthReducer, allOrderYearReducer, createOrderReducer, deliveredOrderReducer, deliveredOrderVerifyingReducer, drinkLeastOrderedReducer, drinkMostOrderedReducer, leastOrderedDrinkReducer, maxTotalOrderReducer, mostOrderedDrinkReducer, orderAggregateListReducer, orderAggregateReducer, orderDeliveredReducer, OrderDetailReducer, orderListReducer, orderMaxTotalReducer, orderPaidReducer, orderSortedByDateReducer, orderSortedByTotalReducer, paidOrderReducer, paidOrderVerifyingReducer } from './reducers/orderReducer';
+import { allOrderDateReducer, allOrderFilterByDateReducer, allOrderListReducer, allOrderMonthReducer, allOrderYearReducer, createOrderReducer, deliveredOrderReducer, deliveredOrderVerifyingReducer, drinkLeastOrderedReducer, drinkMostOrderedReducer, leastOrderedDrinkReducer, maxTotalOrderReducer, mostOrderedDrinkReducer, orderAggregateListReducer, orderAggregateReducer, orderDeliveredReducer, OrderDetailReducer, orderIncomePerMonthListReducer, orderListReducer, orderMaxTotalReducer, orderPaidReducer, orderSortedByDateReducer, orderSortedByTotalReducer, paidOrderReducer, paidOrderVerifyingReducer } from './reducers/orderReducer';
 import { detailsOfOrder } from './actions/orderAction';
 import { userCommentListReducer, userCommentReducer, userDeleteCommentReducer, userEditCommentReducer, userFilterCommentByStarReducer, userSortCommentReducer } from './reducers/commentReducer';
 import { postCommentEditingReducers, postCommentPostingReducers, postCreatingReducers, postDeletingReducers, postDetailsReducers, postEditingReducers, postFilteringReducers, postListReducers, postSearchingReducers, postSortingReducers } from './reducers/postReducer';
@@ -95,10 +95,13 @@ const reducer = combineReducers({//bugs are fixed on every streak
 
     //streak #13 + #14 + #15 impoving GUIs
 
-    //streak #14 or so
+    //streak #16 or so
     //implemented drinkFeatureAdding and drinkFeatureRemoving
     drinkFeatureList: drinkFeatureListReducer,
     suggestedDrinkList: suggestedDrinkListReducer,
+
+    //streak #17
+    orderIncomePerMonthList: orderIncomePerMonthListReducer,
     
 
 })

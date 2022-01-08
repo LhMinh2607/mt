@@ -9,6 +9,7 @@ import DeletePostCommentButton from '../components/DeletePostCommentButton';
 import LoadingBox from '../components/LoadingBox';
 import MessageBox from '../components/MessageBox';
 import TopicIcon from '../components/TopicIcon';
+import Editor from "rich-markdown-editor";
 
 export default function PostDetailPage() {
 
@@ -26,7 +27,7 @@ export default function PostDetailPage() {
     const [editPostStatus, setEditPostStatus] = useState(false);
 
     const [title, setTitle] = useState('');
-    const [content, setContent] = useState('');
+    const [content, setPostContent] = useState('');
 
     const postDeleting = useSelector(state=>state.postDeleting);
     const {loading: loadingDeleting, error: errorDeleting, success: successDeleting} = postDeleting;
@@ -52,7 +53,7 @@ export default function PostDetailPage() {
 
     const editPostHandler = () =>{
         setTitle(post.postTitle);
-        setContent(post.postContent);
+        setPostContent(post.postContent);
         setEditPostStatus(!editPostStatus);
         //dispatch(editPost());
     }
@@ -161,8 +162,13 @@ export default function PostDetailPage() {
                                                 <input placeholder="Tiêu đề" className="basic-slide" required={true} type="text" value={title} onChange={(e)=>setTitle(e.target.value)}></input>
                                             </div>
                                             <div>
-                                                <textarea placeholder="Nội dung" className="basic-slide" required={true} value={content} type="textarea" onChange={(e)=> setContent(e.target.value)}>
-                                                </textarea>
+                                            <Editor
+                                                defaultValue={post.postContent}
+                                                onChange={(value) => setPostContent(value)}
+                                                className='Editor'
+                                                placeholder='Nội dung'
+                                                required={true}
+                                            /> 
                                             </div>
                                             <div><button className="primary">ĐĂNG</button></div>
                                         </form>)
@@ -171,7 +177,13 @@ export default function PostDetailPage() {
                             !editPostStatus && (
                                 <div className="postContent">
                                     <h1>{post.postTitle}</h1>
-                                    <p><Linkify>{post.postContent}</Linkify></p>
+                                    <Editor
+                                        defaultValue={post.postContent}
+                                        className='Editor'
+                                        placeholder='Nội dung'
+                                        required={true}
+                                        readOnly={true}
+                                    /> 
                                 </div>
                             )
                         }
@@ -193,8 +205,13 @@ export default function PostDetailPage() {
                         {userInfo ? (<form className="editPostForm" onSubmit={commentPostingHandler}>
                             <div className="row center">Phản hồi dưới tên <label className="bold-text">{userInfo.name}</label></div>
                             <div>
-                                <textarea placeholder="Nội dung" className="basic-slide" required={true} value={replyContent} type="textarea" onChange={(e)=> setReplyContent(e.target.value)}>
-                                </textarea>
+                            <Editor
+                                defaultValue=""
+                                onChange={(value) => setReplyContent(value)}
+                                className='Editor'
+                                placeholder='Nội dung'
+                                required={true}
+                            /> 
                             </div>
                             <div><button className="primary">PHẢN HỒI</button></div>
                         </form>) : (
@@ -232,15 +249,26 @@ export default function PostDetailPage() {
                                         </div>
                                         <div className="col-2">
                                             <div className="postContent">
-                                                <p><Linkify>{pc.content}</Linkify></p>
+                                            <Editor
+                                                defaultValue={pc.content}
+                                                className='Editor'
+                                                placeholder='Nội dung'
+                                                required={true}
+                                                readOnly={true}
+                                            /> 
                                             </div>
                                         </div>
                                 </div>) : 
                                     (
                                         <form className="editPostForm" onSubmit={commentEditingHandler}>
                                             <div>
-                                                <textarea placeholder="Nội dung" className="basic-slide" required={true} value={replyContent} type="textarea" onChange={(e)=> setReplyContent(e.target.value)}>
-                                                </textarea>
+                                            <Editor
+                                                defaultValue=""
+                                                onChange={(value) => setPostContent(value)}
+                                                className='Editor'
+                                                placeholder='Nội dung'
+                                                required={true}
+                                            /> 
                                             </div>
                                             <div><button className="primary">PHẢN HỒI</button></div>
                                         </form>
@@ -261,7 +289,13 @@ export default function PostDetailPage() {
                                                 </div>
                                                 <div className="col-2">
                                                     <div className="postContent">
-                                                        <p><Linkify>{pc.content}</Linkify></p>
+                                                    <Editor
+                                                        defaultValue={pc.content}
+                                                        className='Editor'
+                                                        placeholder='Nội dung'
+                                                        required={true}
+                                                        readOnly={true}
+                                                    /> 
                                                     </div>
                                                 </div>
                                             </div>
@@ -281,7 +315,13 @@ export default function PostDetailPage() {
                                                 </div>
                                                 <div className="col-2">
                                                     <div className="postContent">
-                                                        <p><Linkify>{pc.content}</Linkify></p>
+                                                    <Editor
+                                                        defaultValue={pc.content}
+                                                        className='Editor'
+                                                        placeholder='Nội dung'
+                                                        required={true}
+                                                        readOnly={true}
+                                                    /> 
                                                     </div>
                                                 </div>
                                             </div>

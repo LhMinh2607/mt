@@ -86,9 +86,13 @@ export default function DrinkDetailPage() {
     }
     const [tagContent, setTagContent] = useState('');
     const addTag = () =>{
-        dispatch(addTagToDrink(drink._id, tagContent));
-        enableTagEditBox();
-        window.location.reload()
+        if(tagContent===""){
+            alert('CHƯA NHẬP GÌ KÌA!');
+        }else{
+            dispatch(addTagToDrink(drink._id, tagContent));
+            enableTagEditBox();
+            window.location.reload();
+        }
     }
     const removeTag = () => {
         dispatch(removeTagFromDrink(drink._id));
@@ -413,8 +417,8 @@ export default function DrinkDetailPage() {
                     }
                     {userInfo &&
                         (userInfo.role==='admin' &&
-                            (<div className="card card-body">
-                                <input required={true} type="text" hidden={tagEditBox} className="tagInput basic-slide" onChange={(e)=>setTagContent(e.target.value)}></input>
+                            (<div className="card card-body" style={{maxWidth: '50rem'}}>
+                                <input required={true} placeholder='Nhập tag ở đây' required={true} type="text" hidden={tagEditBox} className="tagInput basic-slide" onChange={(e)=>setTagContent(e.target.value)}></input>
                                 <button className="admin block" onClick={addTag} hidden={tagEditBox}>THÊM</button>
                                 <button className="admin block" onClick={enableTagEditBox}>
                                     {tagEditBox ? <label>THÊM TAG</label> : <label>ĐÓNG</label>}

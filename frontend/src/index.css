@@ -1513,3 +1513,14 @@ option{
   transform: scale(0.8);
   transition: 0.3s ease;
 }
+
+.Editor{
+  padding: 2rem;
+  font-size: 1.2rem;
+  font-family: 'Times New Roman', Times, serif;
+  border-radius: 1rem;
+  resize: none; 
+  height: auto;
+  word-wrap: break-word;
+  background-color: #FFF;
+}

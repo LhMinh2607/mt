@@ -6,6 +6,7 @@ import User from '../models/User.js';
 import { isAuth, isAdmin } from '../utils.js';
 
 
+
 const adminRouter = express.Router(); //adminRouter for secured routes reserve for admin only, restrict users from using these routes on backend
 
 adminRouter.put('/drink/tag/add/:id', expressAsyncHandler(async(req, res)=>{
@@ -28,7 +29,7 @@ adminRouter.put('/drink/tag/remove/:id', expressAsyncHandler(async(req, res)=>{
         drink.tags.splice(drink.tags.indexOf(req.body.tagContent), 1);
         
         await drink.save();
-        res.send({message: "Đã thêm tag"});
+        res.send({message: "Đã xóa tag"});
     }else{
         res.status(404).send("404");
     }
@@ -141,18 +142,19 @@ adminRouter.get('/order/list/filter/:year/:month/:day', expressAsyncHandler(asyn
             res.status(404).send("Không tìm thấy hóa đơn nào");
         }
     }else if(req.params.month!=="null" && req.params.day==="null"){
-        const start = new Date(`${req.params.year}-${parseInt(req.params.month)}-01 23:00:00`); //subtract month by 1 cuz somehow i picked May but it'll show June instead, weird
-        var month = 0;
-        var year = 0;
+        const start = new Date(`${req.params.year}, ${parseInt(req.params.month)}, 1`); //subtract month by 1 cuz somehow i picked May but it'll show June instead, weird
+        let month = 0;
+        let year = req.params.year;
         if(req.params.month<12){
-            month = parseInt(req.params.month)+1
+            month = parseInt(req.params.month)+1;
         }else{
             month = 1;
-            year = req.params.year+1;
+            year = Number(req.params.year)+1;
+            console.log(year);
         }
-        const end = new Date(`${year}-${month}-01 23:00:00`);
-        //console.log(start);
-        //console.log(end);
+        const end = new Date(`${year}, ${month}, 1`);
+        console.log("start:"+start);
+        console.log("end:"+end);
 
         const orders = await Order.find({createdAt: {$gte: start, $lt: end}}).sort({createdAt: -1});
         if(orders){
@@ -163,6 +165,9 @@ adminRouter.get('/order/list/filter/:year/:month/:day', expressAsyncHandler(asyn
     }else if(req.params.month!=="null" && req.params.day!=="null"){
         const start = new Date(`${req.params.year}-${req.params.month}-${req.params.day}`);
         const end = new Date(`${req.params.year}-${req.params.month}-${parseInt(req.params.day)+1}`);
+        // console.log(start);
+        // console.log(end);
+
         const orders = await Order.find({createdAt: {$gte: start, $lt: end}}).sort({createdAt: -1});
         if(orders){
             res.send(orders);
@@ -527,6 +532,63 @@ adminRouter.put('/feature/delete_drinks/', expressAsyncHandler(async(req, res)=>
     }
 }));
 
+adminRouter.get('/order/permonth/:year', expressAsyncHandler(async(req, res)=>{
+
+    // console.log(new Date(`${req.params.year}, 1, 1`))
+
+    if(req.params.year !== "all"){
+        const ordersIncomePerMonthList = await Order.aggregate(
+            [   
+                {$match: {isPaid: true, 
+                createdAt: {$gte: new Date(`${req.params.year}, 1, 1`), $lt: new Date(`${Number(req.params.year)}, 12, 31`)}}},
+                
+                {
+                    $group: {
+                        _id: {$month : "$createdAt"}, 
+                        totalPrice: {$sum: {$cond: [{ $eq: [{ $type: "$totalPrice" }, ""] }, 0, "$totalPrice"]}},
+                    },
+                },
+                {$project: {
+                    monthlyIncome: {$ifNull: ["$totalPrice", 0]}
+                },
+                }, {$sort: {createdAt: 1}},
+                
+            ]
+        )
+        if(ordersIncomePerMonthList.length == 0){
+            res.send([{_id: null, ordersIncomePerMonthList: 0}]);}
+        else{
+            res.send(ordersIncomePerMonthList);
+        }
+    }else if(req.params.year==='all'){
+        const ordersIncomePerMonthList = await Order.aggregate(
+            [   
+                {$match: {isPaid: true}},
+                
+                {
+                    $group: { //took me a whole ass day (morning to afternoon)
+                        _id: {year: {$year: "$createdAt"}, month: {$month : "$createdAt"}}, 
+                        totalPrice: {$sum: {$cond: [{ $eq: [{ $type: "$totalPrice" }, ""] }, 0, "$totalPrice"]}},
+                        
+                    },
+                },
+                {$sort: {_id: 1}},
+                {$project: {
+                    monthlyIncome: {$ifNull: ["$totalPrice", 0]},
+                    
+                },},
+                
+            ]
+        )
+        if(ordersIncomePerMonthList.length == 0){
+            res.send([{_id: null, ordersIncomePerMonthList: 0}]);}
+        else{
+            res.send(ordersIncomePerMonthList);
+        }
+    }
+
+    
+}));
 
 
 

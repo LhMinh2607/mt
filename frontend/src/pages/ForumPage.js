@@ -7,6 +7,7 @@ import DateComponent from '../components/DateComponent';
 import LoadingBox from '../components/LoadingBox';
 import MessageBox from '../components/MessageBox';
 import TopicIcon from '../components/TopicIcon';
+import Editor from "rich-markdown-editor";
 
 export default function ForumPage() {
 
@@ -170,8 +171,13 @@ export default function ForumPage() {
                     <input className="postTitle" required={true} placeholder="Tiêu đề" value={postTitle} className="basic-slide" type="text" onChange={(e)=> setPostTitle(e.target.value)}>
                     </input>
                 </div><div>
-                    <textarea className="postContent" required={true} placeholder="Nội dung" value={postContent} className="basic-slide" type="textarea" onChange={(e)=> setPostContent(e.target.value)}>
-                    </textarea>
+                    <Editor
+                            defaultValue=""
+                            onChange={(value) => setPostContent(value)}
+                            className='Editor'
+                            placeholder='Nội dung'
+                            required={true}
+                        /> 
                 </div>
                     <button type="submit" className="primary block">ĐĂNG</button>
             </form>))

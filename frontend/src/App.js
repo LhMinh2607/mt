@@ -25,21 +25,15 @@ import DrinkUpdatingPage from './pages/DrinkUpdatingPage';
 import ForumPage from './pages/ForumPage';
 import PostDetailPage from './pages/PostDetailPage';
 
-
 function App() {
-
-
   const userSignin = useSelector((state)=> state.userSignin);
   const {userInfo, loading, error} = userSignin;
-
   const dispatch = useDispatch();
   const signOutHandler = () =>{
     dispatch(signout());
   };
-
   const cart = useSelector((state)=> state.cart);
   const {cartItems} = cart;
-
   return (
       <BrowserRouter>
         <div className="grid-containter">
@@ -86,7 +80,7 @@ function App() {
                         : userInfo.role==='admin' && (
                         <div className="dropDown">
                           <Link to="#">{userInfo.name} <i className="fa fa-caret-down"></i></Link>
-                        
+
                           <ul className="dropDown-content">
                             <li>
                               <Link to={`/admin/profile`}>Tài khoản<i className="fa fa-check"></i></Link>
@@ -118,21 +112,23 @@ function App() {
                   <Route exact path="/drink" element={<DrinkPage></DrinkPage>}></Route>
                   <Route exact path="/drink/:drinkId" element={<DrinkDetailPage></DrinkDetailPage>}></Route>
                   <Route path="/shopping_cart" element={<UserOnlyRoute><CartPage></CartPage></UserOnlyRoute>}></Route>
+                  <Route path="/shopping_cart/:drinkId" element={<UserOnlyRoute><CartPage></CartPage></UserOnlyRoute>}></Route>
                   {/* <Route path="/shopping_cart/:drinkId" element={<UserOnlyRoute><CartPage></CartPage></UserOnlyRoute>}></Route> */}
                   <Route path="/shopping_cart/:drinkId/topping=:topping/quantity=:quantity" element={<UserOnlyRoute><CartPage></CartPage></UserOnlyRoute>}></Route>
                   <Route path="/user/:id/profile" element={<ProfilePage></ProfilePage>}></Route>
+                  <Route path="/admin/:id/profile" element={<ProfilePage></ProfilePage>}></Route>
                   <Route path="/admin/profile" element={<ProfilePage></ProfilePage>}></Route>
                   <Route exact path="/order" element={<OrderPage></OrderPage>}></Route>
-                  <Route exact path={`/order/:orderId`} element={<OrderDetailPage></OrderDetailPage>}></Route>
                   <Route exact path={"/order/history/:userId"} element={<OrderHistoryPage></OrderHistoryPage>}></Route>
+                  <Route exact path={`/order/:orderId`} element={<OrderDetailPage></OrderDetailPage>}></Route>
                   <Route exact path="/admin/ordersList" element={<AdminRoute><OrdersListPage></OrdersListPage></AdminRoute>}></Route>
                   <Route exact path="/admin/usersList" element={<AdminRoute><UserListPage></UserListPage></AdminRoute>}></Route>
                   <Route exact path="/admin/drink/add" element={<AdminRoute><DrinkAddingPage></DrinkAddingPage></AdminRoute>}></Route>
                   <Route exact path="/admin/drink/update/:drinkId" element={<AdminRoute><DrinkUpdatingPage></DrinkUpdatingPage></AdminRoute>}></Route>
-                  <Route exact path="/forum" element={<ForumPage></ForumPage>}></Route> 
-                  <Route exact path="/forum/post/:id" element={<PostDetailPage></PostDetailPage>}></Route>     
+                  <Route exact path="/forum" element={<ForumPage></ForumPage>}></Route>
+                  <Route exact path="/forum/post/:id" element={<PostDetailPage></PostDetailPage>}></Route>
                 </Routes>
-                
+
 
               </main>
               {/* <footer className="row-bottom">
@@ -157,6 +153,4 @@ function App() {
     
   );
 }
-
-
 export default App;

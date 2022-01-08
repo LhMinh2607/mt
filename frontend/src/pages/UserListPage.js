@@ -352,7 +352,7 @@ export default function UserListPage() {
                                                     loadingSpending ? (<LoadingBox></LoadingBox>) : errorSpending ? (<MessageBox variant="error">{errorSpending}</MessageBox>)
                                                     : (userSpendingsList.map((userSpend)=>(
                                                         us._id === userSpend._id &&
-                                                        <p key={userSpend._id}>{userSpend.totalMoneySpent} ({u.orderCount}đơn hàng)</p>
+                                                        <p key={userSpend._id}>{userSpend.totalMoneySpent} ({u.orderCount} đơn hàng)</p>
                                                     )) )
                                                 }</td>
                                                 <td><button type="button" className="tiny admin" onClick={() => {navigate(`/order/history/${u._id}`);}}>

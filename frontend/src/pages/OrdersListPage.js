@@ -2,11 +2,25 @@ import React, { useEffect } from 'react'
 import { useState } from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
-import { filterAllOrders, getAllOrdersDate, getAllOrdersMonth, getAllOrdersYear, getMaxTotalOrders, listOfAllOrders, listOfDeliveredOrders, listOfPaidOrders, listOfSortedOrdersByDate, listOfSortedOrdersByTotal } from '../actions/orderAction';
+import { filterAllOrders, getAllOrdersDate, getAllOrdersMonth, getAllOrdersYear, getMaxTotalOrders, listOfAllOrders, listOfDeliveredOrders, listOfOrdersIncomePerMonth, listOfPaidOrders, listOfSortedOrdersByDate, listOfSortedOrdersByTotal } from '../actions/orderAction';
 import { listOfUsers } from '../actions/userAction';
 import DateComponent from '../components/DateComponent';
 import LoadingBox from '../components/LoadingBox';
 import MessageBox from '../components/MessageBox';
+// import { BarChart, Bar, XAxis, YAxis } from 'recharts';
+// import {Area, CirclePie, BarMetric} from 'react-simple-charts'
+import {
+    Chart as ChartJS,
+    CategoryScale,
+    LinearScale,
+    BarElement,
+    Title,
+    Tooltip,
+    Legend,
+  } from 'chart.js';
+  import { Bar } from 'react-chartjs-2';
+//   import faker from 'faker';
+
 
 export default function OrderListsPage() {
 
@@ -23,7 +37,8 @@ export default function OrderListsPage() {
 
     const [day, setDay] = useState("");
     const [month, setMonth] = useState("");
-    const [year, setYear] = useState("");
+    const [monthWithZero, setMonthWithZero] = useState("");
+    const [year, setYear] = useState("all");
 
     const [paidOrder, setPaidOrder] = useState("");
     const [deliveredOrder, setDeliveredOrder] = useState("");
@@ -57,6 +72,73 @@ export default function OrderListsPage() {
     const orderSortedByTotal = useSelector(state=>state.orderSortedByTotal);
     const {loading: loadingSortedOrderByTotal, error: errorSortedOrderByTotal, sortedOrdersByTotal} = orderSortedByTotal;
 
+    const orderIncomePerMonthList = useSelector(state=>state.orderIncomePerMonthList);
+    const {loading: loadingIncomePerMonthList, error: errorIncomePerMonthList, incomePerMonthList} = orderIncomePerMonthList;
+
+    ChartJS.register(
+        CategoryScale,
+        LinearScale,
+        BarElement,
+        Title,
+        Tooltip,
+        Legend
+      );
+
+    const options = {
+        responsive: true,
+        plugins: {
+            legend: {
+            position: 'top',
+            },
+            title: {
+            display: true,
+            text: 'Biểu đồ',
+            },
+        },
+        scales: {
+            y: [{
+              scaleLabel: {
+                display: true,
+                labelString: 'Đồng',
+                ticks: {
+                    fontSize: 40
+                }
+              }
+            }],
+            x: [{
+              scaleLabel: {
+                display: true,
+                labelString: 'Tháng',
+                ticks: {
+                    fontSize: 40
+                }
+              }
+            }],
+          }     
+    };
+
+
+    
+
+    // const labels = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'];
+
+    // const data = {
+    //     labels,
+    //     datasets: [
+    //         {
+    //         label: 'Dataset 1',
+    //         data: labels.map(() => 2),
+    //         backgroundColor: 'rgba(255, 99, 132, 0.5)',
+    //         },
+    //         {
+    //         label: 'Dataset 2',
+    //         data: labels.map(() => 5),
+    //         backgroundColor: 'rgba(53, 162, 235, 0.5)',
+    //         },
+    //     ],
+    // };
+
+    
 
     
     const filterByYearHandler = (e) =>{
@@ -64,26 +146,42 @@ export default function OrderListsPage() {
         setDeliveredOrder("");
         setOrderTotalPrice("");
         setSortingCondition("");
-        if(e.target.value==="")
+        
+        if(e.target.value==="all")
         {
             setMonth("");
+            setMonthWithZero("");
             setDay("");
-            setYear("");
+            setYear("all");
+            dispatch(listOfOrdersIncomePerMonth("all"));
         }else{
             setYear(e.target.value);
             setMonth("");
+            setMonthWithZero("");
             setDay("");
             dispatch(filterAllOrders(e.target.value, "null", "null"));
             dispatch(getAllOrdersMonth(e.target.value)); //month
+            dispatch(listOfOrdersIncomePerMonth(e.target.value));
         }
         
     }
 
     const filterByMonthHandler = (e) =>{
         setMonth(e.target.value);
+        if(Number(e.target.value)<10){
+            setMonthWithZero("0"+e.target.value);
+        }else{
+            setMonthWithZero(e.target.value);
+        }
         setDay("");
-        dispatch(filterAllOrders(year, e.target.value, "null"));
+        if(e.target.value!==""){
+            dispatch(filterAllOrders(year, e.target.value, "null"));
+        }else{
+            dispatch(filterAllOrders(year, "null", "null"));
+        }
         dispatch(getAllOrdersDate(e.target.value, year)); //day of month
+
+        
     }
 
     const filterByDayHandler = (e) =>{
@@ -95,7 +193,7 @@ export default function OrderListsPage() {
         setPaidOrder(e.target.value);
         setSortingCondition("");
         setDeliveredOrder("");
-        setYear("");
+        setYear("all");
         setMonth("");
         setDay("");
         if(e.target.value==="yes")
@@ -112,7 +210,7 @@ export default function OrderListsPage() {
         setDeliveredOrder(e.target.value);
         setSortingCondition("");
         setPaidOrder("");
-        setYear("");
+        setYear("all");
         setMonth("");
         setDay("");
         if(e.target.value==="yes")
@@ -130,7 +228,7 @@ export default function OrderListsPage() {
         setSortingCondition("");
         setDeliveredOrder("");
         setPaidOrder("");
-        setYear("");
+        setYear("all");
         setMonth("");
         setDay("");
         if(e.target.value==="max")
@@ -145,7 +243,7 @@ export default function OrderListsPage() {
         setOrderTotalPrice("");
         setDeliveredOrder("");
         setPaidOrder("");
-        setYear("");
+        setYear("all");
         setMonth("");
         setDay("");
         if(e.target.value.includes('date'))
@@ -170,11 +268,12 @@ export default function OrderListsPage() {
           });
         dispatch(listOfAllOrders());
         dispatch(listOfUsers());
+        dispatch(listOfOrdersIncomePerMonth("all"));
         setTimeout(()=>{
             dispatch(getAllOrdersYear()); //year
         }, 100);
         
-    }, []);
+    }, [year, month, day, monthWithZero]);
 
     return (
         <div>
@@ -184,7 +283,7 @@ export default function OrderListsPage() {
                 </div>
             </div> */}
             <div>
-                {year==="" && <table className="table" style={{width: '50%'}}>
+                {year==="all" && <table className="table" style={{width: '50%'}}>
                     <tbody>
                         <tr>
                             <td><h3>Tổng thu nhập:</h3></td>
@@ -208,7 +307,9 @@ export default function OrderListsPage() {
                         </tr>
                     </tbody>
                 </table>}
-                {year!=="" && <table className="table" style={{width: '50%', right: 0}}>
+                
+
+                {year!=="all" && <><table className="table" style={{width: '50%', right: 0}}>
                         <tbody>
                             <tr>
                                 <td><h3>Thu nhập (đã lọc):</h3></td>
@@ -223,14 +324,49 @@ export default function OrderListsPage() {
                                 {ordersList && ( <td>{Math.floor(ordersList.reduce((a, b)=> b.isPaid ? a + b.totalPrice : a + 0, 0)/12)} đồng</td>)}
                             </tr>
                         </tbody>
-                    </table>}
+                    </table>
+                    </>
+                    
+                    }
+                    
+                    {
+                        loadingIncomePerMonthList ? <LoadingBox></LoadingBox> : errorIncomePerMonthList ? <MessageBox variant='error'>{errorIncomePerMonthList}</MessageBox> :
+                        incomePerMonthList && <Bar options={options} data={{
+                                                    labels: incomePerMonthList.map((fo => "Tháng "+fo._id.month+" Năm "+fo._id.year)),
+                                                    datasets: [
+                                                        {
+                                                            label: 'Thu nhập',
+                                                            // data: [1, 2],
+                                                            data: incomePerMonthList.map((fo => fo.monthlyIncome)),
+                                                            backgroundColor: '#0861a1',
+                                                        }
+                                                    ],
+                                                }} 
+                            height={100} with={600} />
+                    }
+                    {monthWithZero!=="" && day==="" &&
+                        loadingFilter ? <LoadingBox></LoadingBox> : errorFilter ? <MessageBox variant='error'>{errorFilter}</MessageBox> :
+                        filteredOrders && (<Bar options={options} data={{
+                                                    labels: filteredOrders.map((fo => fo.createdAt.substring(0, 4) === year && fo.createdAt.substring(5, 7) === monthWithZero && "Ngày "+fo.createdAt.substring(8, 10))),
+                                                    datasets: [
+                                                        {
+                                                            label: 'Thu nhập',
+                                                            // data: [1, 2],
+                                                            data: filteredOrders.map((fo=> fo.createdAt.substring(0, 4) === year && fo.createdAt.substring(5, 7) === monthWithZero && (fo.isPaid ? fo.totalPrice : 0))),
+                                                            backgroundColor: '#0861a1',
+                                                        }
+                                                    ],
+                                                }} 
+                            height={100} with={600} />)
+                    }
+                        
                 <div className="col-1 card">
                     <div className="row">
                         <div>
                             <div className="row center">Năm:</div>
                             <div className='box'><select id="years" onChange={filterByYearHandler} value={year}>
                                 <option hidden value="">Chọn năm</option>
-                                <option value="">Hiện hết</option>
+                                <option value="all">Hiện hết</option>
                                 {ordersYear && ( 
                                     (ordersYear.map(i => (
                                         <option value={i._id.year}>{i._id.year}</option>
@@ -307,7 +443,7 @@ export default function OrderListsPage() {
                                 </tr>
                             </thead>
                             <tbody>
-                            {year==="" && paidOrder==="" && deliveredOrder==="" && orderTotalPrice==="" && sortingCondition==="" && (ordersList && (loading ? <LoadingBox></LoadingBox> : error ? <MessageBox variant="error">{error}</MessageBox> : loadingUser ? <LoadingBox></LoadingBox> : errorUser ? <MessageBox variant="error">{errorUser}</MessageBox> :
+                            {year==="all" && paidOrder==="" && deliveredOrder==="" && orderTotalPrice==="" && sortingCondition==="" && (ordersList && (loading ? <LoadingBox></LoadingBox> : error ? <MessageBox variant="error">{error}</MessageBox> : loadingUser ? <LoadingBox></LoadingBox> : errorUser ? <MessageBox variant="error">{errorUser}</MessageBox> :
                                 ordersList.map((order)=>(
                                     <>{users.map(user=>(
                                         order.user === user._id &&
@@ -327,7 +463,7 @@ export default function OrderListsPage() {
                                 ))))
                                 
                             }
-                            {year!=="" && (filteredOrders && (loadingFilter ? <LoadingBox></LoadingBox> : errorFilter ? <MessageBox variant="error">{errorFilter}</MessageBox> : loadingUser ? <LoadingBox></LoadingBox> : errorUser ? <MessageBox variant="error">{errorUser}</MessageBox> : 
+                            {year!=="all" && (filteredOrders && (loadingFilter ? <LoadingBox></LoadingBox> : errorFilter ? <MessageBox variant="error">{errorFilter}</MessageBox> : loadingUser ? <LoadingBox></LoadingBox> : errorUser ? <MessageBox variant="error">{errorUser}</MessageBox> : 
                                 filteredOrders.map((order)=>(
                                     <>{users.map(user=>(
                                         order.user === user._id &&
