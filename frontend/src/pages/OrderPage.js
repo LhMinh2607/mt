@@ -6,6 +6,8 @@ import { createOrder, detailsOfOrder } from '../actions/orderAction';
 import { detailsOfUser } from '../actions/userAction';
 import { CART_EMPTY } from '../constants/cartConst';
 import { ORDER_CREATE_RESET } from '../constants/orderConst';
+import GoogleMapReact from 'google-map-react';
+import Marker from '../components/Marker';
 
 export default function OrderPage() {
 
@@ -46,6 +48,59 @@ export default function OrderPage() {
     const username = userInfo.name;
 
 
+    //API-KEY=AIzaSyDLUeXVxDxuJBTpK2ASfc_2UFEJk6-Hk_k //google map api
+    const latitude = 10.846497226619887;
+    // 59.955413;
+    // 10.846497;
+    // 10.846497226619887;
+    const longitude = 106.7942787886718;
+    // 30.337844;
+    // 106.794278;
+    // 106.7942787886718;
+    const defaultProps = {
+        center: {
+          lat: latitude,
+          lng: longitude,
+        },
+        zoom: 11
+      };
+
+    const K_CIRCLE_SIZE = 30;
+    const K_STICK_SIZE = 10;
+    const K_STICK_WIDTH = 3;
+
+    //from google-map-react/google-map-react document
+    const _distanceToMouse = (markerPos, mousePos, markerProps) => {
+        const x = markerPos.x;
+        // because of marker non symmetric,
+        // we transform it central point to measure distance from marker circle center
+        // you can change distance function to any other distance measure
+        const y = markerPos.y - K_STICK_SIZE - K_CIRCLE_SIZE / 2;
+
+        // and i want that hover probability on markers with text === 'A' be greater than others
+        // so i tweak distance function (for example it's more likely to me that user click on 'A' marker)
+        // another way is to decrease distance for 'A' marker
+        // this is really visible on small zoom values or if there are a lot of markers on the map
+        const distanceKoef = markerProps.text !== 'A' ? 1.5 : 1;
+
+        // it's just a simple example, you can tweak distance function as you wish
+        return distanceKoef * Math.sqrt((x - mousePos.x) * (x - mousePos.x) + (y - mousePos.y) * (y - mousePos.y));
+    }
+    
+    // const renderMarkers = (map, maps) => {
+    //     let marker = new maps.Marker({
+    //      position: { lat: latitude, lng: longitude },
+    //      map,
+    //      title: 'Trụ sở quán'
+    //      });
+    //      return marker;
+    //    };
+
+    const onMapClick = (t, map, ) => {
+        const lat = latitude;
+        const lng = longitude;
+
+    }
 
     
     const email = userInfo.email;
@@ -94,8 +149,28 @@ export default function OrderPage() {
                         <label htmlFor="address">
                             Địa chỉ: 
                         </label>
+                        <div style={{ height: '50vh', width: '100%' }}>
+                            <GoogleMapReact
+                                bootstrapURLKeys={{ key: 'AIzaSyDLUeXVxDxuJBTpK2ASfc_2UFEJk6-Hk_k' }}
+                                defaultCenter={defaultProps.center}
+                                defaultZoom={defaultProps.zoom}
+                                yesIWantToUseGoogleMapApiInternals 
+                                hoverDistance={K_CIRCLE_SIZE / 2}
+                                // distanceToMouse={_distanceToMouse}
+                                onClick={onMapClick}
+                                >
+                                <Marker
+                                    lat={latitude}
+                                    lng={longitude}
+                                    text={"Trụ sở quán"}
+                                /> 
+
+                               
+                            </GoogleMapReact>
+                        </div>
                         <input id="shippingAddress" type="text" placeholder="Nhập địa chỉ giao hàng" value={shippingAddress} onChange={(e)=> setShippingAddress(e.target.value)}>
                         </input>
+                        
                         <div className='box'><select id="payment" value={paymentMethod} onChange={(e) => setPaymentMethod(e.target.value)}>
                                 <option value='cash'>Tiền mặt</option>
                                 <option value='paypal'>Paypal / thẻ quốc tế</option>

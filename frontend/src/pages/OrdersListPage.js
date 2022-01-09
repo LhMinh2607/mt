@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { useState } from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
-import { filterAllOrders, getAllOrdersDate, getAllOrdersMonth, getAllOrdersYear, getMaxTotalOrders, listOfAllOrders, listOfDeliveredOrders, listOfOrdersIncomePerMonth, listOfPaidOrders, listOfSortedOrdersByDate, listOfSortedOrdersByTotal } from '../actions/orderAction';
+import { filterAllOrders, getAllOrdersDate, getAllOrdersMonth, getAllOrdersYear, getMaxTotalOrders, getOrderedDrinkCount, listOfAllOrders, listOfDeliveredOrders, listOfOrdersIncomePerMonth, listOfPaidOrders, listOfSortedOrdersByDate, listOfSortedOrdersByTotal } from '../actions/orderAction';
 import { listOfUsers } from '../actions/userAction';
 import DateComponent from '../components/DateComponent';
 import LoadingBox from '../components/LoadingBox';
@@ -17,9 +17,14 @@ import {
     Title,
     Tooltip,
     Legend,
+    ArcElement,
   } from 'chart.js';
-  import { Bar } from 'react-chartjs-2';
+  import { Bar, Pie } from 'react-chartjs-2';
 //   import faker from 'faker';
+import ReactExport from "react-export-excel";
+const ExcelFile = ReactExport.ExcelFile;
+const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
+const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
 
 
 export default function OrderListsPage() {
@@ -75,14 +80,22 @@ export default function OrderListsPage() {
     const orderIncomePerMonthList = useSelector(state=>state.orderIncomePerMonthList);
     const {loading: loadingIncomePerMonthList, error: errorIncomePerMonthList, incomePerMonthList} = orderIncomePerMonthList;
 
+    const drinkOrderedCount = useSelector(state=>state.drinkOrderedCount);
+    const {loading: loadingDrinkCount, error: errorDrinkCount, orderedDrinkCount} = drinkOrderedCount;
+
     ChartJS.register(
         CategoryScale,
         LinearScale,
         BarElement,
         Title,
         Tooltip,
-        Legend
+        Legend,
+        ArcElement,
       );
+    
+    ChartJS.register(
+        ArcElement, Tooltip, Legend
+    )
 
     const options = {
         responsive: true,
@@ -117,6 +130,20 @@ export default function OrderListsPage() {
           }     
     };
 
+
+    const options2 = {
+        responsive: true,
+        maintainAspectRatio: true,
+        // plugins: {
+        //     legend: {
+        //     position: 'top',
+        //     },
+        //     title: {
+        //     display: true,
+        //     text: 'Biểu đồ trà sữa theo số đơn hàng',
+        //     },
+        // },
+    };
 
     
 
@@ -262,6 +289,89 @@ export default function OrderListsPage() {
     //const averageIncomePerMonth = 0;
 
 
+    //example data to test excel exporter
+    // const dataSet3 = [
+    //     {
+    //         shippingInfo: {
+    //           username: 'Tôn Thất Học',
+    //           fullName: 'Tôn Thất Học',
+    //           shippingAddress: 'TPHCM',
+    //           email: 'tonthathoc@gmail.com',
+    //           phoneNumber: '036999199'
+    //         },
+    //         _id: '61acaf995539ea271a6ec9e4',
+    //         orderItems: [
+    //           {
+    //             name: 'Sữa tươi trân châu đường đen',
+    //             image: 'https://vietgle.vn/wp-content/uploads/2020/07/sua-tuoi-tran-chau-tu-lam-tai-nha-thom-ngon.jpg',
+    //             price: 25000,
+    //             drink: '61a196c925530fee2b855cac',
+    //             topping: 'Mặc định',
+    //             toppingPrice: 0,
+    //             _id: '61acaf995539ea271a6ec9e5',
+    //             quantity: 1
+    //           }
+    //         ],
+    //         paymentMethod: 'Cash',
+    //         itemsPrice: 25000,
+    //         totalPrice: 75000,
+    //         shippingPrice: 50000,
+    //         user: '61a3769f2ff60281c79bf18d',
+    //         isPaid: true,
+    //         isDelivered: true,
+    //         createdAt: '2021-12-05T12:24:57.983Z',
+    //         updatedAt: '2021-12-05T12:24:57.983Z',
+    //         __v: 0,
+    //         deliveredAt: '2021-12-06T13:21:04.308Z',
+    //         paidAt: '2021-12-06T13:21:04.308Z'
+    //       },
+    //       {
+    //         shippingInfo: {
+    //           username: 'Không Phải Long',
+    //           fullName: 'Không Phải Long',
+    //           shippingAddress: 'Bình Thường',
+    //           email: 'disisnotlong@gmail.com',
+    //           phoneNumber: '2002123117'
+    //         },
+    //         _id: '61ad7a72ad5b8a24c9db7657',
+    //         orderItems: [
+    //           {
+    //             name: 'Trà sữa trân châu đường đen',
+    //             image: 'https://cdn.dayphache.edu.vn/wp-content/uploads/2019/02/519cb84dfa56f4e64bd73c0393e49890.jpg',
+    //             price: 20000,
+    //             drink: '61a198a125530fee2b855cae',
+    //             topping: 'Mặc định',
+    //             toppingPrice: 0,
+    //             quantity: 10,
+    //             _id: '61ad7a72ad5b8a24c9db7658'
+    //           }
+    //         ],
+    //         paymentMethod: 'Cash',
+    //         itemsPrice: 200000,
+    //         totalPrice: 250000,
+    //         shippingPrice: 50000,
+    //         user: '61a37b952ff60281c79bf1b5',
+    //         isPaid: true,
+    //         isDelivered: true,
+    //         createdAt: '2021-12-06T02:50:26.201Z',
+    //         updatedAt: '2021-12-06T02:50:26.201Z',
+    //         __v: 0,
+    //         deliveredAt: '2021-12-06T02:50:26.201Z',
+    //         paidAt: '2021-12-06T02:50:26.201Z'
+    //       }
+    // ]
+
+    //Math.floor(Math.random()*16777215).toString(16);
+    function getRandomColor() {
+        var letters = '0123456789ABCDEF'.split('');
+        var color = '#';
+        for (var i = 0; i < 6; i++ ) {
+            color += letters[Math.floor(Math.random() * 16)];
+        }
+        return color;
+    }
+
+
     useEffect(()=>{
         window.scrollTo({
             top: 0, 
@@ -269,6 +379,7 @@ export default function OrderListsPage() {
         dispatch(listOfAllOrders());
         dispatch(listOfUsers());
         dispatch(listOfOrdersIncomePerMonth("all"));
+        dispatch(getOrderedDrinkCount());
         setTimeout(()=>{
             dispatch(getAllOrdersYear()); //year
         }, 100);
@@ -328,22 +439,45 @@ export default function OrderListsPage() {
                     </>
                     
                     }
+                    <div className='row'>
+                        <div className='col-2'>
+                            {loadingDrinkCount ? <LoadingBox></LoadingBox> : errorDrinkCount ? <MessageBox variant="error">{errorDrinkCount}</MessageBox> :
+                                orderedDrinkCount && (
+                                <div style={{width: '70%'}}><Pie data={{
+                                    labels: orderedDrinkCount.map((od)=>od._id.drinkName),
+                                    datasets: [
+                                        {
+                                        label: 'of Votes',
+                                        data: orderedDrinkCount.map((od)=>od.drinkCount),
+                                        backgroundColor: orderedDrinkCount.map((od)=>getRandomColor()),
+                                        // borderColor: orderedDrinkCount.map((od)=>getRandomColor()),
+                                        borderWidth: 1,
+                                        },
+                                    ],
+                                }} options={options2}></Pie></div>)
+                            }
+                        </div>
+                        <div className='col-2'>
+                            {
+                            loadingIncomePerMonthList ? <LoadingBox></LoadingBox> : errorIncomePerMonthList ? <MessageBox variant='error'>{errorIncomePerMonthList}</MessageBox> :
+                                incomePerMonthList && <Bar options={options} data={{
+                                                            labels: incomePerMonthList.map((fo => "Tháng "+fo._id.month+" Năm "+fo._id.year)),
+                                                            datasets: [
+                                                                {
+                                                                    label: 'Thu nhập',
+                                                                    // data: [1, 2],
+                                                                    data: incomePerMonthList.map((fo => fo.monthlyIncome)),
+                                                                    backgroundColor: '#0861a1',
+                                                                }
+                                                            ],
+                                                        }} 
+                                    height={100} with={600} />
+                            }
+                        </div>
+                    </div>
                     
-                    {
-                        loadingIncomePerMonthList ? <LoadingBox></LoadingBox> : errorIncomePerMonthList ? <MessageBox variant='error'>{errorIncomePerMonthList}</MessageBox> :
-                        incomePerMonthList && <Bar options={options} data={{
-                                                    labels: incomePerMonthList.map((fo => "Tháng "+fo._id.month+" Năm "+fo._id.year)),
-                                                    datasets: [
-                                                        {
-                                                            label: 'Thu nhập',
-                                                            // data: [1, 2],
-                                                            data: incomePerMonthList.map((fo => fo.monthlyIncome)),
-                                                            backgroundColor: '#0861a1',
-                                                        }
-                                                    ],
-                                                }} 
-                            height={100} with={600} />
-                    }
+                    {/* {<div style={{width: '40%'}}><Pie data={data} options={options2}></Pie></div>} */}
+                    
                     {monthWithZero!=="" && day==="" &&
                         loadingFilter ? <LoadingBox></LoadingBox> : errorFilter ? <MessageBox variant='error'>{errorFilter}</MessageBox> :
                         filteredOrders && (<Bar options={options} data={{
@@ -417,6 +551,36 @@ export default function OrderListsPage() {
             <div className="row">
                 <div className="col-2">
                     <div className="row center  ">
+                        {/* export excel file */}
+                        {/* <ExcelFile element={<button>Download Data</button>}>
+                            <ExcelSheet data={dataSet3} name="Leaves">
+                                <ExcelColumn label="Mã hóa đơn" value="_id"/>
+                                <ExcelColumn label="Mã Khách hàng" value="user"/>
+                                <ExcelColumn label="Username Khách hàng" value={(col) => col.shippingInfo.username}/>
+                                <ExcelColumn label="Tên Khách hàng" value={(col) => col.shippingInfo.fullName}/>
+                                <ExcelColumn label="Tổng thành tiền" value="totalPrice"/>
+                                <ExcelColumn label="Thanh toán" value={(col) => col.isPaid ? col.paidAt : "Chưa"}/>
+                                <ExcelColumn label="Giao hàng" value={(col) => col.isDelivered ? col.deliveredAt : "Chưa"}/>
+                                <ExcelColumn label="Phương thức thanh toán" value={(col) => col==='Cash' ? "Tiền mặt" : col.paymentMethod}/>
+                            </ExcelSheet>
+                        </ExcelFile> */}
+                        
+                            {year==="all" && paidOrder==="" && deliveredOrder==="" && orderTotalPrice==="" && sortingCondition==="" && (ordersList && (loading ? <LoadingBox></LoadingBox> : error ? <MessageBox variant="error">{error}</MessageBox> : loadingUser ? <LoadingBox></LoadingBox> : errorUser ? <MessageBox variant="error">{errorUser}</MessageBox> :
+                                ordersList &&
+                                <ExcelFile filename="Danh sách hóa đơn" element={<button className='primary'>Xuất bảng</button>}>
+                                    <ExcelSheet data={ordersList} name="Danh sách hóa đơn">
+                                        <ExcelColumn label="Mã hóa đơn" value="_id"/>
+                                            <ExcelColumn label="Mã Khách hàng" value="user"/>
+                                            <ExcelColumn label="Username Khách hàng" value={(col) => col.shippingInfo.username}/>
+                                            <ExcelColumn label="Tên Khách hàng" value={(col) => col.shippingInfo.fullName}/>
+                                            <ExcelColumn label="Tổng thành tiền" value="totalPrice"/>
+                                            <ExcelColumn label="Thanh toán" value={(col) => col.isPaid ? col.paidAt : "Chưa"}/>
+                                            <ExcelColumn label="Giao hàng" value={(col) => col.isDelivered ? col.deliveredAt : "Chưa"}/>
+                                            <ExcelColumn label="Phương thức thanh toán" value={(col) => col==='Cash' ? "Tiền mặt" : col.paymentMethod}/>
+                                    </ExcelSheet>
+                                </ExcelFile>
+                                ))
+                            }
                         <table className="table">
                             <thead>
                                 <tr>
@@ -463,6 +627,7 @@ export default function OrderListsPage() {
                                 ))))
                                 
                             }
+                            
                             {year!=="all" && (filteredOrders && (loadingFilter ? <LoadingBox></LoadingBox> : errorFilter ? <MessageBox variant="error">{errorFilter}</MessageBox> : loadingUser ? <LoadingBox></LoadingBox> : errorUser ? <MessageBox variant="error">{errorUser}</MessageBox> : 
                                 filteredOrders.map((order)=>(
                                     <>{users.map(user=>(

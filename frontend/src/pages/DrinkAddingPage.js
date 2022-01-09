@@ -5,6 +5,7 @@ import MessageBox from '../components/MessageBox';
 import { addDrink } from '../actions/drinkAction';
 // import FilleUpload from '../components/FilleUpload';
 import {Link} from 'react-router-dom';
+import Editor from 'rich-markdown-editor';
 
 export default function DrinkAddingPage() {
 
@@ -96,8 +97,13 @@ export default function DrinkAddingPage() {
                         <label htmlFor="desc">
                             Mô tả: 
                         </label>
-                        <input className='basic-slide' id="description" type="text" placeholder="Mô tả" onChange={(e)=> setDescription(e.target.value)} required={true}>
-                        </input>
+                        <Editor
+                            defaultValue=""
+                            onChange={(value) => setDescription(value)}
+                            className='Editor'
+                            placeholder='Mô tả'
+                            required={true}
+                        /> 
                         
                         <div className="bottom-button-div-group">
                             <div className="bottom-button-div">

@@ -3,7 +3,7 @@ import thunk from 'redux-thunk';
 import {drinkAddingReducer, drinkFeatureAddingReducer, drinkFeatureListReducer, drinkFeatureRemovingAllReducer, drinkFeatureRemovingReducer, drinkFilterByPriceReducer, drinkFilterByStarReducer, drinkListReducer, drinkRatingReducer, drinksDetailReducer, drinkSearchReducer, drinkTagsAddingReducer, drinkTagsRemovingReducer, drinkUpdatingReducer, relatedDrinkListReducer, suggestedDrinkListReducer} from './reducers/drinkReducer';
 import { userDetailReducer, userListReducer, userMostSpendingReducer, userSearchingReducer, userSigninReducer, userSignupReducer, userSortedByDateReducer, userSortedByNameReducer, userSortedByOrderReducer, userSortedBySpendingReducer, userUpdateProfileReducer } from './reducers/userReducer';
 import {cartReducer} from './reducers/cartReducer';
-import { allOrderDateReducer, allOrderFilterByDateReducer, allOrderListReducer, allOrderMonthReducer, allOrderYearReducer, createOrderReducer, deliveredOrderReducer, deliveredOrderVerifyingReducer, drinkLeastOrderedReducer, drinkMostOrderedReducer, leastOrderedDrinkReducer, maxTotalOrderReducer, mostOrderedDrinkReducer, orderAggregateListReducer, orderAggregateReducer, orderDeliveredReducer, OrderDetailReducer, orderIncomePerMonthListReducer, orderListReducer, orderMaxTotalReducer, orderPaidReducer, orderPayReducer, orderSortedByDateReducer, orderSortedByTotalReducer, paidOrderReducer, paidOrderVerifyingReducer } from './reducers/orderReducer';
+import { allOrderDateReducer, allOrderFilterByDateReducer, allOrderListReducer, allOrderMonthReducer, allOrderYearReducer, createOrderReducer, deliveredOrderReducer, deliveredOrderVerifyingReducer, drinkOrderedCountReducer, drinkMostOrderedReducer, orderedDrinkCountReducer, maxTotalOrderReducer, mostOrderedDrinkReducer, orderAggregateListReducer, orderAggregateReducer, orderDeliveredReducer, OrderDetailReducer, orderIncomePerMonthListReducer, orderListReducer, orderMaxTotalReducer, orderPaidReducer, orderPayReducer, orderSortedByDateReducer, orderSortedByTotalReducer, paidOrderReducer, paidOrderVerifyingReducer } from './reducers/orderReducer';
 import { detailsOfOrder } from './actions/orderAction';
 import { userCommentListReducer, userCommentReducer, userDeleteCommentReducer, userEditCommentReducer, userFilterCommentByStarReducer, userSortCommentReducer } from './reducers/commentReducer';
 import { postCommentEditingReducers, postCommentPostingReducers, postCreatingReducers, postDeletingReducers, postDetailsReducers, postEditingReducers, postFilteringReducers, postListReducers, postSearchingReducers, postSortingReducers } from './reducers/postReducer';
@@ -63,7 +63,7 @@ const reducer = combineReducers({//bugs are fixed on every streak
     orderSortedByDate: orderSortedByDateReducer,
     orderSortedByTotal: orderSortedByTotalReducer,
     drinkMostOrdered: drinkMostOrderedReducer,
-    drinkLeastOrdered: drinkLeastOrderedReducer,
+    drinkOrderedCount: drinkOrderedCountReducer, //changing from least ordered drink to drink count
     userSearching: userSearchingReducer,
     userMostSpending: userMostSpendingReducer,
     userSortedBySpending: userSortedBySpendingReducer,
@@ -100,11 +100,14 @@ const reducer = combineReducers({//bugs are fixed on every streak
     drinkFeatureList: drinkFeatureListReducer,
     suggestedDrinkList: suggestedDrinkListReducer,
 
-    //streak #17
+    //streak #17 added Bar Chart (monthly income)
     orderIncomePerMonthList: orderIncomePerMonthListReducer,
     
     //streak#18
     orderPay: orderPayReducer, //paypal
+
+    //streak#19
+    //exporting excel file, Pie chart for ordered Drink Count, Google Map API
 
 })
 

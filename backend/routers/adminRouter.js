@@ -126,9 +126,27 @@ adminRouter.get('/order/list/drink/most', expressAsyncHandler(async(req, res)=>{
     res.send(mostOrderedDrink);
 }));
 
-adminRouter.get('/order/list/drink/least', expressAsyncHandler(async(req, res)=>{
-    // const leastOrderedDrink = await Order.find({}).sort({totalPrice: -1}).limit(1);
-    // res.send(leastOrderedDrink);
+adminRouter.get('/order/list/drink/count', expressAsyncHandler(async(req, res)=>{
+    const orderedDrinkCount = await Order.aggregate(
+        [   
+            {$match: {isPaid: true}},
+            {$unwind: '$orderItems'}, //took me a looooooooooooooooooooooooong time since started the project to this day to realize I only need this
+            {$unwind: '$orderItems.drink'}, 
+            {$unwind: '$orderItems.quantity'}, 
+            {
+                $group: { 
+                    _id: {drinkName: "$orderItems.name", drinkId: "$orderItems.drink"}, 
+                    drinkCount: {$sum: '$orderItems.quantity'},
+                },
+            },
+            {$sort: {drinkCount: -1}},
+        ]
+    )
+    if(orderedDrinkCount.length == 0){
+        res.send([{_id: null, orderedDrinkCount: 0}]);}
+    else{
+        res.send(orderedDrinkCount);
+    }
 }));
 
 adminRouter.get('/order/list/filter/:year/:month/:day', expressAsyncHandler(async(req, res)=>{

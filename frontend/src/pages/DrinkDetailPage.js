@@ -12,6 +12,7 @@ import LoadingBox from '../components/LoadingBox';
 import MessageBox from '../components/MessageBox';
 import Rating from '../components/RatingComponent';
 import { USER_COMMENT_RESET } from '../constants/commentConst';
+import Editor from "rich-markdown-editor";
 
 export default function DrinkDetailPage() {
 
@@ -216,7 +217,12 @@ export default function DrinkDetailPage() {
                             <label className="bold-text">Giá:</label> {drink.price} đồng
                         </li>
                         <li>
-                            <h1>Mô tả:</h1> <p>{drink.description}</p> 
+                            <h1>Mô tả:</h1> 
+                            <Editor
+                                defaultValue={drink.description}
+                                className='Editor'
+                                readOnly={true}
+                            />  
                             {/* <p><Linkify>{drink.description}</Linkify></p> */}
                         </li>
                         <li>

@@ -7,6 +7,7 @@ import { detailsOfDrink } from '../actions/drinkAction';
 import { useParams } from 'react-router-dom';
 import DateComponent from '../components/DateComponent';
 import { DRINK_UPDATE_RESET } from '../constants/drinkConst';
+import Editor from 'rich-markdown-editor';
 
 export default function DrinkUpdatingPage(props) {
 
@@ -102,8 +103,15 @@ export default function DrinkUpdatingPage(props) {
                                     <label className="bold-text">Giá: ‎</label> {drink.price}
                                 </div>
                                 <div className="row left">
-                                    <label className="bold-text">Mô tả: ‎</label> {drink.description}
+                                    <label className="bold-text">Mô tả: ‎</label> 
                                 </div>
+                                <Editor
+                                    defaultValue={drink.description}
+                                    className='Editor'
+                                    placeholder='Nội dung'
+                                    required={true}
+                                    readOnly={true}
+                                /> 
                                 <div className="row left">
                                     <label className="bold-text">Số lượng hiện có ‎</label> {drink.quantity}
                                 </div>
@@ -161,6 +169,13 @@ export default function DrinkUpdatingPage(props) {
                         </label>
                         <input className='basic-slide' id="description" type="text" placeholder="Mô tả" onChange={(e)=> setDescription(e.target.value)} required={true} value={drink.description} value={description}> 
                         </input>
+                        <Editor
+                            defaultValue={drink.description}
+                            onChange={(value) => setDescription(value)}
+                            className='Editor'
+                            placeholder='Mô tả'
+                            required={true}
+                        /> 
                         <label htmlFor="qty">
                             Số lượng hiện có: 
                         </label>

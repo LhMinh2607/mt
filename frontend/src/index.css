@@ -1064,6 +1064,24 @@ option{
 
 
 /*  table  */
+.rme-table{
+  width: 100% !important;
+  border: 0.1rem solid #000 !important;
+  border-collapse: collapse !important; 
+}
+.rme-table > tbody > tr > th{
+  text-align: left !important;
+  padding: 0.5rem !important;
+  background-color: #6e9fe7 !important;
+  color: #FFF !important;
+}
+.rme-table > tbody > tr {
+  border: 0.1rem solid #000;
+}
+
+.rme-table > tr > td {
+  padding: 0.9rem;
+}
 .table {
   width: 100%;
   border-collapse: collapse;
@@ -1523,4 +1541,40 @@ option{
   height: auto;
   word-wrap: break-word;
   background-color: #FFF;
+}
+
+.comment{
+  font-size: 1.2rem !important;
+}
+
+.code-block > div > button{
+  width: 10rem !important;
+}
+
+pre {
+  background-color: rgb(216, 213, 213) !important;
+  padding: 1rem !important;
+  border-radius: 0.5rem !important;
+}
+
+code {
+  font-size: 1.2rem !important;
+  background-color: rgb(216, 213, 213) !important;
+  border-radius: 0.5rem !important;
+}
+
+/*google map api*/
+.marker{
+  color: 'white' !important; 
+  background-color: 'grey' !important;
+  padding: '15px 10px' !important;
+  display: 'inline-flex' !important;
+  text-align: 'center' !important;
+  align-items: 'center' !important;
+  justify-content: 'center' !important;
+  border-radius: '100%' !important;
+  transform: translate(-50%, -50%) !important;
+}
+.marker:hover {
+  z-index: 1;
 }

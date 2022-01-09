@@ -44,6 +44,8 @@ export default function OrderDetailPage() {
         // updateTotalSpent(order.totalPrice);
     }
 
+    
+
     useEffect(()=>{
         window.scrollTo({
             top: 0, 
@@ -51,7 +53,7 @@ export default function OrderDetailPage() {
         if(userInfo && userInfo.role==='user' && order && userInfo._id!==order.user){
             navigate(`/order/history/${userInfo._id}`);
         }
-        // dispatch(detailsOfOrder(id));
+        dispatch(detailsOfOrder(id));
         if(true){
             const addPayPalScript = async()=>{
                 const {data} = await axios.get('/api/config/paypal');
@@ -178,8 +180,9 @@ export default function OrderDetailPage() {
                             <h2>
                             Tổng cộng {order && order.orderItems.reduce((a, c)=> a + c.quantity, 0)} món: {order && order.totalPrice} đồng
                             </h2>
-                            
-                            {order &&
+                            {/* {userInfo && userInfo.role}
+                            {order && order.paymentMethod} */}
+                            {userInfo.role==='user' && order && order.paymentMethod==='paypal' &&
                                 !order.isPaid && (
                                     <li>
                                         
